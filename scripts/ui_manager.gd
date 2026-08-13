@@ -427,14 +427,16 @@ func _setup_settings_options() -> void:
 	bg_option_button.clear()
 	bg_option_button.add_item("BACKGROUND 1", 0)
 	bg_option_button.add_item("BACKGROUND 2", 1)
-	bg_option_button.add_item("BLACK", 2)
-	bg_option_button.add_item("WHITE", 3)
+	bg_option_button.add_item("BACKGROUND 3", 2)
+	bg_option_button.add_item("BLACK", 3)
+	bg_option_button.add_item("WHITE", 4)
 	
 	var current_bg = GameManager.selected_bg if GameManager else "bg-game1"
 	match current_bg:
 		"bg-game2": bg_option_button.select(1)
-		"bg-black": bg_option_button.select(2)
-		"bg-white": bg_option_button.select(3)
+		"bg-game3": bg_option_button.select(2)
+		"bg-black": bg_option_button.select(3)
+		"bg-white": bg_option_button.select(4)
 		_: bg_option_button.select(0)
 		
 	_update_bg_preview(current_bg)
@@ -690,8 +692,9 @@ func _on_bg_option_selected(index: int) -> void:
 	var bg_name = "bg-game1"
 	match index:
 		1: bg_name = "bg-game2"
-		2: bg_name = "bg-black"
-		3: bg_name = "bg-white"
+		2: bg_name = "bg-game3"
+		3: bg_name = "bg-black"
+		4: bg_name = "bg-white"
 	_update_bg_preview(bg_name)
 	if GameManager:
 		GameManager.set_background(bg_name)

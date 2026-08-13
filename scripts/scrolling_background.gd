@@ -47,6 +47,8 @@ func _update_ground_color(bg_name: String) -> void:
 	match bg_name:
 		"bg-game2":
 			ground_color_rect.color = Color(0.101961, 0.250980, 0.152941, 1.0) # 1A4027FF
+		"bg-game3":
+			ground_color_rect.color = Color(0.007843, 0.007843, 0.015686, 1.0) # 020204FF
 		"bg-black":
 			ground_color_rect.color = Color(0.18, 0.18, 0.18, 1.0)
 		"bg-white":
