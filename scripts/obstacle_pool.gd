@@ -4,7 +4,7 @@ class_name ObstaclePool
 @export var obstacle_scene: PackedScene = preload("res://scenes/Obstacle.tscn")
 
 const POOL_SIZE: int = 15
-const SPAWN_X: float = 1180.0
+const SPAWN_X: float = 1320.0 # Posición de spawn ajustada al borde derecho de la cámara descentrada
 const GROUND_Y: float = 555.0
 
 var pool: Array[Area2D] = []
@@ -45,8 +45,6 @@ func _spawn_obstacle() -> void:
 			obs.visible = true
 			obs.process_mode = PROCESS_MODE_INHERIT
 			
-			# LÓGICA DE MONEDAS 100% SEGURAS:
-			# Con 35% de probabilidad, colocar moneda en el pico del salto justo sobre el obstáculo
 			if coin_pool and coin_pool.has_method("spawn_coin_over_obstacle") and randf() < 0.35:
 				coin_pool.spawn_coin_over_obstacle(SPAWN_X)
 			return
@@ -73,7 +71,6 @@ func _calculate_next_spawn_interval() -> void:
 	
 	next_spawn_interval = t_min + randf_range(0.1, 0.4)
 	
-	# Si el espacio hasta el siguiente obstáculo es amplio (> 1.2s), colocar una moneda de suelo segura a mitad de camino
 	if coin_pool and coin_pool.has_method("spawn_safe_ground_coin") and next_spawn_interval > 1.2 and randf() < 0.4:
 		var safe_offset = SPAWN_X + (v_game * next_spawn_interval * 0.5)
 		coin_pool.spawn_safe_ground_coin(safe_offset)

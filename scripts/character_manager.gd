@@ -10,8 +10,9 @@ func _register_characters() -> void:
 	var demon = CharacterData.new()
 	demon.id = "demon"
 	demon.display_name = "Demon"
-	demon.sprite_scale = Vector2(0.07, 0.07)
-	demon.sprite_offset = Vector2(0, -10)
+	# Escala aumentada al doble (0.14) para que el personaje sea significativamente más grande y cercano
+	demon.sprite_scale = Vector2(0.14, 0.14)
+	demon.sprite_offset = Vector2(0, -20)
 	
 	var frame_paths = [
 		"res://assets/characters/demon/run1.png",
