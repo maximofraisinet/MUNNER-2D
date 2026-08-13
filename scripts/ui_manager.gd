@@ -46,68 +46,90 @@ extends CanvasLayer
 @onready var store_panel: Panel = $StorePanel
 @onready var store_coins_label: Label = $StorePanel/StoreCoinsLabel
 
-@onready var scroll_container: ScrollContainer = $StorePanel/ScrollContainer
-@onready var scroll_left_button: Button = $StorePanel/ScrollLeftButton
-@onready var scroll_right_button: Button = $StorePanel/ScrollRightButton
+@onready var characters_tab_button: Button = $StorePanel/StoreNavHBox/CharactersTabButton
+@onready var perks_tab_button: Button = $StorePanel/StoreNavHBox/PerksTabButton
 
-@onready var tired_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/TiredCard
-@onready var leech_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/LeechCard
-@onready var maximo_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/MaximoCard
-@onready var omablo_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/OmabloCard
-@onready var demon_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/DemonCard
-@onready var messi_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/MessiCard
-@onready var dark_angel_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/DarkAngelCard
-@onready var demon_messi_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/DemonMessiCard
+@onready var characters_view: Control = $StorePanel/CharactersView
+@onready var perks_view: Control = $StorePanel/PerksView
 
-@onready var action_tired_button: Button = $StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox/ActionTiredButton
-@onready var action_leech_button: Button = $StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox/ActionLeechButton
-@onready var action_maximo_button: Button = $StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox/ActionMaximoButton
-@onready var action_omablo_button: Button = $StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox/ActionOmabloButton
-@onready var action_demon_button: Button = $StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox/ActionDemonButton
-@onready var action_messi_button: Button = $StorePanel/ScrollContainer/CardsHBox/MessiCard/VBox/ActionMessiButton
-@onready var action_dark_angel_button: Button = $StorePanel/ScrollContainer/CardsHBox/DarkAngelCard/VBox/ActionDarkAngelButton
-@onready var action_demon_messi_button: Button = $StorePanel/ScrollContainer/CardsHBox/DemonMessiCard/VBox/ActionDemonMessiButton
+@onready var scroll_container: ScrollContainer = $StorePanel/CharactersView/ScrollContainer
+@onready var scroll_left_button: Button = $StorePanel/CharactersView/ScrollLeftButton
+@onready var scroll_right_button: Button = $StorePanel/CharactersView/ScrollRightButton
 
-@onready var loadout_title_label: Label = $StorePanel/LoadoutBarContainer/LoadoutTitleLabel
-@onready var store_slot1_card: PanelContainer = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card
-@onready var store_slot1_icon: TextureRect = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card/VBox/IconRect
-@onready var store_slot1_qty: Label = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card/VBox/QtyLabel
+@onready var tired_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/TiredCard
+@onready var leech_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/LeechCard
+@onready var maximo_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/MaximoCard
+@onready var omablo_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/OmabloCard
+@onready var demon_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/DemonCard
+@onready var messi_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/MessiCard
+@onready var dark_angel_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/DarkAngelCard
+@onready var demon_messi_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/DemonMessiCard
 
-@onready var store_slot2_card: PanelContainer = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card
-@onready var store_slot2_icon: TextureRect = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card/VBox/IconRect
-@onready var store_slot2_qty: Label = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card/VBox/QtyLabel
+@onready var action_tired_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/TiredCard/VBox/ActionTiredButton
+@onready var action_leech_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/LeechCard/VBox/ActionLeechButton
+@onready var action_maximo_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/MaximoCard/VBox/ActionMaximoButton
+@onready var action_omablo_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/OmabloCard/VBox/ActionOmabloButton
+@onready var action_demon_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/DemonCard/VBox/ActionDemonButton
+@onready var action_messi_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/MessiCard/VBox/ActionMessiButton
+@onready var action_dark_angel_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/DarkAngelCard/VBox/ActionDarkAngelButton
+@onready var action_demon_messi_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/DemonMessiCard/VBox/ActionDemonMessiButton
 
-@onready var store_slot3_card: PanelContainer = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card
-@onready var store_slot3_icon: TextureRect = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card/VBox/IconRect
-@onready var store_slot3_qty: Label = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card/VBox/QtyLabel
+@onready var loadout_title_label: Label = $StorePanel/PerksView/LoadoutBarContainer/LoadoutTitleLabel
+@onready var store_slot1_card: PanelContainer = $StorePanel/PerksView/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card
+@onready var store_slot1_icon: TextureRect = $StorePanel/PerksView/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card/VBox/IconRect
+@onready var store_slot1_qty: Label = $StorePanel/PerksView/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card/VBox/QtyLabel
 
-@onready var shield_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/ShieldBoostCard
-@onready var shield_preview_rect: TextureRect = $StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/PreviewRect
-@onready var shield_qty_label: Label = $StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/QtyLabel
-@onready var buy_shield_boost_button: Button = $StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox/BuyShieldBoostButton
-@onready var equip_shield_slot1_button: Button = $StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox/EquipShieldSlot1Button
+@onready var store_slot2_card: PanelContainer = $StorePanel/PerksView/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card
+@onready var store_slot2_icon: TextureRect = $StorePanel/PerksView/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card/VBox/IconRect
+@onready var store_slot2_qty: Label = $StorePanel/PerksView/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card/VBox/QtyLabel
 
-@onready var life_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/LifeBoostCard
-@onready var life_preview_rect: TextureRect = $StorePanel/BoostCardsHBox/LifeBoostCard/VBox/PreviewRect
-@onready var life_qty_label: Label = $StorePanel/BoostCardsHBox/LifeBoostCard/VBox/QtyLabel
-@onready var buy_life_boost_button: Button = $StorePanel/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox/BuyLifeBoostButton
-@onready var equip_life_slot1_button: Button = $StorePanel/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox/EquipLifeSlot1Button
+@onready var store_slot3_card: PanelContainer = $StorePanel/PerksView/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card
+@onready var store_slot3_icon: TextureRect = $StorePanel/PerksView/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card/VBox/IconRect
+@onready var store_slot3_qty: Label = $StorePanel/PerksView/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card/VBox/QtyLabel
 
-@onready var slow_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/SlowBoostCard
-@onready var slow_preview_rect: TextureRect = $StorePanel/BoostCardsHBox/SlowBoostCard/VBox/PreviewRect
-@onready var slow_qty_label: Label = $StorePanel/BoostCardsHBox/SlowBoostCard/VBox/QtyLabel
-@onready var buy_slow_boost_button: Button = $StorePanel/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox/BuySlowBoostButton
-@onready var equip_slow_slot1_button: Button = $StorePanel/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox/EquipSlowSlot1Button
+@onready var perks_scroll_container: ScrollContainer = $StorePanel/PerksView/PerksScrollContainer
+@onready var perks_scroll_left_button: Button = $StorePanel/PerksView/PerksScrollLeftButton
+@onready var perks_scroll_right_button: Button = $StorePanel/PerksView/PerksScrollRightButton
 
-@onready var fly_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/FlyBoostCard
-@onready var fly_preview_rect: TextureRect = $StorePanel/BoostCardsHBox/FlyBoostCard/VBox/PreviewRect
-@onready var fly_qty_label: Label = $StorePanel/BoostCardsHBox/FlyBoostCard/VBox/QtyLabel
-@onready var buy_fly_boost_button: Button = $StorePanel/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox/BuyFlyBoostButton
-@onready var equip_fly_slot1_button: Button = $StorePanel/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox/EquipFlySlot1Button
+@onready var shield_boost_card: PanelContainer = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/ShieldBoostCard
+@onready var shield_preview_rect: TextureRect = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/ShieldBoostCard/VBox/PreviewRect
+@onready var shield_qty_label: Label = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/ShieldBoostCard/VBox/QtyLabel
+@onready var buy_shield_boost_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox/BuyShieldBoostButton
+@onready var equip_shield_slot1_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox/EquipShieldSlot1Button
 
-@onready var poison_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/PoisonBoostCard
-@onready var poison_preview_rect: TextureRect = $StorePanel/BoostCardsHBox/PoisonBoostCard/VBox/PreviewRect
-@onready var buy_poison_button: Button = $StorePanel/BoostCardsHBox/PoisonBoostCard/VBox/ButtonsHBox/BuyPoisonButton
+@onready var life_boost_card: PanelContainer = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/LifeBoostCard
+@onready var life_preview_rect: TextureRect = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/LifeBoostCard/VBox/PreviewRect
+@onready var life_qty_label: Label = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/LifeBoostCard/VBox/QtyLabel
+@onready var buy_life_boost_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox/BuyLifeBoostButton
+@onready var equip_life_slot1_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox/EquipLifeSlot1Button
+
+@onready var slow_boost_card: PanelContainer = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/SlowBoostCard
+@onready var slow_preview_rect: TextureRect = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/SlowBoostCard/VBox/PreviewRect
+@onready var slow_qty_label: Label = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/SlowBoostCard/VBox/QtyLabel
+@onready var buy_slow_boost_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox/BuySlowBoostButton
+@onready var equip_slow_slot1_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox/EquipSlowSlot1Button
+
+@onready var fly_boost_card: PanelContainer = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/FlyBoostCard
+@onready var fly_preview_rect: TextureRect = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/FlyBoostCard/VBox/PreviewRect
+@onready var fly_qty_label: Label = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/FlyBoostCard/VBox/QtyLabel
+@onready var buy_fly_boost_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox/BuyFlyBoostButton
+@onready var equip_fly_slot1_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox/EquipFlySlot1Button
+
+@onready var coin_mult_boost_card: PanelContainer = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/CoinMultBoostCard
+@onready var coin_mult_preview_rect: TextureRect = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/CoinMultBoostCard/VBox/PreviewRect
+@onready var coin_mult_qty_label: Label = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/CoinMultBoostCard/VBox/QtyLabel
+@onready var buy_coin_mult_boost_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/CoinMultBoostCard/VBox/ButtonsHBox/BuyCoinMultBoostButton
+@onready var equip_coin_mult_slot1_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/CoinMultBoostCard/VBox/ButtonsHBox/EquipCoinMultSlot1Button
+
+@onready var mega_slow_boost_card: PanelContainer = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/MegaSlowBoostCard
+@onready var mega_slow_preview_rect: TextureRect = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/MegaSlowBoostCard/VBox/PreviewRect
+@onready var mega_slow_qty_label: Label = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/MegaSlowBoostCard/VBox/QtyLabel
+@onready var buy_mega_slow_boost_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/MegaSlowBoostCard/VBox/ButtonsHBox/BuyMegaSlowBoostButton
+@onready var equip_mega_slow_slot1_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/MegaSlowBoostCard/VBox/ButtonsHBox/EquipMegaSlowSlot1Button
+
+@onready var poison_boost_card: PanelContainer = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/PoisonBoostCard
+@onready var poison_preview_rect: TextureRect = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/PoisonBoostCard/VBox/PreviewRect
+@onready var buy_poison_button: Button = $StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/PoisonBoostCard/VBox/ButtonsHBox/BuyPoisonButton
 
 @onready var close_store_button: Button = $StorePanel/CloseStoreButton
 
@@ -171,8 +193,17 @@ func _ready() -> void:
 	buy_fly_boost_button.pressed.connect(_on_buy_fly_boost_pressed)
 	equip_fly_slot1_button.pressed.connect(_on_equip_fly_slot1_pressed)
 	
+	buy_coin_mult_boost_button.pressed.connect(_on_buy_coin_mult_boost_pressed)
+	equip_coin_mult_slot1_button.pressed.connect(_on_equip_coin_mult_slot1_pressed)
+	
+	buy_mega_slow_boost_button.pressed.connect(_on_buy_mega_slow_boost_pressed)
+	equip_mega_slow_slot1_button.pressed.connect(_on_equip_mega_slow_slot1_pressed)
+	
 	if buy_poison_button:
 		buy_poison_button.pressed.connect(_on_buy_poison_pressed)
+	
+	characters_tab_button.pressed.connect(_on_characters_tab_pressed)
+	perks_tab_button.pressed.connect(_on_perks_tab_pressed)
 	
 	close_store_button.pressed.connect(_on_close_store_button_pressed)
 	
@@ -341,7 +372,9 @@ func _update_hud_boost_slots() -> void:
 					"shield_boost": icon_file = "shield.png"
 					"life_boost": icon_file = "life.png"
 					"slow_boost": icon_file = "slow.png"
+					"mega_slow_boost": icon_file = "mega_slow.png"
 					"fly_boost": icon_file = "fly.png"
+					"coin_mult_boost": icon_file = "coin_mult.png"
 				var tex = load("res://assets/powerups/%s/%s" % [pack_name, icon_file]) as Texture2D
 				icon.texture = tex
 				icon.visible = true
@@ -363,10 +396,42 @@ func _setup_scroll_buttons() -> void:
 	if scroll_container:
 		scroll_container.get_h_scroll_bar().value_changed.connect(_on_scroll_changed)
 	_update_scroll_buttons_visibility()
+	
+	if perks_scroll_left_button:
+		perks_scroll_left_button.pressed.connect(_on_perks_scroll_left_pressed)
+	if perks_scroll_right_button:
+		perks_scroll_right_button.pressed.connect(_on_perks_scroll_right_pressed)
+	if perks_scroll_container:
+		perks_scroll_container.get_h_scroll_bar().value_changed.connect(_on_perks_scroll_changed)
+	_update_perks_scroll_buttons_visibility()
+
+func _on_characters_tab_pressed() -> void:
+	_switch_store_tab(true)
+
+func _on_perks_tab_pressed() -> void:
+	_switch_store_tab(false)
+
+func _switch_store_tab(show_characters: bool) -> void:
+	if characters_view: characters_view.visible = show_characters
+	if perks_view: perks_view.visible = not show_characters
+	
+	if characters_tab_button:
+		if show_characters:
+			characters_tab_button.modulate = Color(1.0, 1.0, 1.0, 1.0)
+		else:
+			characters_tab_button.modulate = Color(0.6, 0.6, 0.6, 0.8)
+	if perks_tab_button:
+		if not show_characters:
+			perks_tab_button.modulate = Color(1.0, 1.0, 1.0, 1.0)
+		else:
+			perks_tab_button.modulate = Color(0.6, 0.6, 0.6, 0.8)
+			
+	_update_scroll_buttons_visibility()
+	_update_perks_scroll_buttons_visibility()
 
 func _on_scroll_left_pressed() -> void:
 	if scroll_container:
-		var target = max(0, scroll_container.scroll_horizontal - 220)
+		var target = max(0, scroll_container.scroll_horizontal - 240)
 		var tween = create_tween()
 		tween.tween_property(scroll_container, "scroll_horizontal", target, 0.2).set_trans(Tween.TRANS_QUAD)
 		tween.finished.connect(_update_scroll_buttons_visibility)
@@ -375,7 +440,7 @@ func _on_scroll_right_pressed() -> void:
 	if scroll_container:
 		var bar = scroll_container.get_h_scroll_bar()
 		var max_val = int(bar.max_value - bar.page)
-		var target = min(max_val, scroll_container.scroll_horizontal + 220)
+		var target = min(max_val, scroll_container.scroll_horizontal + 240)
 		var tween = create_tween()
 		tween.tween_property(scroll_container, "scroll_horizontal", target, 0.2).set_trans(Tween.TRANS_QUAD)
 		tween.finished.connect(_update_scroll_buttons_visibility)
@@ -394,8 +459,38 @@ func _update_scroll_buttons_visibility() -> void:
 	if scroll_right_button:
 		scroll_right_button.visible = (curr < max_val - 5)
 
+func _on_perks_scroll_left_pressed() -> void:
+	if perks_scroll_container:
+		var target = max(0, perks_scroll_container.scroll_horizontal - 240)
+		var tween = create_tween()
+		tween.tween_property(perks_scroll_container, "scroll_horizontal", target, 0.2).set_trans(Tween.TRANS_QUAD)
+		tween.finished.connect(_update_perks_scroll_buttons_visibility)
+
+func _on_perks_scroll_right_pressed() -> void:
+	if perks_scroll_container:
+		var bar = perks_scroll_container.get_h_scroll_bar()
+		var max_val = int(bar.max_value - bar.page)
+		var target = min(max_val, perks_scroll_container.scroll_horizontal + 240)
+		var tween = create_tween()
+		tween.tween_property(perks_scroll_container, "scroll_horizontal", target, 0.2).set_trans(Tween.TRANS_QUAD)
+		tween.finished.connect(_update_perks_scroll_buttons_visibility)
+
+func _on_perks_scroll_changed(_val: float) -> void:
+	_update_perks_scroll_buttons_visibility()
+
+func _update_perks_scroll_buttons_visibility() -> void:
+	if not perks_scroll_container: return
+	var bar = perks_scroll_container.get_h_scroll_bar()
+	var max_val = int(bar.max_value - bar.page)
+	var curr = perks_scroll_container.scroll_horizontal
+	
+	if perks_scroll_left_button:
+		perks_scroll_left_button.visible = (curr > 5)
+	if perks_scroll_right_button:
+		perks_scroll_right_button.visible = (curr < max_val - 5)
+
 func _setup_card_hover_effects() -> void:
-	var cards = [tired_card, leech_card, maximo_card, omablo_card, demon_card, messi_card, dark_angel_card, demon_messi_card, shield_boost_card, life_boost_card, slow_boost_card, fly_boost_card, poison_boost_card]
+	var cards = [tired_card, leech_card, maximo_card, omablo_card, demon_card, messi_card, dark_angel_card, demon_messi_card, shield_boost_card, life_boost_card, slow_boost_card, mega_slow_boost_card, fly_boost_card, coin_mult_boost_card, poison_boost_card]
 	for card in cards:
 		if card:
 			card.mouse_entered.connect(_on_card_mouse_entered.bind(card))
@@ -586,6 +681,12 @@ func _update_store_buttons() -> void:
 	if fly_preview_rect:
 		var tex = load("res://assets/powerups/%s/fly.png" % pack_name) as Texture2D
 		if tex: fly_preview_rect.texture = tex
+	if coin_mult_preview_rect:
+		var tex = load("res://assets/powerups/%s/coin_mult.png" % pack_name) as Texture2D
+		if tex: coin_mult_preview_rect.texture = tex
+	if mega_slow_preview_rect:
+		var tex = load("res://assets/powerups/%s/mega_slow.png" % pack_name) as Texture2D
+		if tex: mega_slow_preview_rect.texture = tex
 	if poison_preview_rect:
 		var p_tex = load("res://assets/powerups/%s/poison.png" % pack_name) as Texture2D
 		if p_tex: poison_preview_rect.texture = p_tex
@@ -622,11 +723,15 @@ func _update_store_buttons() -> void:
 	var life_qty = CharacterManager.get_boost_qty("life_boost")
 	var slow_qty = CharacterManager.get_boost_qty("slow_boost")
 	var fly_qty = CharacterManager.get_boost_qty("fly_boost")
+	var coin_mult_qty = CharacterManager.get_boost_qty("coin_mult_boost")
+	var mega_slow_qty = CharacterManager.get_boost_qty("mega_slow_boost")
 	
 	if shield_qty_label: shield_qty_label.text = "Owned: %d" % shield_qty
 	if life_qty_label: life_qty_label.text = "Owned: %d" % life_qty
 	if slow_qty_label: slow_qty_label.text = "Owned: %d" % slow_qty
 	if fly_qty_label: fly_qty_label.text = "Owned: %d" % fly_qty
+	if coin_mult_qty_label: coin_mult_qty_label.text = "Owned: %d" % coin_mult_qty
+	if mega_slow_qty_label: mega_slow_qty_label.text = "Owned: %d" % mega_slow_qty
 	
 	if buy_shield_boost_button:
 		var price = CharacterManager.get_boost_price("shield_boost")
@@ -644,6 +749,14 @@ func _update_store_buttons() -> void:
 		var price = CharacterManager.get_boost_price("fly_boost")
 		buy_fly_boost_button.text = "BUY (%d COINS)" % price
 		buy_fly_boost_button.disabled = (GameManager.total_coins < price)
+	if buy_coin_mult_boost_button:
+		var price = CharacterManager.get_boost_price("coin_mult_boost")
+		buy_coin_mult_boost_button.text = "BUY (%s COINS)" % _format_number(price)
+		buy_coin_mult_boost_button.disabled = (GameManager.total_coins < price)
+	if buy_mega_slow_boost_button:
+		var price = CharacterManager.get_boost_price("mega_slow_boost")
+		buy_mega_slow_boost_button.text = "BUY (%s COINS)" % _format_number(price)
+		buy_mega_slow_boost_button.disabled = (GameManager.total_coins < price)
 		
 	if buy_poison_button:
 		var price = CharacterManager.get_boost_price("poison")
@@ -658,6 +771,8 @@ func _update_store_buttons() -> void:
 	_update_boost_equip_btn(equip_life_slot1_button, "life_boost", equipped_slots, life_qty, has_slots)
 	_update_boost_equip_btn(equip_slow_slot1_button, "slow_boost", equipped_slots, slow_qty, has_slots)
 	_update_boost_equip_btn(equip_fly_slot1_button, "fly_boost", equipped_slots, fly_qty, has_slots)
+	_update_boost_equip_btn(equip_coin_mult_slot1_button, "coin_mult_boost", equipped_slots, coin_mult_qty, has_slots)
+	_update_boost_equip_btn(equip_mega_slow_slot1_button, "mega_slow_boost", equipped_slots, mega_slow_qty, has_slots)
 
 	_update_scroll_buttons_visibility()
 
@@ -695,6 +810,7 @@ func _on_play_button_pressed() -> void:
 	GameManager.start_game()
 
 func _on_store_button_pressed() -> void:
+	_switch_store_tab(true)
 	_update_all_ui()
 	store_panel.visible = true
 
@@ -827,6 +943,24 @@ func _on_buy_fly_boost_pressed() -> void:
 
 func _on_equip_fly_slot1_pressed() -> void:
 	_equip_to_first_available_slot("fly_boost")
+	_update_all_ui()
+
+func _on_buy_coin_mult_boost_pressed() -> void:
+	if CharacterManager:
+		CharacterManager.buy_boost("coin_mult_boost")
+		_update_all_ui()
+
+func _on_equip_coin_mult_slot1_pressed() -> void:
+	_equip_to_first_available_slot("coin_mult_boost")
+	_update_all_ui()
+
+func _on_buy_mega_slow_boost_pressed() -> void:
+	if CharacterManager:
+		CharacterManager.buy_boost("mega_slow_boost")
+		_update_all_ui()
+
+func _on_equip_mega_slow_slot1_pressed() -> void:
+	_equip_to_first_available_slot("mega_slow_boost")
 	_update_all_ui()
 
 func _on_buy_poison_pressed() -> void:

@@ -1,7 +1,7 @@
 extends Area2D
 class_name PowerUp
 
-enum Type { SHIELD, FLY, TURBO_DEBUFF, EXTRA_LIFE, SLOW_PERMANENT, SPEED_PERMANENT }
+enum Type { SHIELD, FLY, TURBO_DEBUFF, EXTRA_LIFE, SLOW_PERMANENT, SPEED_PERMANENT, COIN_MULT_2X }
 
 var type: Type = Type.SHIELD
 @onready var visual: ColorRect = $Visual
@@ -46,6 +46,9 @@ func _update_visuals() -> void:
 		Type.SPEED_PERMANENT:
 			icon_name = "speed.png"
 			default_color = Color(1.0, 0.5, 0.0, 1.0)
+		Type.COIN_MULT_2X:
+			icon_name = "coin_mult.png"
+			default_color = Color(1.0, 0.84, 0.0, 1.0)
 
 	visual.color = default_color
 	

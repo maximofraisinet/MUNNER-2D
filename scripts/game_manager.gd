@@ -104,12 +104,16 @@ func open_main_menu() -> void:
 	get_tree().paused = true
 	menu_opened_triggered.emit()
 
-func add_coin() -> void:
-	run_coins += 1
+func add_coin(amount: int = 1) -> void:
+	run_coins += amount
 
 func apply_permanent_speed_reduction() -> void:
 	current_speed = max(250.0, current_speed * 0.80)
 	speed_notification_emitted.emit("SPEED DOWN (-20%)", Color(0.0, 1.0, 0.5))
+
+func apply_mega_speed_reduction() -> void:
+	current_speed = max(150.0, current_speed * 0.20)
+	speed_notification_emitted.emit("MEGA SLOW (-80%)!", Color(0.2, 0.8, 1.0))
 
 func apply_permanent_speed_increase() -> void:
 	current_speed = current_speed * 1.10

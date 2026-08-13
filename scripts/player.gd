@@ -35,6 +35,9 @@ var coin_trail_timer: float = 0.0
 var is_turbo: bool = false
 var turbo_timer: float = 0.0
 
+var is_coin_multiplier_active: bool = false
+var coin_mult_timer: float = 0.0
+
 func _ready() -> void:
 	initial_pos = global_position
 	GameManager.game_restarted_triggered.connect(_on_game_restarted)
@@ -62,6 +65,8 @@ func _reset_player_state() -> void:
 	fly_timer = 0.0
 	is_turbo = false
 	turbo_timer = 0.0
+	is_coin_multiplier_active = false
+	coin_mult_timer = 0.0
 	GameManager.speed_multiplier = 1.0
 	
 	if current_character and current_character.id == "demon_messi":
@@ -108,6 +113,16 @@ func apply_powerup(type: PowerUp.Type) -> void:
 			if current_character and (current_character.id == "messi" or current_character.id == "demon_messi"):
 				return # Inmune a aceleración negativa
 			GameManager.apply_permanent_speed_increase()
+		PowerUp.Type.COIN_MULT_2X:
+			is_coin_multiplier_active = true
+			coin_mult_timer = 5.0
+			GameManager.speed_notification_emitted.emit("2X COINS MULTIPLIER (5s)!", Color(1.0, 0.84, 0.0))
+
+func get_current_coin_multiplier() -> int:
+	var base_mult: int = current_character.coin_multiplier if current_character else 1
+	if is_coin_multiplier_active:
+		return base_mult * 2
+	return base_mult
 
 func use_boost_slot(slot_idx: int) -> void:
 	if not CharacterManager: return
@@ -129,10 +144,16 @@ func use_boost_slot(slot_idx: int) -> void:
 			GameManager.speed_notification_emitted.emit("ACTIVATED LIFE BOOST!", Color(1.0, 0.2, 0.3))
 		elif boost_id == "slow_boost":
 			GameManager.apply_permanent_speed_reduction()
+		elif boost_id == "mega_slow_boost":
+			GameManager.apply_mega_speed_reduction()
 		elif boost_id == "fly_boost":
 			is_flying = true
 			fly_timer = 4.0
 			GameManager.speed_notification_emitted.emit("ACTIVATED FLY BOOST!", Color(1.0, 0.84, 0.0))
+		elif boost_id == "coin_mult_boost":
+			is_coin_multiplier_active = true
+			coin_mult_timer = 5.0
+			GameManager.speed_notification_emitted.emit("ACTIVATED 2X COINS (5s)!", Color(1.0, 0.84, 0.0))
 
 func on_obstacle_hit(obs: Area2D) -> bool:
 	if is_invulnerable:
@@ -203,6 +224,12 @@ func _physics_process(delta: float) -> void:
 		if turbo_timer <= 0.0:
 			is_turbo = false
 			GameManager.speed_multiplier = 1.0
+
+	# Procesar temporizador de Multiplicador de Monedas 2X
+	if is_coin_multiplier_active:
+		coin_mult_timer -= delta
+		if coin_mult_timer <= 0.0:
+			is_coin_multiplier_active = false
 
 	# Imán de Monedas para DEMON MESSI
 	if current_character and current_character.id == "demon_messi":

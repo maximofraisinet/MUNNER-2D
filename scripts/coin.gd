@@ -28,7 +28,10 @@ func _update_texture() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if visible and body is Player:
-		GameManager.add_coin()
+		var mult: int = 1
+		if body.has_method("get_current_coin_multiplier"):
+			mult = body.get_current_coin_multiplier()
+		GameManager.add_coin(mult)
 		visible = false
 		set_deferred("process_mode", PROCESS_MODE_DISABLED)
 		set_deferred("monitoring", false)

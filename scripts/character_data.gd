@@ -12,6 +12,7 @@ class_name CharacterData
 @export var price: int = 1
 @export var tier_rank: int = 1
 @export var boost_slots: int = 0
+@export var coin_multiplier: int = 1
 @export var pros_description: String = ""
 @export var cons_description: String = ""
 

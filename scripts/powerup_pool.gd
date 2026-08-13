@@ -71,6 +71,7 @@ func _select_weighted_powerup_type() -> PowerUp.Type:
 		PowerUp.Type.SHIELD: 40.0,
 		PowerUp.Type.TURBO_DEBUFF: 30.0 * neg_mult,
 		PowerUp.Type.FLY: 12.0 * fly_mult,
+		PowerUp.Type.COIN_MULT_2X: 10.0,
 		PowerUp.Type.SLOW_PERMANENT: 8.0,
 		PowerUp.Type.EXTRA_LIFE: 6.0 * life_mult,
 		PowerUp.Type.SPEED_PERMANENT: 4.0 * neg_mult

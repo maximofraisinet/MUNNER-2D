@@ -13,7 +13,9 @@ var boost_inventory: Dictionary = {
 	"shield_boost": 0,
 	"life_boost": 0,
 	"slow_boost": 0,
-	"fly_boost": 0
+	"fly_boost": 0,
+	"coin_mult_boost": 0,
+	"mega_slow_boost": 0
 }
 var equipped_boost_slots: Array = ["", "", ""]
 
@@ -31,6 +33,7 @@ func _register_characters() -> void:
 	tired.tier_rank = 1
 	tired.price = 0 # Starter gratuito
 	tired.boost_slots = 0
+	tired.coin_multiplier = 1
 	tired.pros_description = "+10% Score bonus per second"
 	tired.cons_description = "+10% Faster base jump fall"
 	tired.sprite_scale = Vector2(0.13, 0.13)
@@ -53,6 +56,7 @@ func _register_characters() -> void:
 	leech.tier_rank = 2
 	leech.price = 500
 	leech.boost_slots = 0
+	leech.coin_multiplier = 1
 	leech.pros_description = "+20% Shield Duration (6.0s duration)"
 	leech.cons_description = "-15% Coin spawn chance"
 	leech.sprite_scale = Vector2(0.13, 0.13)
@@ -75,6 +79,7 @@ func _register_characters() -> void:
 	maximo.tier_rank = 3
 	maximo.price = 1500
 	maximo.boost_slots = 0
+	maximo.coin_multiplier = 1
 	maximo.pros_description = "-50% Negative items drop rate"
 	maximo.cons_description = "-10% Run score multiplier"
 	maximo.negative_spawn_multiplier = 0.5
@@ -98,7 +103,8 @@ func _register_characters() -> void:
 	omablo.tier_rank = 4
 	omablo.price = 3500
 	omablo.boost_slots = 0
-	omablo.pros_description = "+150% EXTRA LIFE drop rate"
+	omablo.coin_multiplier = 2
+	omablo.pros_description = "INFINITO x2 MONEDAS & +150% EXTRA LIFE drop rate"
 	omablo.cons_description = "+30% Turbo Debuff drop rate"
 	omablo.life_spawn_multiplier = 2.5
 	omablo.sprite_scale = Vector2(0.115, 0.115)
@@ -121,7 +127,8 @@ func _register_characters() -> void:
 	demon.tier_rank = 5
 	demon.price = 7500
 	demon.boost_slots = 1 # 1 Boost Slot activo
-	demon.pros_description = "+150% Extra Life, +100% Fly & -50% Debuffs"
+	demon.coin_multiplier = 3
+	demon.pros_description = "INFINITO x3 MONEDAS, +150% Life, +100% Fly & 1 Slot"
 	demon.cons_description = "None (Premium Perk Tier)"
 	demon.life_spawn_multiplier = 2.5
 	demon.fly_spawn_multiplier = 2.0
@@ -146,7 +153,8 @@ func _register_characters() -> void:
 	messi.tier_rank = 6
 	messi.price = 15000
 	messi.boost_slots = 2 # 2 Boost Slots activos!
-	messi.pros_description = "PRO: 0% Negative items drop (No Debuffs!)"
+	messi.coin_multiplier = 4
+	messi.pros_description = "INFINITO x4 MONEDAS, 2 Slots & 0% Debuffs"
 	messi.cons_description = "CON: Standard positive item drop rates"
 	messi.negative_spawn_multiplier = 0.0 # 0% debuffs!
 	messi.life_spawn_multiplier = 1.0
@@ -171,7 +179,8 @@ func _register_characters() -> void:
 	dark_angel.tier_rank = 7
 	dark_angel.price = 30000
 	dark_angel.boost_slots = 3 # 3 MAX Boost Slots activos!
-	dark_angel.pros_description = "PRO: +300% Fly drop rate & 3 Slots"
+	dark_angel.coin_multiplier = 4
+	dark_angel.pros_description = "INFINITO x4 MONEDAS, 3 Slots & +300% Fly"
 	dark_angel.cons_description = "CON: +50% Turbo Debuff drop rate"
 	dark_angel.fly_spawn_multiplier = 4.0 # +300% fly drop!
 	dark_angel.life_spawn_multiplier = 1.5
@@ -196,7 +205,8 @@ func _register_characters() -> void:
 	demon_messi.tier_rank = 8
 	demon_messi.price = 50000 # Ultimate Endgame GOD Tier
 	demon_messi.boost_slots = 3 # 3 MAX Boost Slots
-	demon_messi.pros_description = "PRO: PERMA-SHIELD, +5 LIVES, MAGNET, 0% DEBUFFS"
+	demon_messi.coin_multiplier = 4
+	demon_messi.pros_description = "INFINITO x4 MONEDAS, PERMA-SHIELD, +5 LIVES, MAGNET"
 	demon_messi.cons_description = "CON: NONE (UNSTOPPABLE GOD TIER)"
 	demon_messi.negative_spawn_multiplier = 0.0 # 0% debuffs!
 	demon_messi.life_spawn_multiplier = 5.0    # +400% Extra Lives!
@@ -250,6 +260,8 @@ func get_boost_price(boost_id: String) -> int:
 		"slow_boost": return 150
 		"life_boost": return 200
 		"fly_boost": return 250
+		"coin_mult_boost": return 700
+		"mega_slow_boost": return 5000
 		"poison": return 75000
 		_: return 100
 
@@ -286,7 +298,9 @@ func wipe_all_data() -> void:
 		"shield_boost": 0,
 		"life_boost": 0,
 		"slow_boost": 0,
-		"fly_boost": 0
+		"fly_boost": 0,
+		"coin_mult_boost": 0,
+		"mega_slow_boost": 0
 	}
 	equipped_boost_slots = ["", "", ""]
 	save_data()
@@ -307,5 +321,15 @@ func load_data() -> void:
 	if config.load(SAVE_PATH) == OK:
 		current_character_id = config.get_value("character", "current", "tired")
 		unlocked_characters = config.get_value("character", "unlocked", ["tired"])
-		boost_inventory = config.get_value("character", "boost_inventory", {"shield_boost": 0, "life_boost": 0, "slow_boost": 0, "fly_boost": 0})
+		var default_inv = {
+			"shield_boost": 0,
+			"life_boost": 0,
+			"slow_boost": 0,
+			"fly_boost": 0,
+			"coin_mult_boost": 0,
+			"mega_slow_boost": 0
+		}
+		var loaded_inv = config.get_value("character", "boost_inventory", default_inv)
+		for k in default_inv.keys():
+			boost_inventory[k] = loaded_inv.get(k, 0)
 		equipped_boost_slots = config.get_value("character", "equipped_boost_slots", ["", "", ""])
