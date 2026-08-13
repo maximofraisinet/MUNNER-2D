@@ -55,6 +55,29 @@ func _register_characters() -> void:
 		tired.jump_frame = tired.run_frames[2]
 	characters["tired"] = tired
 
+	# Personaje 3: LEECH
+	var leech = CharacterData.new()
+	leech.id = "leech"
+	leech.display_name = "LEECH"
+	leech.sprite_scale = Vector2(0.13, 0.13)
+	leech.sprite_offset = Vector2(0, -20)
+	
+	var leech_paths = [
+		"res://assets/characters/leech/run1.png",
+		"res://assets/characters/leech/run2.png",
+		"res://assets/characters/leech/run3.png",
+		"res://assets/characters/leech/run4.png",
+		"res://assets/characters/leech/run5.png",
+		"res://assets/characters/leech/run6.png"
+	]
+	for path in leech_paths:
+		var tex = load(path) as Texture2D
+		if tex:
+			leech.run_frames.append(tex)
+	if leech.run_frames.size() > 2:
+		leech.jump_frame = leech.run_frames[2]
+	characters["leech"] = leech
+
 func get_current_character() -> CharacterData:
 	if characters.has(current_character_id):
 		return characters[current_character_id]
