@@ -5,7 +5,7 @@ class_name ObstaclePool
 
 const POOL_SIZE: int = 15
 const SPAWN_X: float = 1320.0
-const GROUND_Y: float = 555.0
+const GROUND_Y: float = 558.0
 
 var pool: Array[Area2D] = []
 var spawn_timer: float = 0.0
@@ -58,6 +58,8 @@ func _spawn_obstacle() -> void:
 	for obs in pool:
 		if not obs.visible:
 			obs.global_position = Vector2(SPAWN_X, GROUND_Y)
+			if obs.has_method("randomize_appearance"):
+				obs.randomize_appearance()
 			obs.visible = true
 			obs.process_mode = PROCESS_MODE_INHERIT
 			
