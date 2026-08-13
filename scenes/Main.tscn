@@ -224,29 +224,35 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -120.0
-offset_top = -20.0
+offset_top = -30.0
 offset_right = 120.0
-offset_bottom = 200.0
+offset_bottom = 220.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 12
 
 [node name="PlayButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "PLAY"
 
 [node name="StoreButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 text = "STORE"
 
-[node name="ExitButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 50)
+[node name="SettingsButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
+text = "SETTINGS"
+
+[node name="ExitButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
 text = "EXIT"
 
 [node name="StorePanel" type="Panel" parent="UI"]
@@ -377,6 +383,85 @@ theme_override_font_sizes/font_size = 15
 text = "SELECT"
 
 [node name="CloseStoreButton" type="Button" parent="UI/StorePanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -60.0
+offset_right = 80.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 20
+text = "BACK"
+
+[node name="SettingsPanel" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -140.0
+offset_right = 260.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="UI/SettingsPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 20.0
+offset_bottom = 60.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="PackLabel" type="Label" parent="UI/SettingsPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -45.0
+offset_right = 200.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "POWER-UP ICONS PACK:"
+horizontal_alignment = 1
+
+[node name="PackOptionButton" type="OptionButton" parent="UI/SettingsPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -5.0
+offset_right = 120.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+item_count = 2
+popup/item_0/text = "ARGENTO"
+popup/item_0/id = 0
+popup/item_1/text = "DEFAULT"
+popup/item_1/id = 1
+
+[node name="CloseSettingsButton" type="Button" parent="UI/SettingsPanel"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5

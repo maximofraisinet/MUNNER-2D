@@ -5,6 +5,7 @@ signal game_over_triggered
 signal game_restarted_triggered
 signal menu_opened_triggered
 signal speed_notification_emitted(message: String, text_color: Color)
+signal icon_pack_changed(pack_name: String)
 
 enum State { START, PLAYING, GAMEOVER }
 var current_state: State = State.START
@@ -21,6 +22,9 @@ var effective_speed: float:
 
 ## Tiempo de vuelo del jugador
 var player_air_hang_time: float = 0.6818
+
+## Paquete de iconos de potenciadores ("argento" o "default")
+var selected_icon_pack: String = "argento"
 
 ## Estadísticas persistentes
 var high_score: float = 0.0
@@ -40,6 +44,12 @@ func _process(delta: float) -> void:
 	if current_state == State.PLAYING:
 		current_speed += speed_acceleration * delta
 		run_score += delta * 10.0
+
+func set_icon_pack(pack_name: String) -> void:
+	if selected_icon_pack != pack_name:
+		selected_icon_pack = pack_name
+		save_data()
+		icon_pack_changed.emit(selected_icon_pack)
 
 func start_game() -> void:
 	current_state = State.PLAYING
@@ -82,12 +92,10 @@ func add_coin() -> void:
 	run_coins += 1
 
 func apply_permanent_speed_reduction() -> void:
-	# Reducción permanente del -20% de velocidad base
 	current_speed = max(250.0, current_speed * 0.80)
 	speed_notification_emitted.emit("SPEED DOWN (-20%)", Color(0.0, 1.0, 0.5))
 
 func apply_permanent_speed_increase() -> void:
-	# Aumento permanente del +10% de velocidad base
 	current_speed = current_speed * 1.10
 	speed_notification_emitted.emit("SPEED UP (+10%)", Color(1.0, 0.5, 0.0))
 
@@ -95,6 +103,7 @@ func save_data() -> void:
 	var config = ConfigFile.new()
 	config.set_value("stats", "high_score", high_score)
 	config.set_value("stats", "total_coins", total_coins)
+	config.set_value("settings", "icon_pack", selected_icon_pack)
 	config.save(SAVE_PATH)
 
 func load_data() -> void:
@@ -102,3 +111,4 @@ func load_data() -> void:
 	if config.load(SAVE_PATH) == OK:
 		high_score = config.get_value("stats", "high_score", 0.0)
 		total_coins = config.get_value("stats", "total_coins", 0)
+		selected_icon_pack = config.get_value("settings", "icon_pack", "argento")

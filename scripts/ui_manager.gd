@@ -16,6 +16,7 @@ extends CanvasLayer
 @onready var total_coins_label: Label = $MainMenu/StatsContainer/TotalCoinsLabel
 @onready var play_button: Button = $MainMenu/ButtonsContainer/PlayButton
 @onready var store_button: Button = $MainMenu/ButtonsContainer/StoreButton
+@onready var settings_button: Button = $MainMenu/ButtonsContainer/SettingsButton
 @onready var exit_button: Button = $MainMenu/ButtonsContainer/ExitButton
 
 @onready var store_panel: Panel = $StorePanel
@@ -25,6 +26,10 @@ extends CanvasLayer
 @onready var select_maximo_button: Button = $StorePanel/CharactersHBox/MaximoBox/SelectMaximoButton
 @onready var select_omablo_button: Button = $StorePanel/CharactersHBox/OmabloBox/SelectOmabloButton
 @onready var close_store_button: Button = $StorePanel/CloseStoreButton
+
+@onready var settings_panel: Panel = $SettingsPanel
+@onready var pack_option_button: OptionButton = $SettingsPanel/PackOptionButton
+@onready var close_settings_button: Button = $SettingsPanel/CloseSettingsButton
 
 @onready var game_over_panel: Panel = $GameOverPanel
 @onready var summary_label: Label = $GameOverPanel/SummaryLabel
@@ -39,9 +44,11 @@ func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
 	
 	_show_main_menu()
+	_setup_settings_options()
 	
 	play_button.pressed.connect(_on_play_button_pressed)
 	store_button.pressed.connect(_on_store_button_pressed)
+	settings_button.pressed.connect(_on_settings_button_pressed)
 	exit_button.pressed.connect(_on_exit_button_pressed)
 	
 	select_demon_button.pressed.connect(_on_select_demon_pressed)
@@ -51,6 +58,9 @@ func _ready() -> void:
 	select_omablo_button.pressed.connect(_on_select_omablo_pressed)
 	close_store_button.pressed.connect(_on_close_store_button_pressed)
 	
+	pack_option_button.item_selected.connect(_on_pack_option_selected)
+	close_settings_button.pressed.connect(_on_close_settings_button_pressed)
+	
 	restart_button.pressed.connect(_on_restart_button_pressed)
 	menu_button.pressed.connect(_on_menu_button_pressed)
 	
@@ -59,6 +69,17 @@ func _ready() -> void:
 	GameManager.menu_opened_triggered.connect(_on_menu_opened)
 	GameManager.game_over_triggered.connect(_on_game_over)
 	GameManager.speed_notification_emitted.connect(_on_speed_notification_emitted)
+
+func _setup_settings_options() -> void:
+	pack_option_button.clear()
+	pack_option_button.add_item("ARGENTO", 0)
+	pack_option_button.add_item("DEFAULT", 1)
+	
+	var current_pack = GameManager.selected_icon_pack if GameManager else "argento"
+	if current_pack == "default":
+		pack_option_button.select(1)
+	else:
+		pack_option_button.select(0)
 
 func _process(delta: float) -> void:
 	if score_label:
@@ -144,6 +165,7 @@ func _show_main_menu() -> void:
 	hud.visible = false
 	game_over_panel.visible = false
 	store_panel.visible = false
+	settings_panel.visible = false
 
 func _on_play_button_pressed() -> void:
 	main_menu.visible = false
@@ -153,6 +175,18 @@ func _on_play_button_pressed() -> void:
 func _on_store_button_pressed() -> void:
 	_update_store_buttons()
 	store_panel.visible = true
+
+func _on_settings_button_pressed() -> void:
+	_setup_settings_options()
+	settings_panel.visible = true
+
+func _on_pack_option_selected(index: int) -> void:
+	var pack_name = "argento" if index == 0 else "default"
+	if GameManager:
+		GameManager.set_icon_pack(pack_name)
+
+func _on_close_settings_button_pressed() -> void:
+	settings_panel.visible = false
 
 func _on_select_demon_pressed() -> void:
 	if CharacterManager:
@@ -198,6 +232,7 @@ func _on_game_started() -> void:
 	main_menu.visible = false
 	game_over_panel.visible = false
 	store_panel.visible = false
+	settings_panel.visible = false
 	hud.visible = true
 	if notification_label:
 		notification_label.visible = false
@@ -206,6 +241,7 @@ func _on_game_restarted() -> void:
 	main_menu.visible = false
 	game_over_panel.visible = false
 	store_panel.visible = false
+	settings_panel.visible = false
 	hud.visible = true
 	if notification_label:
 		notification_label.visible = false
