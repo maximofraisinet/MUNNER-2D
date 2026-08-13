@@ -139,6 +139,56 @@ func _register_characters() -> void:
 	if demon.run_frames.size() > 2: demon.jump_frame = demon.run_frames[2]
 	characters["demon"] = demon
 
+	# 6. MESSI (Tier 6 - GOAT Tier)
+	var messi = CharacterData.new()
+	messi.id = "messi"
+	messi.display_name = "MESSI 👑"
+	messi.tier_rank = 6
+	messi.price = 1
+	messi.boost_slots = 2 # 2 Boost Slots activos!
+	messi.pros_description = "PRO: 0% Negative items drop (No Debuffs!)"
+	messi.cons_description = "CON: Standard positive item drop rates"
+	messi.negative_spawn_multiplier = 0.0 # 0% debuffs!
+	messi.life_spawn_multiplier = 1.0
+	messi.fly_spawn_multiplier = 1.0
+	messi.sprite_scale = Vector2(0.13, 0.13)
+	messi.sprite_offset = Vector2(0, -20)
+	var messi_paths = [
+		"res://assets/characters/messi/run1.png", "res://assets/characters/messi/run2.png",
+		"res://assets/characters/messi/run3.png", "res://assets/characters/messi/run4.png",
+		"res://assets/characters/messi/run5.png", "res://assets/characters/messi/run6.png"
+	]
+	for path in messi_paths:
+		var tex = load(path) as Texture2D
+		if tex: messi.run_frames.append(tex)
+	if messi.run_frames.size() > 2: messi.jump_frame = messi.run_frames[2]
+	characters["messi"] = messi
+
+	# 7. DARK ANGEL (Tier 7 - Celestial Ultimate)
+	var dark_angel = CharacterData.new()
+	dark_angel.id = "dark_angel"
+	dark_angel.display_name = "DARK ANGEL ⚡"
+	dark_angel.tier_rank = 7
+	dark_angel.price = 1
+	dark_angel.boost_slots = 3 # 3 MAX Boost Slots activos!
+	dark_angel.pros_description = "PRO: +300% Fly drop rate & 3 Boost Slots"
+	dark_angel.cons_description = "CON: +50% Turbo Debuff drop rate"
+	dark_angel.fly_spawn_multiplier = 4.0 # +300% fly drop!
+	dark_angel.life_spawn_multiplier = 1.5
+	dark_angel.negative_spawn_multiplier = 1.5
+	dark_angel.sprite_scale = Vector2(0.14, 0.14)
+	dark_angel.sprite_offset = Vector2(0, -20)
+	var dark_angel_paths = [
+		"res://assets/characters/dark_angel/run1.png", "res://assets/characters/dark_angel/run2.png",
+		"res://assets/characters/dark_angel/run3.png", "res://assets/characters/dark_angel/run4.png",
+		"res://assets/characters/dark_angel/run5.png", "res://assets/characters/dark_angel/run6.png"
+	]
+	for path in dark_angel_paths:
+		var tex = load(path) as Texture2D
+		if tex: dark_angel.run_frames.append(tex)
+	if dark_angel.run_frames.size() > 2: dark_angel.jump_frame = dark_angel.run_frames[2]
+	characters["dark_angel"] = dark_angel
+
 func get_current_character() -> CharacterData:
 	if characters.has(current_character_id):
 		return characters[current_character_id]

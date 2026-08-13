@@ -54,12 +54,16 @@ extends CanvasLayer
 @onready var maximo_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/MaximoCard
 @onready var omablo_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/OmabloCard
 @onready var demon_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/DemonCard
+@onready var messi_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/MessiCard
+@onready var dark_angel_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/DarkAngelCard
 
 @onready var action_tired_button: Button = $StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox/ActionTiredButton
 @onready var action_leech_button: Button = $StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox/ActionLeechButton
 @onready var action_maximo_button: Button = $StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox/ActionMaximoButton
 @onready var action_omablo_button: Button = $StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox/ActionOmabloButton
 @onready var action_demon_button: Button = $StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox/ActionDemonButton
+@onready var action_messi_button: Button = $StorePanel/ScrollContainer/CardsHBox/MessiCard/VBox/ActionMessiButton
+@onready var action_dark_angel_button: Button = $StorePanel/ScrollContainer/CardsHBox/DarkAngelCard/VBox/ActionDarkAngelButton
 
 @onready var loadout_title_label: Label = $StorePanel/LoadoutBarContainer/LoadoutTitleLabel
 @onready var store_slot1_card: PanelContainer = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card
@@ -130,6 +134,8 @@ func _ready() -> void:
 	action_maximo_button.pressed.connect(_on_action_maximo_pressed)
 	action_omablo_button.pressed.connect(_on_action_omablo_pressed)
 	action_demon_button.pressed.connect(_on_action_demon_pressed)
+	action_messi_button.pressed.connect(_on_action_messi_pressed)
+	action_dark_angel_button.pressed.connect(_on_action_dark_angel_pressed)
 	
 	buy_shield_boost_button.pressed.connect(_on_buy_shield_boost_pressed)
 	equip_shield_slot1_button.pressed.connect(_on_equip_shield_slot1_pressed)
@@ -313,7 +319,7 @@ func _update_scroll_buttons_visibility() -> void:
 		scroll_right_button.visible = (curr < max_val - 5)
 
 func _setup_card_hover_effects() -> void:
-	var cards = [tired_card, leech_card, maximo_card, omablo_card, demon_card, shield_boost_card, life_boost_card, slow_boost_card, fly_boost_card]
+	var cards = [tired_card, leech_card, maximo_card, omablo_card, demon_card, messi_card, dark_angel_card, shield_boost_card, life_boost_card, slow_boost_card, fly_boost_card]
 	for card in cards:
 		if card:
 			card.mouse_entered.connect(_on_card_mouse_entered.bind(card))
@@ -441,7 +447,9 @@ func _update_store_buttons() -> void:
 		"leech": action_leech_button,
 		"maximo": action_maximo_button,
 		"omablo": action_omablo_button,
-		"demon": action_demon_button
+		"demon": action_demon_button,
+		"messi": action_messi_button,
+		"dark_angel": action_dark_angel_button
 	}
 	
 	for char_id in char_buttons.keys():
@@ -477,21 +485,21 @@ func _update_store_buttons() -> void:
 		
 	var curr_char = CharacterManager.get_current_character()
 	var has_slots = curr_char and curr_char.boost_slots > 0
-	var slot_0_boost = CharacterManager.equipped_boost_slots[0]
+	var equipped_slots = CharacterManager.equipped_boost_slots
 	
-	_update_boost_equip_btn(equip_shield_slot1_button, "shield_boost", slot_0_boost, shield_qty, has_slots)
-	_update_boost_equip_btn(equip_life_slot1_button, "life_boost", slot_0_boost, life_qty, has_slots)
-	_update_boost_equip_btn(equip_slow_slot1_button, "slow_boost", slot_0_boost, slow_qty, has_slots)
-	_update_boost_equip_btn(equip_fly_slot1_button, "fly_boost", slot_0_boost, fly_qty, has_slots)
+	_update_boost_equip_btn(equip_shield_slot1_button, "shield_boost", equipped_slots, shield_qty, has_slots)
+	_update_boost_equip_btn(equip_life_slot1_button, "life_boost", equipped_slots, life_qty, has_slots)
+	_update_boost_equip_btn(equip_slow_slot1_button, "slow_boost", equipped_slots, slow_qty, has_slots)
+	_update_boost_equip_btn(equip_fly_slot1_button, "fly_boost", equipped_slots, fly_qty, has_slots)
 
 	_update_scroll_buttons_visibility()
 
-func _update_boost_equip_btn(btn: Button, boost_id: String, active_boost: String, qty: int, has_slots: bool) -> void:
+func _update_boost_equip_btn(btn: Button, boost_id: String, equipped_slots: Array, qty: int, has_slots: bool) -> void:
 	if not btn: return
 	if not has_slots:
 		btn.text = "NO SLOTS"
 		btn.disabled = true
-	elif active_boost == boost_id:
+	elif boost_id in equipped_slots:
 		btn.text = "EQUIPPED"
 		btn.disabled = false
 	else:
@@ -560,6 +568,12 @@ func _on_action_omablo_pressed() -> void:
 func _on_action_demon_pressed() -> void:
 	_handle_character_action("demon")
 
+func _on_action_messi_pressed() -> void:
+	_handle_character_action("messi")
+
+func _on_action_dark_angel_pressed() -> void:
+	_handle_character_action("dark_angel")
+
 func _handle_character_action(char_id: String) -> void:
 	if not CharacterManager: return
 	if CharacterManager.is_unlocked(char_id):
@@ -569,15 +583,35 @@ func _handle_character_action(char_id: String) -> void:
 			CharacterManager.select_character(char_id)
 	_update_all_ui()
 
+func _equip_to_first_available_slot(boost_id: String) -> void:
+	if not CharacterManager: return
+	var curr = CharacterManager.get_current_character()
+	if not curr or curr.boost_slots == 0: return
+	
+	# Si ya está equipado, desequipar
+	if boost_id in CharacterManager.equipped_boost_slots:
+		for i in range(curr.boost_slots):
+			if CharacterManager.equipped_boost_slots[i] == boost_id:
+				CharacterManager.equip_boost_to_slot(i, boost_id)
+				return
+				
+	# Si no está equipado, buscar slot libre o reemplazar el slot 0
+	for i in range(curr.boost_slots):
+		if CharacterManager.equipped_boost_slots[i] == "":
+			CharacterManager.equip_boost_to_slot(i, boost_id)
+			return
+			
+	# Si todos están llenos, reemplazar slot 0
+	CharacterManager.equip_boost_to_slot(0, boost_id)
+
 func _on_buy_shield_boost_pressed() -> void:
 	if CharacterManager:
 		CharacterManager.buy_boost("shield_boost")
 		_update_all_ui()
 
 func _on_equip_shield_slot1_pressed() -> void:
-	if CharacterManager:
-		CharacterManager.equip_boost_to_slot(0, "shield_boost")
-		_update_all_ui()
+	_equip_to_first_available_slot("shield_boost")
+	_update_all_ui()
 
 func _on_buy_life_boost_pressed() -> void:
 	if CharacterManager:
@@ -585,9 +619,8 @@ func _on_buy_life_boost_pressed() -> void:
 		_update_all_ui()
 
 func _on_equip_life_slot1_pressed() -> void:
-	if CharacterManager:
-		CharacterManager.equip_boost_to_slot(0, "life_boost")
-		_update_all_ui()
+	_equip_to_first_available_slot("life_boost")
+	_update_all_ui()
 
 func _on_buy_slow_boost_pressed() -> void:
 	if CharacterManager:
@@ -595,9 +628,8 @@ func _on_buy_slow_boost_pressed() -> void:
 		_update_all_ui()
 
 func _on_equip_slow_slot1_pressed() -> void:
-	if CharacterManager:
-		CharacterManager.equip_boost_to_slot(0, "slow_boost")
-		_update_all_ui()
+	_equip_to_first_available_slot("slow_boost")
+	_update_all_ui()
 
 func _on_buy_fly_boost_pressed() -> void:
 	if CharacterManager:
@@ -605,9 +637,8 @@ func _on_buy_fly_boost_pressed() -> void:
 		_update_all_ui()
 
 func _on_equip_fly_slot1_pressed() -> void:
-	if CharacterManager:
-		CharacterManager.equip_boost_to_slot(0, "fly_boost")
-		_update_all_ui()
+	_equip_to_first_available_slot("fly_boost")
+	_update_all_ui()
 
 func _on_close_store_button_pressed() -> void:
 	store_panel.visible = false

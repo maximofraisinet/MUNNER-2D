@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://c_main_001"]
+[gd_scene load_steps=26 format=3 uid="uid://c_main_001"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/obstacle_pool.gd" id="2_pool"]
@@ -18,6 +18,8 @@
 [ext_resource type="Texture2D" path="res://assets/powerups/argento/life.png" id="16_life_tex"]
 [ext_resource type="Texture2D" path="res://assets/powerups/argento/slow.png" id="17_slow_tex"]
 [ext_resource type="Texture2D" path="res://assets/powerups/argento/fly.png" id="18_fly_tex"]
+[ext_resource type="Texture2D" path="res://assets/characters/messi/run1.png" id="19_messi_preview"]
+[ext_resource type="Texture2D" path="res://assets/characters/dark_angel/run1.png" id="20_dark_angel_preview"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(2400, 68)
@@ -835,6 +837,120 @@ text = "Slots: 1 BOOST SLOT"
 horizontal_alignment = 1
 
 [node name="ActionDemonButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
+custom_minimum_size = Vector2(145, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 12
+text = "BUY (1 COIN)"
+
+[node name="MessiCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
+custom_minimum_size = Vector2(175, 235)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_demon")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox/MessiCard"]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/MessiCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "6. MESSI 👑"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/MessiCard/VBox"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("19_messi_preview")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/MessiCard/VBox"]
+custom_minimum_size = Vector2(155, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+text = "PRO: 0% Negative Items (No Debuffs)"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/MessiCard/VBox"]
+custom_minimum_size = Vector2(155, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+text = "CON: None (GOAT Tier)"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="SlotsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/MessiCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "Slots: 2 BOOST SLOTS"
+horizontal_alignment = 1
+
+[node name="ActionMessiButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/MessiCard/VBox"]
+custom_minimum_size = Vector2(145, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 12
+text = "BUY (1 COIN)"
+
+[node name="DarkAngelCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
+custom_minimum_size = Vector2(175, 235)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_demon")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox/DarkAngelCard"]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/DarkAngelCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.8, 0.4, 1, 1)
+text = "7. DARK ANGEL ⚡"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/DarkAngelCard/VBox"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("20_dark_angel_preview")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/DarkAngelCard/VBox"]
+custom_minimum_size = Vector2(155, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+text = "PRO: +300% Fly drop & 3 Slots"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/DarkAngelCard/VBox"]
+custom_minimum_size = Vector2(155, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+text = "CON: +50% Turbo Debuff drop"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="SlotsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/DarkAngelCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "Slots: 3 BOOST SLOTS"
+horizontal_alignment = 1
+
+[node name="ActionDarkAngelButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/DarkAngelCard/VBox"]
 custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
 size_flags_horizontal = 4
