@@ -5,6 +5,8 @@ class_name Player
 @export var jump_velocity: float = -750.0
 
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var obstacle_pool: Node2D = $"../ObstaclePool"
+@onready var coin_pool: Node2D = $"../CoinPool"
 
 var air_hang_time: float:
 	get:
@@ -16,6 +18,22 @@ var current_frame_idx: int = 0
 var anim_fps: float = 12.0
 var initial_pos: Vector2 = Vector2(100, 545)
 
+## ESTADOS DE POTENCIADORES Y VIDAS
+var extra_lives: int = 0
+
+var has_shield: bool = false
+var shield_timer: float = 0.0
+
+var is_invulnerable: bool = false
+var invulnerability_timer: float = 0.0
+
+var is_flying: bool = false
+var fly_timer: float = 0.0
+var coin_trail_timer: float = 0.0
+
+var is_turbo: bool = false
+var turbo_timer: float = 0.0
+
 func _ready() -> void:
 	initial_pos = global_position
 	GameManager.game_restarted_triggered.connect(_on_game_restarted)
@@ -26,6 +44,18 @@ func _ready() -> void:
 func _on_game_restarted() -> void:
 	global_position = initial_pos
 	velocity = Vector2.ZERO
+	extra_lives = 0
+	has_shield = false
+	shield_timer = 0.0
+	is_invulnerable = false
+	invulnerability_timer = 0.0
+	is_flying = false
+	fly_timer = 0.0
+	is_turbo = false
+	turbo_timer = 0.0
+	GameManager.speed_multiplier = 1.0
+	if sprite:
+		sprite.modulate = Color.WHITE
 
 func _on_character_changed(_new_char: CharacterData) -> void:
 	load_character()
@@ -40,27 +70,123 @@ func load_character() -> void:
 				sprite.texture = current_character.run_frames[0]
 				current_frame_idx = 0
 
+func apply_powerup(type: PowerUp.Type) -> void:
+	match type:
+		PowerUp.Type.SHIELD:
+			has_shield = true
+			shield_timer = 5.0
+		PowerUp.Type.EXTRA_LIFE:
+			extra_lives += 1
+		PowerUp.Type.FLY:
+			is_flying = true
+			fly_timer = 4.0
+		PowerUp.Type.TURBO_DEBUFF:
+			is_turbo = true
+			turbo_timer = 4.0
+			GameManager.speed_multiplier = 1.35
+
+func on_obstacle_hit(obs: Area2D) -> bool:
+	if is_invulnerable:
+		return true
+		
+	# 1. Absorber con Escudo Finito
+	if has_shield:
+		has_shield = false
+		shield_timer = 0.0
+		is_invulnerable = true
+		invulnerability_timer = 0.5
+		if obs:
+			obs.visible = false
+			obs.set_deferred("process_mode", PROCESS_MODE_DISABLED)
+		return true
+		
+	# 2. Resucitar con Vida Extra acumulada
+	if extra_lives > 0:
+		extra_lives -= 1
+		is_invulnerable = true
+		invulnerability_timer = 1.5
+		if obs:
+			obs.visible = false
+			obs.set_deferred("process_mode", PROCESS_MODE_DISABLED)
+		if obstacle_pool and obstacle_pool.has_method("clear_landing_runway"):
+			obstacle_pool.clear_landing_runway()
+		return true
+		
+	return false # Sin escudo ni vida extra: Game Over
+
 func _physics_process(delta: float) -> void:
 	if GameManager.current_state != GameManager.State.PLAYING:
 		return
 
-	if not is_on_floor():
-		velocity.y += gravity * delta
-		if current_character and current_character.jump_frame and sprite:
-			sprite.texture = current_character.jump_frame
+	# Procesar temporizador de invulnerabilidad
+	if is_invulnerable:
+		invulnerability_timer -= delta
+		if invulnerability_timer <= 0.0:
+			is_invulnerable = false
+
+	# Procesar temporizador de Escudo Finito
+	if has_shield:
+		shield_timer -= delta
+		if shield_timer <= 0.0:
+			has_shield = false
+
+	# Procesar temporizador de Turbo
+	if is_turbo:
+		turbo_timer -= delta
+		if turbo_timer <= 0.0:
+			is_turbo = false
+			GameManager.speed_multiplier = 1.0
+
+	# Procesar temporizador de Vuelo
+	if is_flying:
+		fly_timer -= delta
+		velocity.y = 0.0
+		global_position.y = lerp(global_position.y, 380.0, 8.0 * delta)
+		
+		coin_trail_timer += delta
+		if coin_trail_timer >= 0.25:
+			coin_trail_timer = 0.0
+			if coin_pool and coin_pool.has_method("spawn_flight_coin"):
+				coin_pool.spawn_flight_coin(1180.0, 360.0)
+				
+		if fly_timer <= 0.0:
+			is_flying = false
+			if obstacle_pool and obstacle_pool.has_method("clear_landing_runway"):
+				obstacle_pool.clear_landing_runway()
 	else:
-		_animate_run(delta)
+		if not is_on_floor():
+			velocity.y += gravity * delta
+			if current_character and current_character.jump_frame and sprite:
+				sprite.texture = current_character.jump_frame
+		else:
+			_animate_run(delta)
 
-	if is_on_floor() and (Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_up")):
-		velocity.y = jump_velocity
+		if is_on_floor() and (Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_up")):
+			velocity.y = jump_velocity
 
+	_update_visual_modulation()
 	move_and_slide()
+
+func _update_visual_modulation() -> void:
+	if not sprite:
+		return
+		
+	if is_flying:
+		sprite.modulate = Color(1.0, 0.85, 0.3)
+	elif is_turbo:
+		sprite.modulate = Color(1.0, 0.4, 1.0)
+	elif has_shield:
+		sprite.modulate = Color(0.4, 1.0, 1.0)
+	elif is_invulnerable:
+		sprite.modulate = Color(1.0, 0.5, 0.5, 0.7) # Parpadeo de invulnerabilidad tras perder vida/escudo
+	else:
+		sprite.modulate = Color.WHITE
 
 func _animate_run(delta: float) -> void:
 	if not current_character or current_character.run_frames.size() == 0 or not sprite:
 		return
 		
-	var speed_multiplier = GameManager.current_speed / 400.0
+	var speed_multiplier = GameManager.effective_speed / 400.0
 	anim_timer += delta * anim_fps * speed_multiplier
 	
 	if anim_timer >= 1.0:

@@ -3,7 +3,7 @@ class_name CoinPool
 
 @export var coin_scene: PackedScene = preload("res://scenes/Coin.tscn")
 
-const POOL_SIZE: int = 10
+const POOL_SIZE: int = 25
 var pool: Array[Area2D] = []
 
 func _ready() -> void:
@@ -24,7 +24,7 @@ func _physics_process(delta: float) -> void:
 	if GameManager.current_state != GameManager.State.PLAYING:
 		return
 		
-	var current_speed = GameManager.current_speed
+	var current_speed = GameManager.effective_speed
 	
 	for coin in pool:
 		if coin.visible:
@@ -44,6 +44,14 @@ func spawn_safe_ground_coin(spawn_x: float) -> void:
 	var coin = _get_free_coin()
 	if coin:
 		coin.global_position = Vector2(spawn_x, 540.0)
+		coin.visible = true
+		coin.set_deferred("process_mode", PROCESS_MODE_INHERIT)
+		coin.set_deferred("monitoring", true)
+
+func spawn_flight_coin(spawn_x: float, spawn_y: float) -> void:
+	var coin = _get_free_coin()
+	if coin:
+		coin.global_position = Vector2(spawn_x, spawn_y)
 		coin.visible = true
 		coin.set_deferred("process_mode", PROCESS_MODE_INHERIT)
 		coin.set_deferred("monitoring", true)

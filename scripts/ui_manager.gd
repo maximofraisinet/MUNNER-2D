@@ -5,6 +5,11 @@ extends CanvasLayer
 @onready var coins_label: Label = $HUD/CoinsLabel
 @onready var speed_label: Label = $HUD/SpeedLabel
 
+@onready var lives_status_label: Label = $HUD/PowerUpStatusBox/LivesStatusLabel
+@onready var shield_status_label: Label = $HUD/PowerUpStatusBox/ShieldStatusLabel
+@onready var fly_status_label: Label = $HUD/PowerUpStatusBox/FlyStatusLabel
+@onready var turbo_status_label: Label = $HUD/PowerUpStatusBox/TurboStatusLabel
+
 @onready var main_menu: Control = $MainMenu
 @onready var best_score_label: Label = $MainMenu/StatsContainer/BestScoreLabel
 @onready var total_coins_label: Label = $MainMenu/StatsContainer/TotalCoinsLabel
@@ -24,6 +29,8 @@ extends CanvasLayer
 @onready var summary_label: Label = $GameOverPanel/SummaryLabel
 @onready var restart_button: Button = $GameOverPanel/ButtonsContainer/RestartButton
 @onready var menu_button: Button = $GameOverPanel/ButtonsContainer/MenuButton
+
+@onready var player: Node2D = $"../Player"
 
 func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
@@ -55,7 +62,41 @@ func _process(_delta: float) -> void:
 	if coins_label:
 		coins_label.text = "COINS: %d" % GameManager.run_coins
 	if speed_label:
-		speed_label.text = "SPEED: %d px/s" % int(GameManager.current_speed)
+		speed_label.text = "SPEED: %d px/s" % int(GameManager.effective_speed)
+
+	_update_powerup_status()
+
+func _update_powerup_status() -> void:
+	if not player:
+		return
+		
+	# Lives Status (Top Right)
+	if lives_status_label:
+		var lives = int(player.get("extra_lives"))
+		lives_status_label.visible = (lives > 0)
+		if lives > 0:
+			lives_status_label.text = "LIVES: %d" % lives
+
+	# Finite Shield Status (5s Timer)
+	if shield_status_label:
+		var has_shield = player.get("has_shield") == true
+		shield_status_label.visible = has_shield
+		if has_shield:
+			shield_status_label.text = "SHIELD: %.1fs" % float(player.get("shield_timer"))
+		
+	# Fly Status
+	if fly_status_label:
+		var is_flying = player.get("is_flying") == true
+		fly_status_label.visible = is_flying
+		if is_flying:
+			fly_status_label.text = "FLYING: %.1fs" % float(player.get("fly_timer"))
+			
+	# Turbo Status
+	if turbo_status_label:
+		var is_turbo = player.get("is_turbo") == true
+		turbo_status_label.visible = is_turbo
+		if is_turbo:
+			turbo_status_label.text = "TURBO DEBUFF: %.1fs" % float(player.get("turbo_timer"))
 
 func _update_store_buttons() -> void:
 	var current_id = CharacterManager.current_character_id if CharacterManager else "demon"

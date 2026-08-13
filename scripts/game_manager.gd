@@ -12,6 +12,11 @@ var current_state: State = State.START
 var initial_speed: float = 400.0
 var speed_acceleration: float = 12.0
 var current_speed: float = 400.0
+var speed_multiplier: float = 1.0
+
+var effective_speed: float:
+	get:
+		return current_speed * speed_multiplier
 
 ## Tiempo de vuelo del jugador
 var player_air_hang_time: float = 0.6818
@@ -38,6 +43,7 @@ func _process(delta: float) -> void:
 func start_game() -> void:
 	current_state = State.PLAYING
 	current_speed = initial_speed
+	speed_multiplier = 1.0
 	run_score = 0.0
 	run_coins = 0
 	get_tree().paused = false
@@ -48,10 +54,8 @@ func game_over() -> void:
 		return
 	current_state = State.GAMEOVER
 	
-	# Acumular monedas de esta partida al total persistente
 	total_coins += run_coins
 	
-	# Actualizar High Score si se superó el récord
 	if run_score > high_score:
 		high_score = run_score
 		
@@ -62,6 +66,7 @@ func game_over() -> void:
 func restart_game() -> void:
 	current_state = State.PLAYING
 	current_speed = initial_speed
+	speed_multiplier = 1.0
 	run_score = 0.0
 	run_coins = 0
 	get_tree().paused = false

@@ -20,7 +20,6 @@ func _ready() -> void:
 		var obs = obstacle_scene.instantiate() as Area2D
 		obs.visible = false
 		obs.process_mode = PROCESS_MODE_DISABLED
-		obs.body_entered.connect(_on_obstacle_body_entered)
 		add_child(obs)
 		pool.append(obs)
 
@@ -31,11 +30,17 @@ func reset_pool() -> void:
 	next_spawn_interval = 1.5
 	cluster_remaining = 0
 
+## Desactivar todos los obstáculos en pista de aterrizaje (X entre 0 y 750)
+func clear_landing_runway() -> void:
+	for obs in pool:
+		if obs.visible and obs.global_position.x >= -50.0 and obs.global_position.x <= 750.0:
+			_deactivate_obstacle(obs)
+
 func _physics_process(delta: float) -> void:
 	if GameManager.current_state != GameManager.State.PLAYING:
 		return
 		
-	var current_speed = GameManager.current_speed
+	var current_speed = GameManager.effective_speed
 	
 	for obs in pool:
 		if obs.visible:
@@ -65,7 +70,7 @@ func _deactivate_obstacle(obs: Area2D) -> void:
 	obs.process_mode = PROCESS_MODE_DISABLED
 
 func _calculate_next_spawn_interval() -> void:
-	var v_game = GameManager.current_speed
+	var v_game = GameManager.effective_speed
 	var t_air = GameManager.player_air_hang_time
 	
 	if cluster_remaining > 0:
@@ -85,7 +90,3 @@ func _calculate_next_spawn_interval() -> void:
 	if coin_pool and coin_pool.has_method("spawn_safe_ground_coin") and next_spawn_interval > 1.2 and randf() < 0.4:
 		var safe_offset = SPAWN_X + (v_game * next_spawn_interval * 0.5)
 		coin_pool.spawn_safe_ground_coin(safe_offset)
-
-func _on_obstacle_body_entered(body: Node2D) -> void:
-	if body is Player:
-		GameManager.game_over()

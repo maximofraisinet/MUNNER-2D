@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c_main_001"]
+[gd_scene load_steps=9 format=3 uid="uid://c_main_001"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/obstacle_pool.gd" id="2_pool"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c_obstacle_001" path="res://scenes/Obstacle.tscn" id="4_obstacle_scene"]
 [ext_resource type="Script" path="res://scripts/coin_pool.gd" id="5_coin_pool"]
 [ext_resource type="Texture2D" path="res://assets/ui/bg-menu.png" id="6_bg_menu"]
+[ext_resource type="Script" path="res://scripts/powerup_pool.gd" id="7_powerup_pool"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(2400, 68)
@@ -52,6 +53,9 @@ obstacle_scene = ExtResource("4_obstacle_scene")
 [node name="CoinPool" type="Node2D" parent="."]
 script = ExtResource("5_coin_pool")
 
+[node name="PowerUpPool" type="Node2D" parent="."]
+script = ExtResource("7_powerup_pool")
+
 [node name="UI" type="CanvasLayer" parent="."]
 process_mode = 3
 script = ExtResource("3_ui")
@@ -91,6 +95,49 @@ offset_right = 250.0
 offset_bottom = 120.0
 theme_override_font_sizes/font_size = 18
 text = "SPEED: 400 px/s"
+
+[node name="PowerUpStatusBox" type="VBoxContainer" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -280.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 160.0
+grow_horizontal = 0
+
+[node name="LivesStatusLabel" type="Label" parent="UI/HUD/PowerUpStatusBox"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 0.2, 0.3, 1)
+text = "LIVES: 0"
+horizontal_alignment = 2
+
+[node name="ShieldStatusLabel" type="Label" parent="UI/HUD/PowerUpStatusBox"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+text = "SHIELD: 5.0s"
+horizontal_alignment = 2
+
+[node name="FlyStatusLabel" type="Label" parent="UI/HUD/PowerUpStatusBox"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "FLYING: 4.0s"
+horizontal_alignment = 2
+
+[node name="TurboStatusLabel" type="Label" parent="UI/HUD/PowerUpStatusBox"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0, 1, 1)
+text = "TURBO DEBUFF: 4.0s"
+horizontal_alignment = 2
 
 [node name="MainMenu" type="Control" parent="UI"]
 layout_mode = 3
