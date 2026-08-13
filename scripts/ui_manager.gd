@@ -41,12 +41,14 @@ extends CanvasLayer
 @onready var play_button: Button = $MainMenu/ButtonsContainer/PlayButton
 @onready var store_button: Button = $MainMenu/ButtonsContainer/StoreButton
 @onready var achievements_button: Button = $MainMenu/ButtonsContainer/AchievementsButton
+@onready var casino_button: Button = $MainMenu/ButtonsContainer/CasinoButton
 @onready var settings_button: Button = $MainMenu/ButtonsContainer/SettingsButton
 @onready var exit_button: Button = $MainMenu/ButtonsContainer/ExitButton
 
 @onready var achievements_panel: Panel = $AchievementsPanel
 @onready var achievements_vbox: VBoxContainer = $AchievementsPanel/ScrollContainer/AchievementsVBox
 @onready var close_achievements_button: Button = $AchievementsPanel/CloseAchievementsButton
+@onready var casino_panel: Panel = $CasinoPanel
 
 @onready var store_panel: Panel = $StorePanel
 @onready var store_coins_label: Label = $StorePanel/StoreCoinsLabel
@@ -180,6 +182,7 @@ func _ready() -> void:
 	store_button.pressed.connect(_on_store_button_pressed)
 	achievements_button.pressed.connect(_on_achievements_button_pressed)
 	close_achievements_button.pressed.connect(_on_close_achievements_button_pressed)
+	casino_button.pressed.connect(_on_casino_button_pressed)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	exit_button.pressed.connect(_on_exit_button_pressed)
 	
@@ -868,22 +871,31 @@ func _show_main_menu() -> void:
 	game_over_panel.visible = false
 	store_panel.visible = false
 	if achievements_panel: achievements_panel.visible = false
+	if casino_panel: casino_panel.visible = false
 	settings_panel.visible = false
 	if cheat_panel: cheat_panel.visible = false
 
 func _on_play_button_pressed() -> void:
 	main_menu.visible = false
 	hud.visible = true
+	if casino_panel: casino_panel.visible = false
 	GameManager.start_game()
 
 func _on_store_button_pressed() -> void:
 	_switch_store_tab(true)
 	_update_all_ui()
+	if casino_panel: casino_panel.visible = false
 	store_panel.visible = true
 
 func _on_achievements_button_pressed() -> void:
 	_populate_achievements()
+	if casino_panel: casino_panel.visible = false
 	if achievements_panel: achievements_panel.visible = true
+
+func _on_casino_button_pressed() -> void:
+	if SoundManager: SoundManager.play_click()
+	if casino_panel:
+		casino_panel.open_casino()
 
 func _on_close_achievements_button_pressed() -> void:
 	if achievements_panel: achievements_panel.visible = false
@@ -995,6 +1007,7 @@ func _on_achievement_claimed(_id: String, reward: int) -> void:
 
 func _on_settings_button_pressed() -> void:
 	_setup_settings_options()
+	if casino_panel: casino_panel.visible = false
 	settings_panel.visible = true
 
 func _on_music_playlist_selected(index: int) -> void:

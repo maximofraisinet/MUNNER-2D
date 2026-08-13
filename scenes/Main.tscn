@@ -23,6 +23,7 @@
 [ext_resource type="Texture2D" path="res://assets/characters/demon_messi/run1.png" id="21_demon_messi_preview"]
 [ext_resource type="Texture2D" path="res://assets/ui/bg-menu-dark.png" id="22_bg_menu_dark"]
 [ext_resource type="Texture2D" path="res://assets/powerups/poison.png" id="23_poison_tex"]
+[ext_resource type="Script" path="res://scripts/casino_panel.gd" id="24_casino_panel"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(2400, 68)
@@ -455,41 +456,48 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -130.0
-offset_top = -60.0
+offset_top = -80.0
 offset_right = 130.0
 offset_bottom = 230.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
 [node name="PlayButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 46)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 text = "PLAY"
 
 [node name="StoreButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "STORE"
 
 [node name="AchievementsButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "ACHIEVEMENTS"
 
-[node name="SettingsButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 44)
+[node name="CasinoButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+text = "🎰 CASINO"
+
+[node name="SettingsButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
 text = "SETTINGS"
 
 [node name="ExitButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "EXIT"
 
 [node name="StorePanel" type="Panel" parent="UI"]
@@ -2074,6 +2082,464 @@ custom_minimum_size = Vector2(100, 35)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "CANCEL"
+
+[node name="CasinoPanel" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -460.0
+offset_top = -275.0
+offset_right = 460.0
+offset_bottom = 275.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_opaque_panel")
+script = ExtResource("24_casino_panel")
+
+[node name="TopBar" type="Control" parent="UI/CasinoPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 44.0
+grow_horizontal = 2
+
+[node name="TitleLabel" type="Label" parent="UI/CasinoPanel/TopBar"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -14.0
+offset_right = 260.0
+offset_bottom = 14.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "🎰 CASINO & GAMBLE"
+
+[node name="CasinoCoinsLabel" type="Label" parent="UI/CasinoPanel/TopBar"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -12.0
+offset_right = -60.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+text = "💰 YOUR COINS: 0"
+horizontal_alignment = 2
+
+[node name="CloseCasinoButton" type="Button" parent="UI/CasinoPanel/TopBar"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = -16.0
+offset_right = -14.0
+offset_bottom = 16.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+text = "✕"
+
+[node name="NavHBox" type="HBoxContainer" parent="UI/CasinoPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 44.0
+offset_bottom = 80.0
+grow_horizontal = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="SlotsTabButton" type="Button" parent="UI/CasinoPanel/NavHBox"]
+custom_minimum_size = Vector2(130, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "🎰 SLOTS"
+
+[node name="CoinFlipTabButton" type="Button" parent="UI/CasinoPanel/NavHBox"]
+custom_minimum_size = Vector2(130, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "🪙 COIN FLIP"
+
+[node name="MinesTabButton" type="Button" parent="UI/CasinoPanel/NavHBox"]
+custom_minimum_size = Vector2(130, 32)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "💣 MINES"
+
+[node name="BetBar" type="HBoxContainer" parent="UI/CasinoPanel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -60.0
+offset_right = -20.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="BetAmountLabel" type="Label" parent="UI/CasinoPanel/BetBar"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+text = "BET: $100"
+vertical_alignment = 1
+
+[node name="ChipsHBox" type="HBoxContainer" parent="UI/CasinoPanel/BetBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+alignment = 2
+
+[node name="Chip100Button" type="Button" parent="UI/CasinoPanel/BetBar/ChipsHBox"]
+custom_minimum_size = Vector2(58, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "+100"
+
+[node name="Chip500Button" type="Button" parent="UI/CasinoPanel/BetBar/ChipsHBox"]
+custom_minimum_size = Vector2(58, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "+500"
+
+[node name="Chip1kButton" type="Button" parent="UI/CasinoPanel/BetBar/ChipsHBox"]
+custom_minimum_size = Vector2(58, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "+1K"
+
+[node name="Chip5kButton" type="Button" parent="UI/CasinoPanel/BetBar/ChipsHBox"]
+custom_minimum_size = Vector2(58, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "+5K"
+
+[node name="ChipHalfButton" type="Button" parent="UI/CasinoPanel/BetBar/ChipsHBox"]
+custom_minimum_size = Vector2(48, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "1/2"
+
+[node name="Chip2xButton" type="Button" parent="UI/CasinoPanel/BetBar/ChipsHBox"]
+custom_minimum_size = Vector2(48, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "2X"
+
+[node name="ChipMaxButton" type="Button" parent="UI/CasinoPanel/BetBar/ChipsHBox"]
+custom_minimum_size = Vector2(54, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "MAX"
+
+[node name="ChipClearButton" type="Button" parent="UI/CasinoPanel/BetBar/ChipsHBox"]
+custom_minimum_size = Vector2(50, 34)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "MIN"
+
+[node name="Views" type="Control" parent="UI/CasinoPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 86.0
+offset_bottom = -68.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SlotsView" type="Control" parent="UI/CasinoPanel/Views"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ReelsContainer" type="HBoxContainer" parent="UI/CasinoPanel/Views/SlotsView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -115.0
+offset_right = 160.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Reel1" type="PanelContainer" parent="UI/CasinoPanel/Views/SlotsView/ReelsContainer"]
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/CasinoPanel/Views/SlotsView/ReelsContainer/Reel1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "7️⃣"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Reel2" type="PanelContainer" parent="UI/CasinoPanel/Views/SlotsView/ReelsContainer"]
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/CasinoPanel/Views/SlotsView/ReelsContainer/Reel2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "7️⃣"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Reel3" type="PanelContainer" parent="UI/CasinoPanel/Views/SlotsView/ReelsContainer"]
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/CasinoPanel/Views/SlotsView/ReelsContainer/Reel3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "7️⃣"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PayoutGuide" type="Label" parent="UI/CasinoPanel/Views/SlotsView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -5.0
+offset_right = 350.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "🍒 x3  |  🍋 x5  |  🔔 x10  |  💎 x25  |  👑 x50  |  7️⃣ x100  (Pair = x1.5)"
+horizontal_alignment = 1
+
+[node name="SpinButton" type="Button" parent="UI/CasinoPanel/Views/SlotsView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.0
+offset_top = 35.0
+offset_right = 110.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+text = "🎰 SPIN!"
+
+[node name="StatusLabel" type="Label" parent="UI/CasinoPanel/Views/SlotsView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = 92.0
+offset_right = 300.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 15
+text = "Press SPIN to play!"
+horizontal_alignment = 1
+
+[node name="CoinFlipView" type="Control" parent="UI/CasinoPanel/Views"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChoiceHBox" type="HBoxContainer" parent="UI/CasinoPanel/Views/CoinFlipView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -120.0
+offset_right = 190.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="HeadsButton" type="Button" parent="UI/CasinoPanel/Views/CoinFlipView/ChoiceHBox"]
+custom_minimum_size = Vector2(170, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "🦅 HEADS (x1.95)"
+
+[node name="TailsButton" type="Button" parent="UI/CasinoPanel/Views/CoinFlipView/ChoiceHBox"]
+custom_minimum_size = Vector2(170, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "👑 TAILS (x1.95)"
+
+[node name="CoinDisplay" type="PanelContainer" parent="UI/CasinoPanel/Views/CoinFlipView"]
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -65.0
+offset_right = 45.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(45, 45)
+
+[node name="SymbolLabel" type="Label" parent="UI/CasinoPanel/Views/CoinFlipView/CoinDisplay"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 46
+text = "🦅"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FlipButton" type="Button" parent="UI/CasinoPanel/Views/CoinFlipView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.0
+offset_top = 40.0
+offset_right = 110.0
+offset_bottom = 85.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+text = "🪙 FLIP COIN!"
+
+[node name="StatusLabel" type="Label" parent="UI/CasinoPanel/Views/CoinFlipView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = 95.0
+offset_right = 300.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 15
+text = "Select Heads or Tails and Flip!"
+horizontal_alignment = 1
+
+[node name="MinesView" type="Control" parent="UI/CasinoPanel/Views"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MinesLayoutHBox" type="HBoxContainer" parent="UI/CasinoPanel/Views/MinesView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -140.0
+offset_right = 320.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="UI/CasinoPanel/Views/MinesView/MinesLayoutHBox"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 5
+
+[node name="ControlVBox" type="VBoxContainer" parent="UI/CasinoPanel/Views/MinesView/MinesLayoutHBox"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="MultiplierLabel" type="Label" parent="UI/CasinoPanel/Views/MinesView/MinesLayoutHBox/ControlVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+text = "NEXT GEM: x1.15"
+horizontal_alignment = 1
+
+[node name="StartMinesButton" type="Button" parent="UI/CasinoPanel/Views/MinesView/MinesLayoutHBox/ControlVBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+text = "💣 START GAME"
+
+[node name="CashoutButton" type="Button" parent="UI/CasinoPanel/Views/MinesView/MinesLayoutHBox/ControlVBox"]
+visible = false
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
+text = "💰 CASHOUT: $0"
+
+[node name="StatusLabel" type="Label" parent="UI/CasinoPanel/Views/MinesView/MinesLayoutHBox/ControlVBox"]
+custom_minimum_size = Vector2(240, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "💎 Find gems, avoid the 3 hidden mines!"
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="GameOverPanel" type="Panel" parent="UI"]
 visible = false

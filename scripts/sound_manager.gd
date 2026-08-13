@@ -12,6 +12,10 @@ var footstep2_sfx: AudioStream
 var shield_hit_sfx: AudioStream
 var game_over_sfx: AudioStream
 var click_sfx: AudioStream
+var casino_win_sfx: AudioStream
+var casino_lose_sfx: AudioStream
+var casino_spin_sfx: AudioStream
+var explosion_sfx: AudioStream
 
 var players: Array[AudioStreamPlayer] = []
 var max_players: int = 10
@@ -34,6 +38,10 @@ func _ready() -> void:
 	shield_hit_sfx = load("res://assets/sfx/shield_hit.wav")
 	game_over_sfx = load("res://assets/sfx/game_over.wav")
 	click_sfx = load("res://assets/sfx/click.wav")
+	casino_win_sfx = load("res://assets/sfx/casino_win.wav")
+	casino_lose_sfx = load("res://assets/sfx/casino_lose.wav")
+	casino_spin_sfx = load("res://assets/sfx/casino_spin.wav")
+	explosion_sfx = load("res://assets/sfx/explosion.wav")
 	
 	for i in range(max_players):
 		var p = AudioStreamPlayer.new()
@@ -84,6 +92,18 @@ func play_game_over() -> void:
 
 func play_click() -> void:
 	_play_stream(click_sfx, 0.7, randf_range(0.98, 1.02))
+
+func play_casino_win() -> void:
+	_play_stream(casino_win_sfx, 1.0, 1.0)
+
+func play_casino_lose() -> void:
+	_play_stream(casino_lose_sfx, 0.9, 1.0)
+
+func play_casino_spin() -> void:
+	_play_stream(casino_spin_sfx, 0.6, randf_range(0.95, 1.05))
+
+func play_explosion() -> void:
+	_play_stream(explosion_sfx, 1.0, randf_range(0.95, 1.05))
 
 func set_sfx_volume(val: float) -> void:
 	sfx_volume = clamp(val, 0.0, 1.0)
