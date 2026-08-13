@@ -2,6 +2,7 @@ extends Node2D
 
 @export var scroll_speed_ratio: float = 0.4
 @onready var sprites: Array[Sprite2D] = [$Sprite1, $Sprite2, $Sprite3]
+@onready var ground_color_rect: ColorRect = $"../Ground/ColorRect"
 
 var scaled_width: float = 0.0
 
@@ -37,6 +38,21 @@ func _setup_background() -> void:
 			spr.scale = Vector2(scale_factor, scale_factor)
 			spr.modulate = Color.WHITE
 			spr.position = Vector2(start_x + (i * scaled_width), target_y)
+			
+	_update_ground_color(bg_name)
+
+func _update_ground_color(bg_name: String) -> void:
+	if not ground_color_rect:
+		return
+	match bg_name:
+		"bg-game2":
+			ground_color_rect.color = Color(0.101961, 0.250980, 0.152941, 1.0) # 1A4027FF
+		"bg-black":
+			ground_color_rect.color = Color(0.18, 0.18, 0.18, 1.0)
+		"bg-white":
+			ground_color_rect.color = Color(0.75, 0.75, 0.75, 1.0)
+		_: # bg-game1 / default
+			ground_color_rect.color = Color(0.588235, 0.905882, 0.266667, 1.0) # 96E744FF
 
 func _process(delta: float) -> void:
 	if GameManager.current_state == GameManager.State.PLAYING:
