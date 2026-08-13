@@ -82,24 +82,32 @@ extends CanvasLayer
 @onready var store_slot3_qty: Label = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card/VBox/QtyLabel
 
 @onready var shield_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/ShieldBoostCard
+@onready var shield_preview_rect: TextureRect = $StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/PreviewRect
 @onready var shield_qty_label: Label = $StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/QtyLabel
 @onready var buy_shield_boost_button: Button = $StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox/BuyShieldBoostButton
 @onready var equip_shield_slot1_button: Button = $StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox/EquipShieldSlot1Button
 
 @onready var life_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/LifeBoostCard
+@onready var life_preview_rect: TextureRect = $StorePanel/BoostCardsHBox/LifeBoostCard/VBox/PreviewRect
 @onready var life_qty_label: Label = $StorePanel/BoostCardsHBox/LifeBoostCard/VBox/QtyLabel
 @onready var buy_life_boost_button: Button = $StorePanel/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox/BuyLifeBoostButton
 @onready var equip_life_slot1_button: Button = $StorePanel/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox/EquipLifeSlot1Button
 
 @onready var slow_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/SlowBoostCard
+@onready var slow_preview_rect: TextureRect = $StorePanel/BoostCardsHBox/SlowBoostCard/VBox/PreviewRect
 @onready var slow_qty_label: Label = $StorePanel/BoostCardsHBox/SlowBoostCard/VBox/QtyLabel
 @onready var buy_slow_boost_button: Button = $StorePanel/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox/BuySlowBoostButton
 @onready var equip_slow_slot1_button: Button = $StorePanel/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox/EquipSlowSlot1Button
 
 @onready var fly_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/FlyBoostCard
+@onready var fly_preview_rect: TextureRect = $StorePanel/BoostCardsHBox/FlyBoostCard/VBox/PreviewRect
 @onready var fly_qty_label: Label = $StorePanel/BoostCardsHBox/FlyBoostCard/VBox/QtyLabel
 @onready var buy_fly_boost_button: Button = $StorePanel/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox/BuyFlyBoostButton
 @onready var equip_fly_slot1_button: Button = $StorePanel/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox/EquipFlySlot1Button
+
+@onready var poison_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/PoisonBoostCard
+@onready var poison_preview_rect: TextureRect = $StorePanel/BoostCardsHBox/PoisonBoostCard/VBox/PreviewRect
+@onready var buy_poison_button: Button = $StorePanel/BoostCardsHBox/PoisonBoostCard/VBox/ButtonsHBox/BuyPoisonButton
 
 @onready var close_store_button: Button = $StorePanel/CloseStoreButton
 
@@ -160,6 +168,9 @@ func _ready() -> void:
 	buy_fly_boost_button.pressed.connect(_on_buy_fly_boost_pressed)
 	equip_fly_slot1_button.pressed.connect(_on_equip_fly_slot1_pressed)
 	
+	if buy_poison_button:
+		buy_poison_button.pressed.connect(_on_buy_poison_pressed)
+	
 	close_store_button.pressed.connect(_on_close_store_button_pressed)
 	
 	ui_theme_option_button.item_selected.connect(_on_ui_theme_selected)
@@ -181,11 +192,16 @@ func _ready() -> void:
 	GameManager.speed_notification_emitted.connect(_on_speed_notification_emitted)
 	if GameManager.has_signal("ui_theme_changed"):
 		GameManager.ui_theme_changed.connect(_update_ui_theme_bg)
+	if GameManager.has_signal("icon_pack_changed"):
+		GameManager.icon_pack_changed.connect(_on_icon_pack_changed_ui)
 	
 	if CharacterManager:
 		CharacterManager.unlocked_characters_changed.connect(_update_all_ui)
 		CharacterManager.boost_inventory_changed.connect(_update_all_ui)
 		CharacterManager.character_changed.connect(_on_character_changed_ui)
+
+func _on_icon_pack_changed_ui(_pack_name: String) -> void:
+	_update_all_ui()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if GameManager.current_state == GameManager.State.START and not cheat_panel.visible:
@@ -371,7 +387,7 @@ func _update_scroll_buttons_visibility() -> void:
 		scroll_right_button.visible = (curr < max_val - 5)
 
 func _setup_card_hover_effects() -> void:
-	var cards = [tired_card, leech_card, maximo_card, omablo_card, demon_card, messi_card, dark_angel_card, demon_messi_card, shield_boost_card, life_boost_card, slow_boost_card, fly_boost_card]
+	var cards = [tired_card, leech_card, maximo_card, omablo_card, demon_card, messi_card, dark_angel_card, demon_messi_card, shield_boost_card, life_boost_card, slow_boost_card, fly_boost_card, poison_boost_card]
 	for card in cards:
 		if card:
 			card.mouse_entered.connect(_on_card_mouse_entered.bind(card))
@@ -454,7 +470,7 @@ func _on_speed_notification_emitted(message: String, text_color: Color) -> void:
 		notification_label.text = message
 		notification_label.set("theme_override_colors/font_color", text_color)
 		notification_label.visible = true
-		notification_timer = 2.0
+		notification_timer = 3.0
 
 func _update_notification_toast(delta: float) -> void:
 	if notification_timer > 0.0:
@@ -527,6 +543,25 @@ func _update_store_buttons() -> void:
 	if not CharacterManager:
 		return
 		
+	var pack_name = GameManager.selected_icon_pack if GameManager else "default"
+	
+	# Actualizar dinámicamente las previsualizaciones de iconos en la tienda según el paquete seleccionado
+	if shield_preview_rect:
+		var tex = load("res://assets/powerups/%s/shield.png" % pack_name) as Texture2D
+		if tex: shield_preview_rect.texture = tex
+	if life_preview_rect:
+		var tex = load("res://assets/powerups/%s/life.png" % pack_name) as Texture2D
+		if tex: life_preview_rect.texture = tex
+	if slow_preview_rect:
+		var tex = load("res://assets/powerups/%s/slow.png" % pack_name) as Texture2D
+		if tex: slow_preview_rect.texture = tex
+	if fly_preview_rect:
+		var tex = load("res://assets/powerups/%s/fly.png" % pack_name) as Texture2D
+		if tex: fly_preview_rect.texture = tex
+	if poison_preview_rect:
+		var p_tex = load("res://assets/powerups/%s/poison.png" % pack_name) as Texture2D
+		if p_tex: poison_preview_rect.texture = p_tex
+		
 	var current_id = CharacterManager.current_character_id
 	var char_buttons = {
 		"tired": action_tired_button,
@@ -581,6 +616,11 @@ func _update_store_buttons() -> void:
 		var price = CharacterManager.get_boost_price("fly_boost")
 		buy_fly_boost_button.text = "BUY (%d COINS)" % price
 		buy_fly_boost_button.disabled = (GameManager.total_coins < price)
+		
+	if buy_poison_button:
+		var price = CharacterManager.get_boost_price("poison")
+		buy_poison_button.text = "BUY (%s COINS)" % _format_number(price)
+		buy_poison_button.disabled = (GameManager.total_coins < price)
 		
 	var curr_char = CharacterManager.get_current_character()
 	var has_slots = curr_char and curr_char.boost_slots > 0
@@ -697,20 +737,17 @@ func _equip_to_first_available_slot(boost_id: String) -> void:
 	var curr = CharacterManager.get_current_character()
 	if not curr or curr.boost_slots == 0: return
 	
-	# Si ya está equipado, desequipar
 	if boost_id in CharacterManager.equipped_boost_slots:
 		for i in range(curr.boost_slots):
 			if CharacterManager.equipped_boost_slots[i] == boost_id:
 				CharacterManager.equip_boost_to_slot(i, boost_id)
 				return
 				
-	# Si no está equipado, buscar slot libre o reemplazar el slot 0
 	for i in range(curr.boost_slots):
 		if CharacterManager.equipped_boost_slots[i] == "":
 			CharacterManager.equip_boost_to_slot(i, boost_id)
 			return
 			
-	# Si todos están llenos, reemplazar slot 0
 	CharacterManager.equip_boost_to_slot(0, boost_id)
 
 func _on_buy_shield_boost_pressed() -> void:
@@ -748,6 +785,19 @@ func _on_buy_fly_boost_pressed() -> void:
 func _on_equip_fly_slot1_pressed() -> void:
 	_equip_to_first_available_slot("fly_boost")
 	_update_all_ui()
+
+func _on_buy_poison_pressed() -> void:
+	var price = 75000
+	if GameManager.total_coins >= price:
+		_drink_poison_and_wipe_everything()
+
+func _drink_poison_and_wipe_everything() -> void:
+	GameManager.wipe_all_data()
+	CharacterManager.wipe_all_data()
+	_update_all_ui()
+	store_panel.visible = false
+	_show_main_menu()
+	_on_speed_notification_emitted("☠️ YOU DRANK POISON! ALL SCORE, COINS & CHARACTERS RESET TO 0! ☠️", Color(1.0, 0.1, 0.1))
 
 func _on_close_store_button_pressed() -> void:
 	store_panel.visible = false

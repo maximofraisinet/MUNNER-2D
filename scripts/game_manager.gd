@@ -115,6 +115,13 @@ func apply_permanent_speed_increase() -> void:
 	current_speed = current_speed * 1.10
 	speed_notification_emitted.emit("SPEED UP (+10%)", Color(1.0, 0.5, 0.0))
 
+func wipe_all_data() -> void:
+	high_score = 0.0
+	total_coins = 0
+	run_score = 0.0
+	run_coins = 0
+	save_data()
+
 func save_data() -> void:
 	var config = ConfigFile.new()
 	config.set_value("stats", "high_score", high_score)

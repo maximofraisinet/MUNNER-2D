@@ -250,6 +250,7 @@ func get_boost_price(boost_id: String) -> int:
 		"slow_boost": return 150
 		"life_boost": return 200
 		"fly_boost": return 250
+		"poison": return 75000
 		_: return 100
 
 func buy_boost(boost_id: String) -> bool:
@@ -277,6 +278,21 @@ func equip_boost_to_slot(slot_idx: int, boost_id: String) -> bool:
 
 func get_boost_qty(boost_id: String) -> int:
 	return boost_inventory.get(boost_id, 0)
+
+func wipe_all_data() -> void:
+	current_character_id = "tired"
+	unlocked_characters = ["tired"]
+	boost_inventory = {
+		"shield_boost": 0,
+		"life_boost": 0,
+		"slow_boost": 0,
+		"fly_boost": 0
+	}
+	equipped_boost_slots = ["", "", ""]
+	save_data()
+	character_changed.emit(get_current_character())
+	unlocked_characters_changed.emit()
+	boost_inventory_changed.emit()
 
 func save_data() -> void:
 	var config = ConfigFile.new()

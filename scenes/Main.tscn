@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://c_main_001"]
+[gd_scene load_steps=30 format=3 uid="uid://c_main_001"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/obstacle_pool.gd" id="2_pool"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" path="res://assets/characters/dark_angel/run1.png" id="20_dark_angel_preview"]
 [ext_resource type="Texture2D" path="res://assets/characters/demon_messi/run1.png" id="21_demon_messi_preview"]
 [ext_resource type="Texture2D" path="res://assets/ui/bg-menu-dark.png" id="22_bg_menu_dark"]
+[ext_resource type="Texture2D" path="res://assets/powerups/poison.png" id="23_poison_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(2400, 68)
@@ -1168,7 +1169,7 @@ theme_override_constants/separation = 12
 alignment = 1
 
 [node name="ShieldBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
-custom_minimum_size = Vector2(215, 85)
+custom_minimum_size = Vector2(180, 85)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
@@ -1204,19 +1205,19 @@ theme_override_constants/separation = 4
 alignment = 1
 
 [node name="BuyShieldBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 22)
+custom_minimum_size = Vector2(80, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
-text = "BUY (1 COIN)"
+theme_override_font_sizes/font_size = 9
+text = "BUY (100 COINS)"
 
 [node name="EquipShieldSlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 22)
+custom_minimum_size = Vector2(80, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 9
 text = "EQUIP"
 
 [node name="LifeBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
-custom_minimum_size = Vector2(215, 85)
+custom_minimum_size = Vector2(180, 85)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
@@ -1252,19 +1253,19 @@ theme_override_constants/separation = 4
 alignment = 1
 
 [node name="BuyLifeBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 22)
+custom_minimum_size = Vector2(80, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
-text = "BUY (1 COIN)"
+theme_override_font_sizes/font_size = 9
+text = "BUY (200 COINS)"
 
 [node name="EquipLifeSlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 22)
+custom_minimum_size = Vector2(80, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 9
 text = "EQUIP"
 
 [node name="SlowBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
-custom_minimum_size = Vector2(215, 85)
+custom_minimum_size = Vector2(180, 85)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
@@ -1300,19 +1301,19 @@ theme_override_constants/separation = 4
 alignment = 1
 
 [node name="BuySlowBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 22)
+custom_minimum_size = Vector2(80, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
-text = "BUY (1 COIN)"
+theme_override_font_sizes/font_size = 9
+text = "BUY (150 COINS)"
 
 [node name="EquipSlowSlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 22)
+custom_minimum_size = Vector2(80, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 9
 text = "EQUIP"
 
 [node name="FlyBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
-custom_minimum_size = Vector2(215, 85)
+custom_minimum_size = Vector2(180, 85)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
@@ -1348,16 +1349,60 @@ theme_override_constants/separation = 4
 alignment = 1
 
 [node name="BuyFlyBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 22)
+custom_minimum_size = Vector2(80, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
-text = "BUY (1 COIN)"
+theme_override_font_sizes/font_size = 9
+text = "BUY (250 COINS)"
 
 [node name="EquipFlySlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 22)
+custom_minimum_size = Vector2(80, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 9
 text = "EQUIP"
+
+[node name="PoisonBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
+custom_minimum_size = Vector2(180, 85)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_demon")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/BoostCardsHBox/PoisonBoostCard"]
+layout_mode = 2
+theme_override_constants/separation = 1
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/PoisonBoostCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.8, 0.1, 0.9, 1)
+text = "POISON ☠️"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/BoostCardsHBox/PoisonBoostCard/VBox"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("23_poison_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/PoisonBoostCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+text = "DANGER: WIPES SAVE!"
+horizontal_alignment = 1
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="UI/StorePanel/BoostCardsHBox/PoisonBoostCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="BuyPoisonButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/PoisonBoostCard/VBox/ButtonsHBox"]
+custom_minimum_size = Vector2(160, 22)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+text = "BUY (75,000 COINS)"
 
 [node name="CloseStoreButton" type="Button" parent="UI/StorePanel"]
 layout_mode = 1
