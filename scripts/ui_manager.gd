@@ -52,5 +52,5 @@ func _on_game_restarted() -> void:
 
 func _on_game_over() -> void:
 	if summary_label:
-		summary_label.text = "Score Final: %d  |  Monedas: %d" % [int(GameManager.score), GameManager.coins]
+		summary_label.text = "Final Score: %d  |  Coins: %d" % [int(GameManager.score), GameManager.coins]
 	game_over_panel.visible = true

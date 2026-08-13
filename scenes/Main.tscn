@@ -112,7 +112,7 @@ offset_top = 30.0
 offset_bottom = 75.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 32
-text = "DINO RUNNER 2D"
+text = "MUNNER 2D"
 horizontal_alignment = 1
 
 [node name="PlayButton" type="Button" parent="UI/StartPanel"]
@@ -129,7 +129,7 @@ offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 24
-text = "JUGAR"
+text = "PLAY"
 
 [node name="GameOverPanel" type="Panel" parent="UI"]
 visible = false
@@ -182,4 +182,4 @@ offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 22
-text = "REINICIAR"
+text = "RESTART"
