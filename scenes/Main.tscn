@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/ui_manager.gd" id="3_ui"]
 [ext_resource type="PackedScene" uid="uid://c_obstacle_001" path="res://scenes/Obstacle.tscn" id="4_obstacle_scene"]
 [ext_resource type="Script" path="res://scripts/coin_pool.gd" id="5_coin_pool"]
+[ext_resource type="Texture2D" path="res://assets/ui/bg-menu.png" id="6_bg_menu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(2400, 68)
@@ -91,45 +92,143 @@ offset_bottom = 120.0
 theme_override_font_sizes/font_size = 18
 text = "SPEED: 400 px/s"
 
-[node name="StartPanel" type="Panel" parent="UI"]
+[node name="MainMenu" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="UI/MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_bg_menu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StatsContainer" type="VBoxContainer" parent="UI/MainMenu"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 30.0
+offset_right = -30.0
+offset_bottom = 120.0
+grow_horizontal = 0
+
+[node name="BestScoreLabel" type="Label" parent="UI/MainMenu/StatsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "BEST SCORE: 0"
+horizontal_alignment = 2
+
+[node name="TotalCoinsLabel" type="Label" parent="UI/MainMenu/StatsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "TOTAL COINS: 0"
+horizontal_alignment = 2
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="UI/MainMenu"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -120.0
-offset_right = 220.0
-offset_bottom = 120.0
+offset_left = -120.0
+offset_top = -20.0
+offset_right = 120.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="PlayButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "PLAY"
+
+[node name="StoreButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "STORE"
+
+[node name="ExitButton" type="Button" parent="UI/MainMenu/ButtonsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "EXIT"
+
+[node name="StorePanel" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -180.0
+offset_right = 250.0
+offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleLabel" type="Label" parent="UI/StartPanel"]
+[node name="TitleLabel" type="Label" parent="UI/StorePanel"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 30.0
-offset_bottom = 75.0
+offset_top = 20.0
+offset_bottom = 60.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 32
-text = "MUNNER 2D"
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "CHARACTER STORE"
 horizontal_alignment = 1
 
-[node name="PlayButton" type="Button" parent="UI/StartPanel"]
+[node name="InfoLabel" type="Label" parent="UI/StorePanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Active Character: DEMON
+More characters coming soon!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CloseStoreButton" type="Button" parent="UI/StorePanel"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -100.0
-offset_top = -100.0
-offset_right = 100.0
-offset_bottom = -40.0
+offset_left = -80.0
+offset_top = -60.0
+offset_right = 80.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 24
-text = "PLAY"
+theme_override_font_sizes/font_size = 20
+text = "BACK"
 
 [node name="GameOverPanel" type="Panel" parent="UI"]
 visible = false
@@ -139,9 +238,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -220.0
-offset_top = -130.0
+offset_top = -140.0
 offset_right = 220.0
-offset_bottom = 130.0
+offset_bottom = 140.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -168,18 +267,29 @@ theme_override_font_sizes/font_size = 18
 text = "Score: 0 | Coins: 0"
 horizontal_alignment = 1
 
-[node name="RestartButton" type="Button" parent="UI/GameOverPanel"]
+[node name="ButtonsContainer" type="HBoxContainer" parent="UI/GameOverPanel"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -100.0
-offset_top = -90.0
-offset_right = 100.0
-offset_bottom = -30.0
+offset_left = -180.0
+offset_top = -70.0
+offset_right = 180.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 22
+theme_override_constants/separation = 20
+
+[node name="RestartButton" type="Button" parent="UI/GameOverPanel/ButtonsContainer"]
+custom_minimum_size = Vector2(160, 45)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "RESTART"
+
+[node name="MenuButton" type="Button" parent="UI/GameOverPanel/ButtonsContainer"]
+custom_minimum_size = Vector2(160, 45)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "MAIN MENU"
