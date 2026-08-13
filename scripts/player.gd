@@ -19,11 +19,16 @@ var initial_pos: Vector2 = Vector2(100, 545)
 func _ready() -> void:
 	initial_pos = global_position
 	GameManager.game_restarted_triggered.connect(_on_game_restarted)
+	if CharacterManager:
+		CharacterManager.character_changed.connect(_on_character_changed)
 	load_character()
 
 func _on_game_restarted() -> void:
 	global_position = initial_pos
 	velocity = Vector2.ZERO
+
+func _on_character_changed(_new_char: CharacterData) -> void:
+	load_character()
 
 func load_character() -> void:
 	if CharacterManager:
@@ -33,6 +38,7 @@ func load_character() -> void:
 			sprite.position = current_character.sprite_offset
 			if current_character.run_frames.size() > 0:
 				sprite.texture = current_character.run_frames[0]
+				current_frame_idx = 0
 
 func _physics_process(delta: float) -> void:
 	if GameManager.current_state != GameManager.State.PLAYING:

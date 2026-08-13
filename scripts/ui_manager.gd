@@ -6,13 +6,15 @@ extends CanvasLayer
 @onready var speed_label: Label = $HUD/SpeedLabel
 
 @onready var main_menu: Control = $MainMenu
-@onready var best_score_label: Label = $UI/MainMenu/StatsContainer/BestScoreLabel if has_node("UI/MainMenu/StatsContainer/BestScoreLabel") else $MainMenu/StatsContainer/BestScoreLabel
-@onready var total_coins_label: Label = $UI/MainMenu/StatsContainer/TotalCoinsLabel if has_node("UI/MainMenu/StatsContainer/TotalCoinsLabel") else $MainMenu/StatsContainer/TotalCoinsLabel
+@onready var best_score_label: Label = $MainMenu/StatsContainer/BestScoreLabel
+@onready var total_coins_label: Label = $MainMenu/StatsContainer/TotalCoinsLabel
 @onready var play_button: Button = $MainMenu/ButtonsContainer/PlayButton
 @onready var store_button: Button = $MainMenu/ButtonsContainer/StoreButton
 @onready var exit_button: Button = $MainMenu/ButtonsContainer/ExitButton
 
 @onready var store_panel: Panel = $StorePanel
+@onready var select_demon_button: Button = $StorePanel/CharactersHBox/DemonBox/SelectDemonButton
+@onready var select_tired_button: Button = $StorePanel/CharactersHBox/TiredBox/SelectTiredButton
 @onready var close_store_button: Button = $StorePanel/CloseStoreButton
 
 @onready var game_over_panel: Panel = $GameOverPanel
@@ -28,6 +30,9 @@ func _ready() -> void:
 	play_button.pressed.connect(_on_play_button_pressed)
 	store_button.pressed.connect(_on_store_button_pressed)
 	exit_button.pressed.connect(_on_exit_button_pressed)
+	
+	select_demon_button.pressed.connect(_on_select_demon_pressed)
+	select_tired_button.pressed.connect(_on_select_tired_pressed)
 	close_store_button.pressed.connect(_on_close_store_button_pressed)
 	
 	restart_button.pressed.connect(_on_restart_button_pressed)
@@ -46,6 +51,19 @@ func _process(_delta: float) -> void:
 	if speed_label:
 		speed_label.text = "SPEED: %d px/s" % int(GameManager.current_speed)
 
+func _update_store_buttons() -> void:
+	var current_id = CharacterManager.current_character_id if CharacterManager else "demon"
+	if current_id == "demon":
+		select_demon_button.text = "EQUIPPED"
+		select_demon_button.disabled = true
+		select_tired_button.text = "SELECT"
+		select_tired_button.disabled = false
+	elif current_id == "tired":
+		select_demon_button.text = "SELECT"
+		select_demon_button.disabled = false
+		select_tired_button.text = "EQUIPPED"
+		select_tired_button.disabled = true
+
 func _update_menu_stats() -> void:
 	if best_score_label:
 		best_score_label.text = "BEST SCORE: %d" % int(GameManager.high_score)
@@ -54,6 +72,7 @@ func _update_menu_stats() -> void:
 
 func _show_main_menu() -> void:
 	_update_menu_stats()
+	_update_store_buttons()
 	main_menu.visible = true
 	hud.visible = false
 	game_over_panel.visible = false
@@ -65,7 +84,18 @@ func _on_play_button_pressed() -> void:
 	GameManager.start_game()
 
 func _on_store_button_pressed() -> void:
+	_update_store_buttons()
 	store_panel.visible = true
+
+func _on_select_demon_pressed() -> void:
+	if CharacterManager:
+		CharacterManager.select_character("demon")
+		_update_store_buttons()
+
+func _on_select_tired_pressed() -> void:
+	if CharacterManager:
+		CharacterManager.select_character("tired")
+		_update_store_buttons()
 
 func _on_close_store_button_pressed() -> void:
 	store_panel.visible = false
@@ -99,5 +129,5 @@ func _on_menu_opened() -> void:
 
 func _on_game_over() -> void:
 	if summary_label:
-		summary_label.text = "Run Score: %d  |  Coins Collected: %d" % [int(GameManager.run_score), GameManager.run_coins]
+		summary_label.text = "Final Score: %d  |  Coins: %d" % [int(GameManager.run_score), GameManager.run_coins]
 	game_over_panel.visible = true
