@@ -484,11 +484,11 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_top = 10.0
-offset_bottom = 40.0
+offset_bottom = 35.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-text = "CHARACTER STORE"
+text = "CHARACTER & BOOST STORE"
 horizontal_alignment = 1
 
 [node name="StoreCoinsLabel" type="Label" parent="UI/StorePanel"]
@@ -499,7 +499,7 @@ anchor_right = 1.0
 offset_left = -220.0
 offset_top = 10.0
 offset_right = -20.0
-offset_bottom = 40.0
+offset_bottom = 35.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
@@ -512,9 +512,9 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 10.0
-offset_top = -145.0
+offset_top = -230.0
 offset_right = 45.0
-offset_bottom = -25.0
+offset_bottom = -10.0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 22
 text = "◀"
@@ -527,9 +527,9 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -45.0
-offset_top = -145.0
+offset_top = -230.0
 offset_right = -10.0
-offset_bottom = -25.0
+offset_bottom = -10.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 22
@@ -543,9 +543,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -460.0
-offset_top = -225.0
+offset_top = -235.0
 offset_right = 460.0
-offset_bottom = 35.0
+offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 3
@@ -557,7 +557,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 14
 
 [node name="TiredCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
-custom_minimum_size = Vector2(170, 250)
+custom_minimum_size = Vector2(175, 235)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
@@ -574,7 +574,7 @@ text = "1. TIRED"
 horizontal_alignment = 1
 
 [node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("10_tired_preview")
@@ -582,7 +582,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox"]
-custom_minimum_size = Vector2(155, 38)
+custom_minimum_size = Vector2(155, 34)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
@@ -591,7 +591,7 @@ autowrap_mode = 2
 horizontal_alignment = 1
 
 [node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox"]
-custom_minimum_size = Vector2(155, 35)
+custom_minimum_size = Vector2(155, 32)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
@@ -607,14 +607,14 @@ text = "Slots: 0"
 horizontal_alignment = 1
 
 [node name="ActionTiredButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox"]
-custom_minimum_size = Vector2(145, 34)
+custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 12
 text = "EQUIPPED"
 
 [node name="LeechCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
-custom_minimum_size = Vector2(170, 250)
+custom_minimum_size = Vector2(175, 235)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
@@ -631,7 +631,7 @@ text = "2. LEECH"
 horizontal_alignment = 1
 
 [node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("11_leech_preview")
@@ -639,16 +639,16 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox"]
-custom_minimum_size = Vector2(155, 38)
+custom_minimum_size = Vector2(155, 34)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
-text = "PRO: +20% Shield Duration (6.0s)"
+text = "PRO: +20% Shield Duration"
 autowrap_mode = 2
 horizontal_alignment = 1
 
 [node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox"]
-custom_minimum_size = Vector2(155, 35)
+custom_minimum_size = Vector2(155, 32)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
@@ -664,14 +664,14 @@ text = "Slots: 0"
 horizontal_alignment = 1
 
 [node name="ActionLeechButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox"]
-custom_minimum_size = Vector2(145, 34)
+custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 12
 text = "BUY (1 COIN)"
 
 [node name="MaximoCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
-custom_minimum_size = Vector2(170, 250)
+custom_minimum_size = Vector2(175, 235)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
@@ -688,7 +688,7 @@ text = "3. MAXIMO"
 horizontal_alignment = 1
 
 [node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("12_maximo_preview")
@@ -696,16 +696,16 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox"]
-custom_minimum_size = Vector2(155, 38)
+custom_minimum_size = Vector2(155, 34)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
-text = "PRO: -50% Negative items drop rate"
+text = "PRO: -50% Negative items drop"
 autowrap_mode = 2
 horizontal_alignment = 1
 
 [node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox"]
-custom_minimum_size = Vector2(155, 35)
+custom_minimum_size = Vector2(155, 32)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
@@ -721,14 +721,14 @@ text = "Slots: 0"
 horizontal_alignment = 1
 
 [node name="ActionMaximoButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox"]
-custom_minimum_size = Vector2(145, 34)
+custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 12
 text = "BUY (1 COIN)"
 
 [node name="OmabloCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
-custom_minimum_size = Vector2(170, 250)
+custom_minimum_size = Vector2(175, 235)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
@@ -745,7 +745,7 @@ text = "4. OMABLO"
 horizontal_alignment = 1
 
 [node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("13_omablo_preview")
@@ -753,20 +753,20 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox"]
-custom_minimum_size = Vector2(155, 38)
+custom_minimum_size = Vector2(155, 34)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
-text = "PRO: +150% EXTRA LIFE drop rate"
+text = "PRO: +150% EXTRA LIFE drop"
 autowrap_mode = 2
 horizontal_alignment = 1
 
 [node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox"]
-custom_minimum_size = Vector2(155, 35)
+custom_minimum_size = Vector2(155, 32)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
-text = "CON: +30% Turbo Debuff drop rate"
+text = "CON: +30% Turbo Debuff drop"
 autowrap_mode = 2
 horizontal_alignment = 1
 
@@ -778,14 +778,14 @@ text = "Slots: 0"
 horizontal_alignment = 1
 
 [node name="ActionOmabloButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox"]
-custom_minimum_size = Vector2(145, 34)
+custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 12
 text = "BUY (1 COIN)"
 
 [node name="DemonCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
-custom_minimum_size = Vector2(170, 250)
+custom_minimum_size = Vector2(175, 235)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_demon")
 
@@ -802,7 +802,7 @@ text = "5. DEMON ★"
 horizontal_alignment = 1
 
 [node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("14_demon_preview")
@@ -810,16 +810,16 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
-custom_minimum_size = Vector2(155, 38)
+custom_minimum_size = Vector2(155, 34)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
-text = "PRO: +150% Life, +100% Fly & -50% Debuffs"
+text = "PRO: +150% Life & +100% Fly"
 autowrap_mode = 2
 horizontal_alignment = 1
 
 [node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
-custom_minimum_size = Vector2(155, 35)
+custom_minimum_size = Vector2(155, 32)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
@@ -835,28 +835,128 @@ text = "Slots: 1 BOOST SLOT"
 horizontal_alignment = 1
 
 [node name="ActionDemonButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
-custom_minimum_size = Vector2(145, 34)
+custom_minimum_size = Vector2(145, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 12
 text = "BUY (1 COIN)"
 
-[node name="BoostStoreTitle" type="Label" parent="UI/StorePanel"]
+[node name="LoadoutBarContainer" type="VBoxContainer" parent="UI/StorePanel"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -300.0
-offset_top = -225.0
-offset_right = 300.0
-offset_bottom = -200.0
+offset_left = -320.0
+offset_top = -175.0
+offset_right = 320.0
+offset_bottom = -125.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 16
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="LoadoutTitleLabel" type="Label" parent="UI/StorePanel/LoadoutBarContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-text = "BOOST STORE & SLOTS (PRESS KEYS 1, 2, 3 IN GAME)"
+text = "EQUIPPED LOADOUT (CURRENT: DEMON)"
+horizontal_alignment = 1
+
+[node name="LoadoutSlotsHBox" type="HBoxContainer" parent="UI/StorePanel/LoadoutBarContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Slot1Card" type="PanelContainer" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox"]
+custom_minimum_size = Vector2(55, 38)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_slot_disabled")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="KeyLabel" type="Label" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "[1]"
+horizontal_alignment = 1
+
+[node name="IconRect" type="TextureRect" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card/VBox"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "EMPTY"
+horizontal_alignment = 1
+
+[node name="Slot2Card" type="PanelContainer" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox"]
+custom_minimum_size = Vector2(55, 38)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_slot_disabled")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="KeyLabel" type="Label" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "[2]"
+horizontal_alignment = 1
+
+[node name="IconRect" type="TextureRect" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card/VBox"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "LOCKED"
+horizontal_alignment = 1
+
+[node name="Slot3Card" type="PanelContainer" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox"]
+custom_minimum_size = Vector2(55, 38)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_slot_disabled")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="KeyLabel" type="Label" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "[3]"
+horizontal_alignment = 1
+
+[node name="IconRect" type="TextureRect" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card/VBox"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "LOCKED"
 horizontal_alignment = 1
 
 [node name="BoostCardsHBox" type="HBoxContainer" parent="UI/StorePanel"]
@@ -867,33 +967,33 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -480.0
-offset_top = -195.0
+offset_top = -122.0
 offset_right = 480.0
-offset_bottom = -45.0
+offset_bottom = -34.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 12
 alignment = 1
 
 [node name="ShieldBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
-custom_minimum_size = Vector2(210, 145)
+custom_minimum_size = Vector2(215, 85)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
 [node name="VBox" type="VBoxContainer" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard"]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 1
 alignment = 1
 
 [node name="NameLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0, 1, 1, 1)
 text = "SHIELD BOOST"
 horizontal_alignment = 1
 
 [node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox"]
-custom_minimum_size = Vector2(36, 36)
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("15_shield_tex")
@@ -902,7 +1002,7 @@ stretch_mode = 5
 
 [node name="QtyLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 9
 text = "Owned: 0"
 horizontal_alignment = 1
 
@@ -912,36 +1012,36 @@ theme_override_constants/separation = 4
 alignment = 1
 
 [node name="BuyShieldBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 28)
+custom_minimum_size = Vector2(90, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 10
 text = "BUY (1 COIN)"
 
 [node name="EquipShieldSlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 28)
+custom_minimum_size = Vector2(90, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
-text = "SLOT 1"
+theme_override_font_sizes/font_size = 10
+text = "EQUIP"
 
 [node name="LifeBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
-custom_minimum_size = Vector2(210, 145)
+custom_minimum_size = Vector2(215, 85)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
 [node name="VBox" type="VBoxContainer" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard"]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 1
 alignment = 1
 
 [node name="NameLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1, 0.2, 0.3, 1)
 text = "LIFE BOOST"
 horizontal_alignment = 1
 
 [node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox"]
-custom_minimum_size = Vector2(36, 36)
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("16_life_tex")
@@ -950,7 +1050,7 @@ stretch_mode = 5
 
 [node name="QtyLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 9
 text = "Owned: 0"
 horizontal_alignment = 1
 
@@ -960,36 +1060,36 @@ theme_override_constants/separation = 4
 alignment = 1
 
 [node name="BuyLifeBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 28)
+custom_minimum_size = Vector2(90, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 10
 text = "BUY (1 COIN)"
 
 [node name="EquipLifeSlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 28)
+custom_minimum_size = Vector2(90, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
-text = "SLOT 1"
+theme_override_font_sizes/font_size = 10
+text = "EQUIP"
 
 [node name="SlowBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
-custom_minimum_size = Vector2(210, 145)
+custom_minimum_size = Vector2(215, 85)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
 [node name="VBox" type="VBoxContainer" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard"]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 1
 alignment = 1
 
 [node name="NameLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0, 1, 0.5, 1)
 text = "SLOW BOOST"
 horizontal_alignment = 1
 
 [node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox"]
-custom_minimum_size = Vector2(36, 36)
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("17_slow_tex")
@@ -998,7 +1098,7 @@ stretch_mode = 5
 
 [node name="QtyLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 9
 text = "Owned: 0"
 horizontal_alignment = 1
 
@@ -1008,36 +1108,36 @@ theme_override_constants/separation = 4
 alignment = 1
 
 [node name="BuySlowBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 28)
+custom_minimum_size = Vector2(90, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 10
 text = "BUY (1 COIN)"
 
 [node name="EquipSlowSlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 28)
+custom_minimum_size = Vector2(90, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
-text = "SLOT 1"
+theme_override_font_sizes/font_size = 10
+text = "EQUIP"
 
 [node name="FlyBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
-custom_minimum_size = Vector2(210, 145)
+custom_minimum_size = Vector2(215, 85)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
 [node name="VBox" type="VBoxContainer" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard"]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 1
 alignment = 1
 
 [node name="NameLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
 text = "FLY BOOST"
 horizontal_alignment = 1
 
 [node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox"]
-custom_minimum_size = Vector2(36, 36)
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("18_fly_tex")
@@ -1046,7 +1146,7 @@ stretch_mode = 5
 
 [node name="QtyLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 9
 text = "Owned: 0"
 horizontal_alignment = 1
 
@@ -1056,16 +1156,16 @@ theme_override_constants/separation = 4
 alignment = 1
 
 [node name="BuyFlyBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 28)
+custom_minimum_size = Vector2(90, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 10
 text = "BUY (1 COIN)"
 
 [node name="EquipFlySlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox"]
-custom_minimum_size = Vector2(90, 28)
+custom_minimum_size = Vector2(90, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
-text = "SLOT 1"
+theme_override_font_sizes/font_size = 10
+text = "EQUIP"
 
 [node name="CloseStoreButton" type="Button" parent="UI/StorePanel"]
 layout_mode = 1
@@ -1075,12 +1175,12 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -80.0
-offset_top = -38.0
+offset_top = -30.0
 offset_right = 80.0
-offset_bottom = -8.0
+offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "BACK"
 
 [node name="SettingsPanel" type="Panel" parent="UI"]

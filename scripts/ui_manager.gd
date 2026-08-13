@@ -61,6 +61,19 @@ extends CanvasLayer
 @onready var action_omablo_button: Button = $StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox/ActionOmabloButton
 @onready var action_demon_button: Button = $StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox/ActionDemonButton
 
+@onready var loadout_title_label: Label = $StorePanel/LoadoutBarContainer/LoadoutTitleLabel
+@onready var store_slot1_card: PanelContainer = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card
+@onready var store_slot1_icon: TextureRect = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card/VBox/IconRect
+@onready var store_slot1_qty: Label = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card/VBox/QtyLabel
+
+@onready var store_slot2_card: PanelContainer = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card
+@onready var store_slot2_icon: TextureRect = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card/VBox/IconRect
+@onready var store_slot2_qty: Label = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot2Card/VBox/QtyLabel
+
+@onready var store_slot3_card: PanelContainer = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card
+@onready var store_slot3_icon: TextureRect = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card/VBox/IconRect
+@onready var store_slot3_qty: Label = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot3Card/VBox/QtyLabel
+
 @onready var shield_boost_card: PanelContainer = $StorePanel/BoostCardsHBox/ShieldBoostCard
 @onready var shield_qty_label: Label = $StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/QtyLabel
 @onready var buy_shield_boost_button: Button = $StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox/BuyShieldBoostButton
@@ -105,6 +118,7 @@ func _ready() -> void:
 	_setup_settings_options()
 	_setup_card_hover_effects()
 	_setup_scroll_buttons()
+	_setup_store_slot_click_handlers()
 	
 	play_button.pressed.connect(_on_play_button_pressed)
 	store_button.pressed.connect(_on_store_button_pressed)
@@ -149,12 +163,74 @@ func _ready() -> void:
 		CharacterManager.boost_inventory_changed.connect(_update_all_ui)
 		CharacterManager.character_changed.connect(_on_character_changed_ui)
 
+func _setup_store_slot_click_handlers() -> void:
+	var slots = [store_slot1_card, store_slot2_card, store_slot3_card]
+	for i in range(3):
+		var card = slots[i]
+		if card:
+			card.gui_input.connect(_on_store_slot_gui_input.bind(i))
+
+func _on_store_slot_gui_input(event: InputEvent, slot_idx: int) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if CharacterManager:
+			var curr = CharacterManager.get_current_character()
+			if curr and slot_idx < curr.boost_slots:
+				# Hacer clic en un slot lo desequipa
+				CharacterManager.equipped_boost_slots[slot_idx] = ""
+				CharacterManager.save_data()
+				CharacterManager.boost_inventory_changed.emit()
+
 func _on_character_changed_ui(_char: CharacterData) -> void:
 	_update_all_ui()
 
 func _update_all_ui() -> void:
 	_update_store_buttons()
+	_update_store_loadout_bar()
 	_update_hud_boost_slots()
+
+func _update_store_loadout_bar() -> void:
+	if not CharacterManager: return
+	var curr_char = CharacterManager.get_current_character()
+	if loadout_title_label and curr_char:
+		loadout_title_label.text = "EQUIPPED LOADOUT (CURRENT: %s)" % curr_char.display_name
+		
+	var unlocked_slots = curr_char.boost_slots if curr_char else 0
+	var pack_name = GameManager.selected_icon_pack if GameManager else "default"
+	
+	var cards = [store_slot1_card, store_slot2_card, store_slot3_card]
+	var icons = [store_slot1_icon, store_slot2_icon, store_slot3_icon]
+	var qtys = [store_slot1_qty, store_slot2_qty, store_slot3_qty]
+	
+	for i in range(3):
+		var card = cards[i]
+		var icon = icons[i]
+		var qty_lbl = qtys[i]
+		if not card or not icon or not qty_lbl: continue
+		
+		if i < unlocked_slots:
+			card.modulate = Color.WHITE
+			var boost_id = CharacterManager.equipped_boost_slots[i]
+			if boost_id != "":
+				var qty = CharacterManager.get_boost_qty(boost_id)
+				qty_lbl.text = "x%d" % qty
+				var icon_file = ""
+				match boost_id:
+					"shield_boost": icon_file = "shield.png"
+					"life_boost": icon_file = "life.png"
+					"slow_boost": icon_file = "slow.png"
+					"fly_boost": icon_file = "fly.png"
+				var tex = load("res://assets/powerups/%s/%s" % [pack_name, icon_file]) as Texture2D
+				icon.texture = tex
+				icon.visible = true
+			else:
+				icon.texture = null
+				icon.visible = false
+				qty_lbl.text = "EMPTY"
+		else:
+			card.modulate = Color(0.35, 0.35, 0.35, 0.5)
+			icon.texture = null
+			icon.visible = false
+			qty_lbl.text = "LOCKED"
 
 func _update_hud_boost_slots() -> void:
 	if not CharacterManager: return
@@ -252,7 +328,6 @@ func _on_card_mouse_exited(card: PanelContainer) -> void:
 	tween.tween_property(card, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func _setup_settings_options() -> void:
-	# Icon Packs Option
 	pack_option_button.clear()
 	pack_option_button.add_item("DEFAULT", 0)
 	pack_option_button.add_item("ARGENTO", 1)
@@ -263,7 +338,6 @@ func _setup_settings_options() -> void:
 	else:
 		pack_option_button.select(0)
 		
-	# Background Option
 	bg_option_button.clear()
 	bg_option_button.add_item("BACKGROUND 1", 0)
 	bg_option_button.add_item("BACKGROUND 2", 1)
@@ -318,7 +392,6 @@ func _update_powerup_status() -> void:
 		
 	var pack_name = GameManager.selected_icon_pack if GameManager else "default"
 		
-	# 1. VIDA EXTRA (LIFE)
 	if life_row:
 		var lives = int(player.get("extra_lives"))
 		life_row.visible = (lives > 0)
@@ -328,7 +401,6 @@ func _update_powerup_status() -> void:
 				var tex = load("res://assets/powerups/%s/life.png" % pack_name) as Texture2D
 				if tex: life_icon.texture = tex
 
-	# 2. ESCUDO (SHIELD)
 	if shield_row:
 		var has_shield = player.get("has_shield") == true
 		shield_row.visible = has_shield
@@ -338,7 +410,6 @@ func _update_powerup_status() -> void:
 				var tex = load("res://assets/powerups/%s/shield.png" % pack_name) as Texture2D
 				if tex: shield_icon.texture = tex
 		
-	# 3. VUELO (FLY)
 	if fly_row:
 		var is_flying = player.get("is_flying") == true
 		fly_row.visible = is_flying
@@ -348,7 +419,6 @@ func _update_powerup_status() -> void:
 				var tex = load("res://assets/powerups/%s/fly.png" % pack_name) as Texture2D
 				if tex: fly_icon.texture = tex
 			
-	# 4. TURBO DEBUFF (TURBO)
 	if turbo_row:
 		var is_turbo = player.get("is_turbo") == true
 		turbo_row.visible = is_turbo
@@ -390,7 +460,6 @@ func _update_store_buttons() -> void:
 			btn.text = "BUY (%d COIN)" % price
 			btn.disabled = (GameManager.total_coins < price)
 			
-	# Seccion de Boosts
 	var shield_qty = CharacterManager.get_boost_qty("shield_boost")
 	var life_qty = CharacterManager.get_boost_qty("life_boost")
 	var slow_qty = CharacterManager.get_boost_qty("slow_boost")
@@ -419,11 +488,15 @@ func _update_store_buttons() -> void:
 
 func _update_boost_equip_btn(btn: Button, boost_id: String, active_boost: String, qty: int, has_slots: bool) -> void:
 	if not btn: return
-	btn.disabled = not has_slots or (active_boost != boost_id and qty < 1)
-	if active_boost == boost_id:
+	if not has_slots:
+		btn.text = "NO SLOTS"
+		btn.disabled = true
+	elif active_boost == boost_id:
 		btn.text = "EQUIPPED"
+		btn.disabled = false
 	else:
-		btn.text = "EQUIP" if has_slots else "NO SLOTS"
+		btn.text = "EQUIP"
+		btn.disabled = (qty < 1)
 
 func _update_menu_stats() -> void:
 	if best_score_label:
@@ -457,7 +530,7 @@ func _on_pack_option_selected(index: int) -> void:
 	var pack_name = "default" if index == 0 else "argento"
 	if GameManager:
 		GameManager.set_icon_pack(pack_name)
-	_update_hud_boost_slots()
+	_update_all_ui()
 
 func _on_bg_option_selected(index: int) -> void:
 	var bg_name = "bg-game1"
@@ -559,7 +632,7 @@ func _on_game_started() -> void:
 	hud.visible = true
 	if notification_label:
 		notification_label.visible = false
-	_update_hud_boost_slots()
+	_update_all_ui()
 
 func _on_game_restarted() -> void:
 	main_menu.visible = false
@@ -569,7 +642,7 @@ func _on_game_restarted() -> void:
 	hud.visible = true
 	if notification_label:
 		notification_label.visible = false
-	_update_hud_boost_slots()
+	_update_all_ui()
 
 func _on_menu_opened() -> void:
 	_show_main_menu()
