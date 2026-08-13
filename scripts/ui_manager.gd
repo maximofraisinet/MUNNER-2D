@@ -143,6 +143,8 @@ extends CanvasLayer
 @onready var music_playlist_option_button: OptionButton = $SettingsPanel/SettingsGrid/MusicPlaylistOptionButton
 @onready var music_volume_slider: HSlider = $SettingsPanel/SettingsGrid/VolumeHBox/MusicVolumeHSlider
 @onready var music_volume_label: Label = $SettingsPanel/SettingsGrid/VolumeHBox/MusicVolumeValueLabel
+@onready var sfx_volume_slider: HSlider = $SettingsPanel/SettingsGrid/SfxVolumeHBox/SfxVolumeHSlider
+@onready var sfx_volume_label: Label = $SettingsPanel/SettingsGrid/SfxVolumeHBox/SfxVolumeValueLabel
 @onready var ui_theme_option_button: OptionButton = $SettingsPanel/SettingsGrid/UiThemeOptionButton
 @onready var pack_option_button: OptionButton = $SettingsPanel/SettingsGrid/PackOptionButton
 @onready var bg_option_button: OptionButton = $SettingsPanel/SettingsGrid/BgOptionButton
@@ -225,6 +227,8 @@ func _ready() -> void:
 		music_playlist_option_button.item_selected.connect(_on_music_playlist_selected)
 	if music_volume_slider:
 		music_volume_slider.value_changed.connect(_on_music_volume_changed)
+	if sfx_volume_slider:
+		sfx_volume_slider.value_changed.connect(_on_sfx_volume_changed)
 	
 	ui_theme_option_button.item_selected.connect(_on_ui_theme_selected)
 	pack_option_button.item_selected.connect(_on_pack_option_selected)
@@ -563,6 +567,11 @@ func _setup_settings_options() -> void:
 		music_volume_slider.value = MusicManager.music_volume * 100.0
 		if music_volume_label:
 			music_volume_label.text = "%d%%" % int(MusicManager.music_volume * 100.0)
+			
+	if sfx_volume_slider and SoundManager:
+		sfx_volume_slider.value = SoundManager.sfx_volume * 100.0
+		if sfx_volume_label:
+			sfx_volume_label.text = "%d%%" % int(SoundManager.sfx_volume * 100.0)
 
 	if ui_theme_option_button:
 		ui_theme_option_button.clear()
@@ -1002,6 +1011,12 @@ func _on_music_volume_changed(val: float) -> void:
 	MusicManager.set_volume(val / 100.0)
 	if music_volume_label:
 		music_volume_label.text = "%d%%" % int(val)
+
+func _on_sfx_volume_changed(val: float) -> void:
+	if not SoundManager: return
+	SoundManager.set_sfx_volume(val / 100.0)
+	if sfx_volume_label:
+		sfx_volume_label.text = "%d%%" % int(val)
 
 func _on_ui_theme_selected(index: int) -> void:
 	var theme_name = "light" if index == 0 else "dark"

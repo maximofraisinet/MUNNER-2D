@@ -110,6 +110,9 @@ func game_over() -> void:
 		return
 	current_state = State.GAMEOVER
 	
+	if SoundManager:
+		SoundManager.play_game_over()
+	
 	total_coins += run_coins
 	
 	if run_score > high_score:

@@ -17,6 +17,7 @@ GameManager="*res://scripts/game_manager.gd"
 CharacterManager="*res://scripts/character_manager.gd"
 MusicManager="*res://scripts/music_manager.gd"
 AchievementManager="*res://scripts/achievement_manager.gd"
+SoundManager="*res://scripts/sound_manager.gd"
 
 [display]
 

@@ -74,6 +74,13 @@ func _update_visuals() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if visible and body is Player:
 		body.apply_powerup(type)
+		if SoundManager:
+			if type == Type.TURBO_DEBUFF or type == Type.SPEED_PERMANENT:
+				SoundManager.play_powerup_negative()
+			elif type == Type.FLY:
+				SoundManager.play_fly()
+			else:
+				SoundManager.play_powerup_positive()
 		visible = false
 		set_deferred("process_mode", PROCESS_MODE_DISABLED)
 		set_deferred("monitoring", false)

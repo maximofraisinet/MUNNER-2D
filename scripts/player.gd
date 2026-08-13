@@ -17,6 +17,7 @@ var anim_timer: float = 0.0
 var current_frame_idx: int = 0
 var anim_fps: float = 12.0
 var initial_pos: Vector2 = Vector2(100, 545)
+var footstep_timer: float = 0.0
 
 ## ESTADOS DE POTENCIADORES Y VIDAS
 var extra_lives: int = 0
@@ -139,21 +140,27 @@ func use_boost_slot(slot_idx: int) -> void:
 			has_shield = true
 			shield_timer = 999999.0 if (curr_char.id == "demon_messi") else 5.0
 			GameManager.speed_notification_emitted.emit("ACTIVATED SHIELD BOOST!", Color(0.0, 1.0, 1.0))
+			if SoundManager: SoundManager.play_powerup_positive()
 		elif boost_id == "life_boost":
 			extra_lives += 1
 			GameManager.speed_notification_emitted.emit("ACTIVATED LIFE BOOST!", Color(1.0, 0.2, 0.3))
+			if SoundManager: SoundManager.play_powerup_positive()
 		elif boost_id == "slow_boost":
 			GameManager.apply_permanent_speed_reduction()
+			if SoundManager: SoundManager.play_powerup_positive()
 		elif boost_id == "mega_slow_boost":
 			GameManager.apply_mega_speed_reduction()
+			if SoundManager: SoundManager.play_powerup_positive()
 		elif boost_id == "fly_boost":
 			is_flying = true
 			fly_timer = 4.0
 			GameManager.speed_notification_emitted.emit("ACTIVATED FLY BOOST!", Color(1.0, 0.84, 0.0))
+			if SoundManager: SoundManager.play_fly()
 		elif boost_id == "coin_mult_boost":
 			is_coin_multiplier_active = true
 			coin_mult_timer = 5.0
 			GameManager.speed_notification_emitted.emit("ACTIVATED 2X COINS (5s)!", Color(1.0, 0.84, 0.0))
+			if SoundManager: SoundManager.play_powerup_positive()
 
 func on_obstacle_hit(obs: Area2D) -> bool:
 	if is_invulnerable:
@@ -165,6 +172,7 @@ func on_obstacle_hit(obs: Area2D) -> bool:
 		shield_timer = 0.0
 		is_invulnerable = true
 		invulnerability_timer = 0.5
+		if SoundManager: SoundManager.play_shield_hit()
 		if current_character and current_character.id == "demon_messi":
 			shield_regen_timer = 2.0 # Se auto-regenera en 2 segundos
 		if obs:
@@ -177,6 +185,7 @@ func on_obstacle_hit(obs: Area2D) -> bool:
 		extra_lives -= 1
 		is_invulnerable = true
 		invulnerability_timer = 1.5
+		if SoundManager: SoundManager.play_shield_hit()
 		if obs:
 			obs.visible = false
 			obs.set_deferred("process_mode", PROCESS_MODE_DISABLED)
@@ -258,9 +267,17 @@ func _physics_process(delta: float) -> void:
 				sprite.texture = current_character.jump_frame
 		else:
 			_animate_run(delta)
+			if GameManager.current_state == GameManager.State.PLAYING:
+				footstep_timer -= delta
+				if footstep_timer <= 0.0:
+					footstep_timer = max(0.12, 0.22 - (GameManager.current_speed - 400.0) * 0.0001)
+					if SoundManager:
+						SoundManager.play_footstep()
 
 		if is_on_floor() and (Input.is_action_just_pressed("jump") or Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_up")):
 			velocity.y = jump_velocity
+			if SoundManager:
+				SoundManager.play_jump()
 
 	_update_visual_modulation()
 	move_and_slide()

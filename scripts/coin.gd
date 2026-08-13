@@ -32,6 +32,8 @@ func _on_body_entered(body: Node2D) -> void:
 		if body.has_method("get_current_coin_multiplier"):
 			mult = body.get_current_coin_multiplier()
 		GameManager.add_coin(mult)
+		if SoundManager:
+			SoundManager.play_coin()
 		visible = false
 		set_deferred("process_mode", PROCESS_MODE_DISABLED)
 		set_deferred("monitoring", false)
