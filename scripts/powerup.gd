@@ -1,7 +1,7 @@
 extends Area2D
 class_name PowerUp
 
-enum Type { SHIELD, FLY, TURBO_DEBUFF, EXTRA_LIFE }
+enum Type { SHIELD, FLY, TURBO_DEBUFF, EXTRA_LIFE, SLOW_PERMANENT, SPEED_PERMANENT }
 
 var type: Type = Type.SHIELD
 @onready var visual: ColorRect = $Visual
@@ -18,6 +18,10 @@ func setup(p_type: Type) -> void:
 				visual.color = Color(1.0, 0.0, 1.0, 1.0) # Púrpura
 			Type.EXTRA_LIFE:
 				visual.color = Color(1.0, 0.15, 0.25, 1.0) # Rojo Corazón
+			Type.SLOW_PERMANENT:
+				visual.color = Color(0.0, 1.0, 0.5, 1.0) # Verde Menta
+			Type.SPEED_PERMANENT:
+				visual.color = Color(1.0, 0.5, 0.0, 1.0) # Naranja Brillant
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)

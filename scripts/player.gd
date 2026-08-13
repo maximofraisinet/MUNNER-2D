@@ -84,6 +84,10 @@ func apply_powerup(type: PowerUp.Type) -> void:
 			is_turbo = true
 			turbo_timer = 4.0
 			GameManager.speed_multiplier = 1.35
+		PowerUp.Type.SLOW_PERMANENT:
+			GameManager.apply_permanent_speed_reduction()
+		PowerUp.Type.SPEED_PERMANENT:
+			GameManager.apply_permanent_speed_increase()
 
 func on_obstacle_hit(obs: Area2D) -> bool:
 	if is_invulnerable:
@@ -178,7 +182,7 @@ func _update_visual_modulation() -> void:
 	elif has_shield:
 		sprite.modulate = Color(0.4, 1.0, 1.0)
 	elif is_invulnerable:
-		sprite.modulate = Color(1.0, 0.5, 0.5, 0.7) # Parpadeo de invulnerabilidad tras perder vida/escudo
+		sprite.modulate = Color(1.0, 0.5, 0.5, 0.7)
 	else:
 		sprite.modulate = Color.WHITE
 

@@ -4,6 +4,7 @@ extends CanvasLayer
 @onready var score_label: Label = $HUD/ScoreLabel
 @onready var coins_label: Label = $HUD/CoinsLabel
 @onready var speed_label: Label = $HUD/SpeedLabel
+@onready var notification_label: Label = $HUD/NotificationToastLabel
 
 @onready var lives_status_label: Label = $HUD/PowerUpStatusBox/LivesStatusLabel
 @onready var shield_status_label: Label = $HUD/PowerUpStatusBox/ShieldStatusLabel
@@ -32,6 +33,8 @@ extends CanvasLayer
 
 @onready var player: Node2D = $"../Player"
 
+var notification_timer: float = 0.0
+
 func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
 	
@@ -55,8 +58,9 @@ func _ready() -> void:
 	GameManager.game_restarted_triggered.connect(_on_game_restarted)
 	GameManager.menu_opened_triggered.connect(_on_menu_opened)
 	GameManager.game_over_triggered.connect(_on_game_over)
+	GameManager.speed_notification_emitted.connect(_on_speed_notification_emitted)
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if score_label:
 		score_label.text = "SCORE: %d" % int(GameManager.run_score)
 	if coins_label:
@@ -65,33 +69,44 @@ func _process(_delta: float) -> void:
 		speed_label.text = "SPEED: %d px/s" % int(GameManager.effective_speed)
 
 	_update_powerup_status()
+	_update_notification_toast(delta)
+
+func _on_speed_notification_emitted(message: String, text_color: Color) -> void:
+	if notification_label:
+		notification_label.text = message
+		notification_label.set("theme_override_colors/font_color", text_color)
+		notification_label.visible = true
+		notification_timer = 2.0
+
+func _update_notification_toast(delta: float) -> void:
+	if notification_timer > 0.0:
+		notification_timer -= delta
+		if notification_timer <= 0.0:
+			if notification_label:
+				notification_label.visible = false
 
 func _update_powerup_status() -> void:
 	if not player:
 		return
 		
-	# Lives Status (Top Right)
 	if lives_status_label:
 		var lives = int(player.get("extra_lives"))
 		lives_status_label.visible = (lives > 0)
 		if lives > 0:
 			lives_status_label.text = "LIVES: %d" % lives
 
-	# Finite Shield Status (5s Timer)
 	if shield_status_label:
 		var has_shield = player.get("has_shield") == true
 		shield_status_label.visible = has_shield
 		if has_shield:
 			shield_status_label.text = "SHIELD: %.1fs" % float(player.get("shield_timer"))
 		
-	# Fly Status
 	if fly_status_label:
 		var is_flying = player.get("is_flying") == true
 		fly_status_label.visible = is_flying
 		if is_flying:
 			fly_status_label.text = "FLYING: %.1fs" % float(player.get("fly_timer"))
 			
-	# Turbo Status
 	if turbo_status_label:
 		var is_turbo = player.get("is_turbo") == true
 		turbo_status_label.visible = is_turbo
@@ -184,12 +199,16 @@ func _on_game_started() -> void:
 	game_over_panel.visible = false
 	store_panel.visible = false
 	hud.visible = true
+	if notification_label:
+		notification_label.visible = false
 
 func _on_game_restarted() -> void:
 	main_menu.visible = false
 	game_over_panel.visible = false
 	store_panel.visible = false
 	hud.visible = true
+	if notification_label:
+		notification_label.visible = false
 
 func _on_menu_opened() -> void:
 	_show_main_menu()

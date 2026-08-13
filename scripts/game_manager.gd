@@ -4,6 +4,7 @@ signal game_started_triggered
 signal game_over_triggered
 signal game_restarted_triggered
 signal menu_opened_triggered
+signal speed_notification_emitted(message: String, text_color: Color)
 
 enum State { START, PLAYING, GAMEOVER }
 var current_state: State = State.START
@@ -79,6 +80,16 @@ func open_main_menu() -> void:
 
 func add_coin() -> void:
 	run_coins += 1
+
+func apply_permanent_speed_reduction() -> void:
+	# Reducción permanente del -20% de velocidad base
+	current_speed = max(250.0, current_speed * 0.80)
+	speed_notification_emitted.emit("SPEED DOWN (-20%)", Color(0.0, 1.0, 0.5))
+
+func apply_permanent_speed_increase() -> void:
+	# Aumento permanente del +10% de velocidad base
+	current_speed = current_speed * 1.10
+	speed_notification_emitted.emit("SPEED UP (+10%)", Color(1.0, 0.5, 0.0))
 
 func save_data() -> void:
 	var config = ConfigFile.new()

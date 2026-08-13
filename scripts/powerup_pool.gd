@@ -3,12 +3,12 @@ class_name PowerUpPool
 
 @export var powerup_scene: PackedScene = preload("res://scenes/PowerUp.tscn")
 
-const POOL_SIZE: int = 8
+const POOL_SIZE: int = 10
 const SPAWN_X: float = 1320.0
 
 var pool: Array[Area2D] = []
 var spawn_timer: float = 0.0
-var next_spawn_interval: float = 10.0
+var next_spawn_interval: float = 8.0
 
 const HEIGHT_POSITIONS: Array[float] = [540.0, 460.0]
 
@@ -26,7 +26,7 @@ func reset_pool() -> void:
 	for pup in pool:
 		_deactivate_powerup(pup)
 	spawn_timer = 0.0
-	next_spawn_interval = randf_range(7.0, 12.0)
+	next_spawn_interval = randf_range(6.0, 11.0)
 
 func _physics_process(delta: float) -> void:
 	if GameManager.current_state != GameManager.State.PLAYING:
@@ -44,12 +44,12 @@ func _physics_process(delta: float) -> void:
 	if spawn_timer >= next_spawn_interval:
 		spawn_timer = 0.0
 		_spawn_powerup()
-		next_spawn_interval = randf_range(7.0, 12.0)
+		next_spawn_interval = randf_range(6.0, 11.0)
 
 func _spawn_powerup() -> void:
 	for pup in pool:
 		if not pup.visible:
-			var rand_type = randi() % 4 as PowerUp.Type
+			var rand_type = randi() % 6 as PowerUp.Type
 			if pup.has_method("setup"):
 				pup.setup(rand_type)
 				
