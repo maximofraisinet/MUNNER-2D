@@ -7,20 +7,32 @@ var scaled_width: float = 0.0
 
 func _ready() -> void:
 	z_index = -10
+	if GameManager:
+		GameManager.background_changed.connect(_on_background_changed)
+	_setup_background()
+
+func _on_background_changed(_bg_name: String) -> void:
 	_setup_background()
 
 func _setup_background() -> void:
-	if sprites.size() > 0 and sprites[0] and sprites[0].texture:
-		var target_height: float = 540.0
-		var scale_factor: float = target_height / sprites[0].texture.get_height()
-		scaled_width = sprites[0].texture.get_width() * scale_factor
+	var bg_name = GameManager.selected_bg if GameManager else "bg-game1"
+	var texture_path = "res://assets/backgrounds/%s.png" % bg_name
+	var tex = load(texture_path) as Texture2D
+	
+	if not tex:
+		tex = load("res://assets/backgrounds/bg-game1.png") as Texture2D
 		
-		# Posición inicial de la cámara: X=500, Zoom=1.2 => Borde izquierdo X = 20
+	if tex and sprites.size() > 0:
+		var target_height: float = 540.0
+		var scale_factor: float = target_height / tex.get_height()
+		scaled_width = tex.get_width() * scale_factor
+		
 		var start_x: float = -400.0
-		var target_y: float = 80.0 # Posición Y del borde superior del viewport
+		var target_y: float = 80.0
 		
 		for i in range(sprites.size()):
 			var spr = sprites[i]
+			spr.texture = tex
 			spr.centered = false
 			spr.scale = Vector2(scale_factor, scale_factor)
 			spr.modulate = Color.WHITE
@@ -34,7 +46,6 @@ func _process(delta: float) -> void:
 			spr.position.x -= speed * delta
 			
 		for spr in sprites:
-			# Si el borde derecho de un sprite sale por completo del área visible izquierda
 			if spr.position.x + scaled_width < -400.0:
 				var rightmost_x = _get_rightmost_x()
 				spr.position.x = rightmost_x + scaled_width

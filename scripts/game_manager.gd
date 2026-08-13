@@ -6,6 +6,7 @@ signal game_restarted_triggered
 signal menu_opened_triggered
 signal speed_notification_emitted(message: String, text_color: Color)
 signal icon_pack_changed(pack_name: String)
+signal background_changed(bg_name: String)
 
 enum State { START, PLAYING, GAMEOVER }
 var current_state: State = State.START
@@ -23,8 +24,9 @@ var effective_speed: float:
 ## Tiempo de vuelo del jugador
 var player_air_hang_time: float = 0.6818
 
-## Paquete de iconos de potenciadores ("argento" o "default")
+## Configuración de Paquete de Iconos y Fondo
 var selected_icon_pack: String = "argento"
+var selected_bg: String = "bg-game1"
 
 ## Estadísticas persistentes
 var high_score: float = 0.0
@@ -50,6 +52,12 @@ func set_icon_pack(pack_name: String) -> void:
 		selected_icon_pack = pack_name
 		save_data()
 		icon_pack_changed.emit(selected_icon_pack)
+
+func set_background(bg_name: String) -> void:
+	if selected_bg != bg_name:
+		selected_bg = bg_name
+		save_data()
+		background_changed.emit(selected_bg)
 
 func start_game() -> void:
 	current_state = State.PLAYING
@@ -104,6 +112,7 @@ func save_data() -> void:
 	config.set_value("stats", "high_score", high_score)
 	config.set_value("stats", "total_coins", total_coins)
 	config.set_value("settings", "icon_pack", selected_icon_pack)
+	config.set_value("settings", "selected_bg", selected_bg)
 	config.save(SAVE_PATH)
 
 func load_data() -> void:
@@ -112,3 +121,4 @@ func load_data() -> void:
 		high_score = config.get_value("stats", "high_score", 0.0)
 		total_coins = config.get_value("stats", "total_coins", 0)
 		selected_icon_pack = config.get_value("settings", "icon_pack", "argento")
+		selected_bg = config.get_value("settings", "selected_bg", "bg-game1")

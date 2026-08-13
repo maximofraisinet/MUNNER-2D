@@ -405,10 +405,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = -140.0
-offset_right = 260.0
-offset_bottom = 140.0
+offset_left = -300.0
+offset_top = -210.0
+offset_right = 300.0
+offset_bottom = 210.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -416,50 +416,75 @@ grow_vertical = 2
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 20.0
-offset_bottom = 60.0
+offset_top = 15.0
+offset_bottom = 55.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 26
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
 text = "SETTINGS"
 horizontal_alignment = 1
 
-[node name="PackLabel" type="Label" parent="UI/SettingsPanel"]
+[node name="SettingsGrid" type="GridContainer" parent="UI/SettingsPanel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -45.0
-offset_right = 200.0
-offset_bottom = -15.0
+offset_left = -260.0
+offset_top = -140.0
+offset_right = 260.0
+offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 18
-text = "POWER-UP ICONS PACK:"
-horizontal_alignment = 1
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 15
+columns = 2
 
-[node name="PackOptionButton" type="OptionButton" parent="UI/SettingsPanel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -120.0
-offset_top = -5.0
-offset_right = 120.0
-offset_bottom = 40.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 18
+[node name="PackLabel" type="Label" parent="UI/SettingsPanel/SettingsGrid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "ICON PACK:"
+
+[node name="PackOptionButton" type="OptionButton" parent="UI/SettingsPanel/SettingsGrid"]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
 item_count = 2
 popup/item_0/text = "ARGENTO"
 popup/item_0/id = 0
 popup/item_1/text = "DEFAULT"
 popup/item_1/id = 1
+
+[node name="BgLabel" type="Label" parent="UI/SettingsPanel/SettingsGrid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "BACKGROUND:"
+
+[node name="BgOptionButton" type="OptionButton" parent="UI/SettingsPanel/SettingsGrid"]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+item_count = 4
+popup/item_0/text = "BACKGROUND 1"
+popup/item_0/id = 0
+popup/item_1/text = "BACKGROUND 2"
+popup/item_1/id = 1
+popup/item_2/text = "BLACK"
+popup/item_2/id = 2
+popup/item_3/text = "WHITE"
+popup/item_3/id = 3
+
+[node name="PreviewLabel" type="Label" parent="UI/SettingsPanel/SettingsGrid"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "BG PREVIEW:"
+
+[node name="BgPreviewRect" type="TextureRect" parent="UI/SettingsPanel/SettingsGrid"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
 
 [node name="CloseSettingsButton" type="Button" parent="UI/SettingsPanel"]
 layout_mode = 1
@@ -469,12 +494,12 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -80.0
-offset_top = -60.0
+offset_top = -50.0
 offset_right = 80.0
-offset_bottom = -20.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "BACK"
 
 [node name="GameOverPanel" type="Panel" parent="UI"]

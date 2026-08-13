@@ -28,7 +28,9 @@ extends CanvasLayer
 @onready var close_store_button: Button = $StorePanel/CloseStoreButton
 
 @onready var settings_panel: Panel = $SettingsPanel
-@onready var pack_option_button: OptionButton = $SettingsPanel/PackOptionButton
+@onready var pack_option_button: OptionButton = $SettingsPanel/SettingsGrid/PackOptionButton
+@onready var bg_option_button: OptionButton = $SettingsPanel/SettingsGrid/BgOptionButton
+@onready var bg_preview_rect: TextureRect = $SettingsPanel/SettingsGrid/BgPreviewRect
 @onready var close_settings_button: Button = $SettingsPanel/CloseSettingsButton
 
 @onready var game_over_panel: Panel = $GameOverPanel
@@ -59,6 +61,7 @@ func _ready() -> void:
 	close_store_button.pressed.connect(_on_close_store_button_pressed)
 	
 	pack_option_button.item_selected.connect(_on_pack_option_selected)
+	bg_option_button.item_selected.connect(_on_bg_option_selected)
 	close_settings_button.pressed.connect(_on_close_settings_button_pressed)
 	
 	restart_button.pressed.connect(_on_restart_button_pressed)
@@ -71,6 +74,7 @@ func _ready() -> void:
 	GameManager.speed_notification_emitted.connect(_on_speed_notification_emitted)
 
 func _setup_settings_options() -> void:
+	# Icon Packs Option
 	pack_option_button.clear()
 	pack_option_button.add_item("ARGENTO", 0)
 	pack_option_button.add_item("DEFAULT", 1)
@@ -80,6 +84,29 @@ func _setup_settings_options() -> void:
 		pack_option_button.select(1)
 	else:
 		pack_option_button.select(0)
+		
+	# Background Option
+	bg_option_button.clear()
+	bg_option_button.add_item("BACKGROUND 1", 0)
+	bg_option_button.add_item("BACKGROUND 2", 1)
+	bg_option_button.add_item("BLACK", 2)
+	bg_option_button.add_item("WHITE", 3)
+	
+	var current_bg = GameManager.selected_bg if GameManager else "bg-game1"
+	match current_bg:
+		"bg-game2": bg_option_button.select(1)
+		"bg-black": bg_option_button.select(2)
+		"bg-white": bg_option_button.select(3)
+		_: bg_option_button.select(0)
+		
+	_update_bg_preview(current_bg)
+
+func _update_bg_preview(bg_name: String) -> void:
+	if bg_preview_rect:
+		var preview_path = "res://assets/backgrounds/previews/%s_preview.png" % bg_name
+		var tex = load(preview_path) as Texture2D
+		if tex:
+			bg_preview_rect.texture = tex
 
 func _process(delta: float) -> void:
 	if score_label:
@@ -184,6 +211,16 @@ func _on_pack_option_selected(index: int) -> void:
 	var pack_name = "argento" if index == 0 else "default"
 	if GameManager:
 		GameManager.set_icon_pack(pack_name)
+
+func _on_bg_option_selected(index: int) -> void:
+	var bg_name = "bg-game1"
+	match index:
+		1: bg_name = "bg-game2"
+		2: bg_name = "bg-black"
+		3: bg_name = "bg-white"
+	_update_bg_preview(bg_name)
+	if GameManager:
+		GameManager.set_background(bg_name)
 
 func _on_close_settings_button_pressed() -> void:
 	settings_panel.visible = false
