@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c_main_001"]
+[gd_scene load_steps=11 format=3 uid="uid://c_main_001"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/obstacle_pool.gd" id="2_pool"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://scripts/coin_pool.gd" id="5_coin_pool"]
 [ext_resource type="Texture2D" path="res://assets/ui/bg-menu.png" id="6_bg_menu"]
 [ext_resource type="Script" path="res://scripts/powerup_pool.gd" id="7_powerup_pool"]
+[ext_resource type="Script" path="res://scripts/scrolling_background.gd" id="8_bg_game"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/bg-game1.png" id="9_bg_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(2400, 68)
@@ -19,6 +21,22 @@ size = Vector2(50, 70)
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(500, 350)
 zoom = Vector2(1.2, 1.2)
+
+[node name="Background" type="Node2D" parent="."]
+z_index = -10
+script = ExtResource("8_bg_game")
+
+[node name="Sprite1" type="Sprite2D" parent="Background"]
+texture = ExtResource("9_bg_tex")
+centered = false
+
+[node name="Sprite2" type="Sprite2D" parent="Background"]
+texture = ExtResource("9_bg_tex")
+centered = false
+
+[node name="Sprite3" type="Sprite2D" parent="Background"]
+texture = ExtResource("9_bg_tex")
+centered = false
 
 [node name="Ground" type="StaticBody2D" parent="."]
 position = Vector2(576, 614)
