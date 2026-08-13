@@ -7,6 +7,7 @@ signal menu_opened_triggered
 signal speed_notification_emitted(message: String, text_color: Color)
 signal icon_pack_changed(pack_name: String)
 signal background_changed(bg_name: String)
+signal ui_theme_changed(theme_name: String)
 
 enum State { START, PLAYING, GAMEOVER }
 var current_state: State = State.START
@@ -24,9 +25,10 @@ var effective_speed: float:
 ## Tiempo de vuelo del jugador
 var player_air_hang_time: float = 0.6818
 
-## Configuración de Paquete de Iconos y Fondo
+## Configuración de Paquete de Iconos, Fondo y Tema de UI
 var selected_icon_pack: String = "default"
 var selected_bg: String = "bg-game1"
+var selected_ui_theme: String = "light"
 
 ## Estadísticas persistentes
 var high_score: float = 0.0
@@ -58,6 +60,12 @@ func set_background(bg_name: String) -> void:
 		selected_bg = bg_name
 		save_data()
 		background_changed.emit(selected_bg)
+
+func set_ui_theme(theme_name: String) -> void:
+	if selected_ui_theme != theme_name:
+		selected_ui_theme = theme_name
+		save_data()
+		ui_theme_changed.emit(selected_ui_theme)
 
 func start_game() -> void:
 	current_state = State.PLAYING
@@ -113,6 +121,7 @@ func save_data() -> void:
 	config.set_value("stats", "total_coins", total_coins)
 	config.set_value("settings", "icon_pack", selected_icon_pack)
 	config.set_value("settings", "selected_bg", selected_bg)
+	config.set_value("settings", "selected_ui_theme", selected_ui_theme)
 	config.save(SAVE_PATH)
 
 func load_data() -> void:
@@ -122,3 +131,4 @@ func load_data() -> void:
 		total_coins = config.get_value("stats", "total_coins", 0)
 		selected_icon_pack = config.get_value("settings", "icon_pack", "default")
 		selected_bg = config.get_value("settings", "selected_bg", "bg-game1")
+		selected_ui_theme = config.get_value("settings", "selected_ui_theme", "light")

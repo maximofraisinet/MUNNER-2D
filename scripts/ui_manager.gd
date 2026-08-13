@@ -35,6 +35,7 @@ extends CanvasLayer
 @onready var slot3_qty: Label = $HUD/BoostHudHBox/Slot3Card/VBox/QtyLabel
 
 @onready var main_menu: Control = $MainMenu
+@onready var menu_bg_rect: TextureRect = $MainMenu/Background
 @onready var best_score_label: Label = $MainMenu/StatsContainer/BestScoreLabel
 @onready var total_coins_label: Label = $MainMenu/StatsContainer/TotalCoinsLabel
 @onready var play_button: Button = $MainMenu/ButtonsContainer/PlayButton
@@ -103,6 +104,7 @@ extends CanvasLayer
 @onready var close_store_button: Button = $StorePanel/CloseStoreButton
 
 @onready var settings_panel: Panel = $SettingsPanel
+@onready var ui_theme_option_button: OptionButton = $SettingsPanel/SettingsGrid/UiThemeOptionButton
 @onready var pack_option_button: OptionButton = $SettingsPanel/SettingsGrid/PackOptionButton
 @onready var bg_option_button: OptionButton = $SettingsPanel/SettingsGrid/BgOptionButton
 @onready var bg_preview_rect: TextureRect = $SettingsPanel/SettingsGrid/BgPreviewRect
@@ -154,6 +156,7 @@ func _ready() -> void:
 	
 	close_store_button.pressed.connect(_on_close_store_button_pressed)
 	
+	ui_theme_option_button.item_selected.connect(_on_ui_theme_selected)
 	pack_option_button.item_selected.connect(_on_pack_option_selected)
 	bg_option_button.item_selected.connect(_on_bg_option_selected)
 	close_settings_button.pressed.connect(_on_close_settings_button_pressed)
@@ -166,6 +169,8 @@ func _ready() -> void:
 	GameManager.menu_opened_triggered.connect(_on_menu_opened)
 	GameManager.game_over_triggered.connect(_on_game_over)
 	GameManager.speed_notification_emitted.connect(_on_speed_notification_emitted)
+	if GameManager.has_signal("ui_theme_changed"):
+		GameManager.ui_theme_changed.connect(_update_ui_theme_bg)
 	
 	if CharacterManager:
 		CharacterManager.unlocked_characters_changed.connect(_update_all_ui)
@@ -337,6 +342,18 @@ func _on_card_mouse_exited(card: PanelContainer) -> void:
 	tween.tween_property(card, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func _setup_settings_options() -> void:
+	if ui_theme_option_button:
+		ui_theme_option_button.clear()
+		ui_theme_option_button.add_item("LIGHT", 0)
+		ui_theme_option_button.add_item("DARK", 1)
+		
+		var current_theme = GameManager.selected_ui_theme if GameManager else "light"
+		if current_theme == "dark":
+			ui_theme_option_button.select(1)
+		else:
+			ui_theme_option_button.select(0)
+		_update_ui_theme_bg(current_theme)
+
 	pack_option_button.clear()
 	pack_option_button.add_item("DEFAULT", 0)
 	pack_option_button.add_item("ARGENTO", 1)
@@ -361,6 +378,13 @@ func _setup_settings_options() -> void:
 		_: bg_option_button.select(0)
 		
 	_update_bg_preview(current_bg)
+
+func _update_ui_theme_bg(theme_name: String) -> void:
+	if menu_bg_rect:
+		var tex_path = "res://assets/ui/bg-menu-%s.png" % theme_name
+		var tex = load(tex_path) as Texture2D
+		if tex:
+			menu_bg_rect.texture = tex
 
 func _update_bg_preview(bg_name: String) -> void:
 	if bg_preview_rect:
@@ -541,6 +565,12 @@ func _on_store_button_pressed() -> void:
 func _on_settings_button_pressed() -> void:
 	_setup_settings_options()
 	settings_panel.visible = true
+
+func _on_ui_theme_selected(index: int) -> void:
+	var theme_name = "light" if index == 0 else "dark"
+	if GameManager:
+		GameManager.set_ui_theme(theme_name)
+	_update_ui_theme_bg(theme_name)
 
 func _on_pack_option_selected(index: int) -> void:
 	var pack_name = "default" if index == 0 else "argento"
