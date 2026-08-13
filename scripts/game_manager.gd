@@ -13,9 +13,11 @@ signal jump_binding_changed(type_name: String, code: int, display_name: String)
 enum State { START, PLAYING, GAMEOVER }
 var current_state: State = State.START
 
-## Parámetros de velocidad iniciales
+## Parámetros de velocidad iniciales y aceleración dinámica
 var initial_speed: float = 400.0
-var speed_acceleration: float = 12.0
+var max_speed: float = 1800.0
+var base_acceleration: float = 10.0
+var acceleration_power: float = 0.9
 var current_speed: float = 400.0
 var speed_multiplier: float = 1.0
 
@@ -75,7 +77,10 @@ func set_jump_binding(type_name: String, code: int, display_name: String) -> voi
 
 func _process(delta: float) -> void:
 	if current_state == State.PLAYING:
-		current_speed += speed_acceleration * delta
+		if current_speed < max_speed:
+			var speed_ratio: float = clamp((max_speed - current_speed) / (max_speed - initial_speed), 0.0, 1.0)
+			var current_accel: float = base_acceleration * pow(speed_ratio, acceleration_power)
+			current_speed = min(max_speed, current_speed + current_accel * delta)
 		run_score += delta * 10.0
 
 func set_icon_pack(pack_name: String) -> void:
