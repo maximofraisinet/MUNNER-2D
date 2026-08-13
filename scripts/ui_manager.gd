@@ -45,6 +45,7 @@ extends CanvasLayer
 @onready var settings_button: Button = $MainMenu/ButtonsContainer/SettingsButton
 @onready var exit_button: Button = $MainMenu/ButtonsContainer/ExitButton
 
+@onready var modal_dimmer: ColorRect = $ModalDimmer
 @onready var achievements_panel: Panel = $AchievementsPanel
 @onready var achievements_vbox: VBoxContainer = $AchievementsPanel/ScrollContainer/AchievementsVBox
 @onready var close_achievements_button: Button = $AchievementsPanel/CloseAchievementsButton
@@ -259,6 +260,17 @@ func _ready() -> void:
 		CharacterManager.unlocked_characters_changed.connect(_update_all_ui)
 		CharacterManager.boost_inventory_changed.connect(_update_all_ui)
 		CharacterManager.character_changed.connect(_on_character_changed_ui)
+		
+	if casino_panel:
+		if casino_panel.has_signal("casino_closed"):
+			casino_panel.casino_closed.connect(_update_modal_dimmer)
+		casino_panel.visibility_changed.connect(_update_modal_dimmer)
+	if modal_dimmer:
+		modal_dimmer.gui_input.connect(_on_modal_dimmer_gui_input)
+
+func _on_modal_dimmer_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_close_any_open_modal()
 
 func _on_icon_pack_changed_ui(_pack_name: String) -> void:
 	_update_all_ui()
@@ -289,8 +301,13 @@ func _input(event: InputEvent) -> void:
 			return
 
 func _unhandled_input(event: InputEvent) -> void:
-	if GameManager.current_state == GameManager.State.START and not cheat_panel.visible:
-		if event is InputEventKey and event.pressed and not event.echo:
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_ESCAPE:
+			if _close_any_open_modal():
+				get_viewport().set_input_as_handled()
+				return
+		
+		if GameManager.current_state == GameManager.State.START and not cheat_panel.visible:
 			var key_str = OS.get_keycode_string(event.keycode).to_lower()
 			if key_str.length() == 1 and key_str >= "a" and key_str <= "z":
 				cheat_buffer += key_str
@@ -300,8 +317,31 @@ func _unhandled_input(event: InputEvent) -> void:
 					cheat_buffer = ""
 					_open_cheat_panel()
 
+func _close_any_open_modal() -> bool:
+	if cheat_panel and cheat_panel.visible:
+		cheat_panel.visible = false
+		_update_modal_dimmer()
+		return true
+	if casino_panel and casino_panel.visible:
+		if casino_panel.has_method("_on_close_pressed"):
+			casino_panel._on_close_pressed()
+		else:
+			casino_panel.visible = false
+		_update_modal_dimmer()
+		return true
+	if achievements_panel and achievements_panel.visible:
+		_on_close_achievements_button_pressed()
+		return true
+	if settings_panel and settings_panel.visible:
+		_on_close_settings_button_pressed()
+		return true
+	if store_panel and store_panel.visible:
+		_on_close_store_button_pressed()
+		return true
+	return false
+
 func _open_cheat_panel() -> void:
-	cheat_panel.visible = true
+	_animate_open_panel(cheat_panel)
 	cheat_amount_input.text = ""
 	cheat_amount_input.grab_focus()
 
@@ -318,9 +358,11 @@ func _apply_cheat_coins() -> void:
 		GameManager.save_data()
 		_update_all_ui()
 	cheat_panel.visible = false
+	_update_modal_dimmer()
 
 func _on_cheat_cancel_pressed() -> void:
 	cheat_panel.visible = false
+	_update_modal_dimmer()
 
 func _setup_store_slot_click_handlers() -> void:
 	var slots = [store_slot1_card, store_slot2_card, store_slot3_card]
@@ -689,8 +731,15 @@ func _update_powerup_status() -> void:
 			var s_timer = float(player.get("shield_timer"))
 			if s_timer > 999.0:
 				if shield_status_label: shield_status_label.text = "PERMA"
+				shield_row.modulate = Color.WHITE
 			else:
 				if shield_status_label: shield_status_label.text = "%.1fs" % s_timer
+				if s_timer <= 1.5:
+					# Flashing warning pulse
+					var pulse = 0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.015)
+					shield_row.modulate = Color(1.0, 0.4 + 0.6 * pulse, 0.4 + 0.6 * pulse, 1.0)
+				else:
+					shield_row.modulate = Color.WHITE
 			if shield_icon:
 				var tex = load("res://assets/powerups/%s/shield.png" % pack_name) as Texture2D
 				if tex: shield_icon.texture = tex
@@ -699,7 +748,14 @@ func _update_powerup_status() -> void:
 		var is_flying = player.get("is_flying") == true
 		fly_row.visible = is_flying
 		if is_flying:
-			if fly_status_label: fly_status_label.text = "%.1fs" % float(player.get("fly_timer"))
+			var f_timer = float(player.get("fly_timer"))
+			if fly_status_label: fly_status_label.text = "%.1fs" % f_timer
+			if f_timer <= 2.0:
+				# Flashing warning pulse before landing
+				var pulse = 0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.015)
+				fly_row.modulate = Color(1.0, 0.7 + 0.3 * pulse, 0.2 + 0.8 * pulse, 1.0)
+			else:
+				fly_row.modulate = Color.WHITE
 			if fly_icon:
 				var tex = load("res://assets/powerups/%s/fly.png" % pack_name) as Texture2D
 				if tex: fly_icon.texture = tex
@@ -708,7 +764,13 @@ func _update_powerup_status() -> void:
 		var is_turbo = player.get("is_turbo") == true
 		turbo_row.visible = is_turbo
 		if is_turbo:
-			if turbo_status_label: turbo_status_label.text = "%.1fs" % float(player.get("turbo_timer"))
+			var t_timer = float(player.get("turbo_timer"))
+			if turbo_status_label: turbo_status_label.text = "%.1fs" % t_timer
+			if t_timer <= 1.5:
+				var pulse = 0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.015)
+				turbo_row.modulate = Color(1.0, 0.5 + 0.5 * pulse, 0.5 + 0.5 * pulse, 1.0)
+			else:
+				turbo_row.modulate = Color.WHITE
 			if turbo_icon:
 				var tex = load("res://assets/powerups/%s/turbo.png" % pack_name) as Texture2D
 				if tex: turbo_icon.texture = tex
@@ -874,31 +936,56 @@ func _show_main_menu() -> void:
 	if casino_panel: casino_panel.visible = false
 	settings_panel.visible = false
 	if cheat_panel: cheat_panel.visible = false
+	if modal_dimmer: modal_dimmer.visible = false
+
+func _animate_open_panel(panel: Control) -> void:
+	if not panel: return
+	panel.visible = true
+	if modal_dimmer: modal_dimmer.visible = true
+	panel.modulate.a = 0.0
+	panel.scale = Vector2(0.96, 0.96)
+	panel.pivot_offset = panel.size * 0.5
+	var tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(panel, "modulate:a", 1.0, 0.15)
+	tween.tween_property(panel, "scale", Vector2.ONE, 0.15)
+
+func _update_modal_dimmer() -> void:
+	if not modal_dimmer: return
+	var any_open = (store_panel and store_panel.visible) or \
+	               (achievements_panel and achievements_panel.visible) or \
+	               (casino_panel and casino_panel.visible) or \
+	               (settings_panel and settings_panel.visible) or \
+	               (cheat_panel and cheat_panel.visible)
+	modal_dimmer.visible = any_open
 
 func _on_play_button_pressed() -> void:
 	main_menu.visible = false
 	hud.visible = true
 	if casino_panel: casino_panel.visible = false
+	if modal_dimmer: modal_dimmer.visible = false
 	GameManager.start_game()
 
 func _on_store_button_pressed() -> void:
 	_switch_store_tab(true)
 	_update_all_ui()
 	if casino_panel: casino_panel.visible = false
-	store_panel.visible = true
+	_animate_open_panel(store_panel)
 
 func _on_achievements_button_pressed() -> void:
 	_populate_achievements()
 	if casino_panel: casino_panel.visible = false
-	if achievements_panel: achievements_panel.visible = true
+	_animate_open_panel(achievements_panel)
 
 func _on_casino_button_pressed() -> void:
 	if SoundManager: SoundManager.play_click()
 	if casino_panel:
+		if modal_dimmer: modal_dimmer.visible = true
 		casino_panel.open_casino()
+		_animate_open_panel(casino_panel)
 
 func _on_close_achievements_button_pressed() -> void:
 	if achievements_panel: achievements_panel.visible = false
+	_update_modal_dimmer()
 	_update_menu_stats()
 
 func _populate_achievements() -> void:
@@ -1008,7 +1095,11 @@ func _on_achievement_claimed(_id: String, reward: int) -> void:
 func _on_settings_button_pressed() -> void:
 	_setup_settings_options()
 	if casino_panel: casino_panel.visible = false
-	settings_panel.visible = true
+	_animate_open_panel(settings_panel)
+
+func _on_close_settings_button_pressed() -> void:
+	settings_panel.visible = false
+	_update_modal_dimmer()
 
 func _on_music_playlist_selected(index: int) -> void:
 	if not MusicManager: return
@@ -1053,9 +1144,6 @@ func _on_bg_option_selected(index: int) -> void:
 	_update_bg_preview(bg_name)
 	if GameManager:
 		GameManager.set_background(bg_name)
-
-func _on_close_settings_button_pressed() -> void:
-	settings_panel.visible = false
 
 func _on_action_tired_pressed() -> void:
 	_handle_character_action("tired")
@@ -1179,6 +1267,7 @@ func _drink_poison_and_wipe_everything() -> void:
 
 func _on_close_store_button_pressed() -> void:
 	store_panel.visible = false
+	_update_modal_dimmer()
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()

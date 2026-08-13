@@ -1,6 +1,8 @@
 extends Panel
 class_name CasinoPanel
 
+signal casino_closed
+
 # ==============================================================================
 # CASINO & GAMBLE SYSTEM (Godot 4 Endless Runner)
 # Minigames: 1. Lucky Slots, 2. Coin Flip, 3. Mines
@@ -174,6 +176,7 @@ func _on_close_pressed() -> void:
 		# Auto-cashout if closing during active mines
 		_on_cashout_mines_pressed()
 	visible = false
+	casino_closed.emit()
 
 # ==============================================================================
 # MINIGAME 1: 🎰 LUCKY SLOTS
@@ -260,6 +263,9 @@ func _evaluate_slots_result(r1: Dictionary, r2: Dictionary, r3: Dictionary) -> v
 		
 		slots_status_label.text = "🎉 %s! WIN: +$%s (x%.0f)" % [r1["name"].to_upper(), _format_number(payout), mult]
 		slots_status_label.modulate = Color(0.2, 1.0, 0.4)
+		slots_status_label.pivot_offset = slots_status_label.size * 0.5
+		slots_status_label.scale = Vector2(1.2, 1.2)
+		create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT).tween_property(slots_status_label, "scale", Vector2.ONE, 0.25)
 		if SoundManager: SoundManager.play_casino_win()
 	elif r1["sym"] == r2["sym"] or r2["sym"] == r3["sym"] or r1["sym"] == r3["sym"]:
 		# 2 matching symbols
@@ -271,6 +277,9 @@ func _evaluate_slots_result(r1: Dictionary, r2: Dictionary, r3: Dictionary) -> v
 		
 		slots_status_label.text = "✨ PAIR MATCH! WIN: +$%s (x1.5)" % _format_number(payout)
 		slots_status_label.modulate = Color(0.4, 0.9, 1.0)
+		slots_status_label.pivot_offset = slots_status_label.size * 0.5
+		slots_status_label.scale = Vector2(1.15, 1.15)
+		create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT).tween_property(slots_status_label, "scale", Vector2.ONE, 0.2)
 		if SoundManager: SoundManager.play_casino_win()
 	else:
 		slots_status_label.text = "💀 NO MATCH! -$%s" % _format_number(current_bet)
@@ -353,6 +362,9 @@ func _evaluate_coinflip_result(outcome: String) -> void:
 		
 		coinflip_status_label.text = "🎉 YOU WON! +$%s (x1.95)" % _format_number(payout)
 		coinflip_status_label.modulate = Color(0.2, 1.0, 0.4)
+		coinflip_status_label.pivot_offset = coinflip_status_label.size * 0.5
+		coinflip_status_label.scale = Vector2(1.2, 1.2)
+		create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT).tween_property(coinflip_status_label, "scale", Vector2.ONE, 0.25)
 		if SoundManager: SoundManager.play_casino_win()
 	elif outcome == "star":
 		coinflip_status_label.text = "⭐ STAR EDGE (HOUSE WINS)! -$%s" % _format_number(current_bet)
@@ -467,6 +479,12 @@ func _on_mine_tile_clicked(idx: int) -> void:
 		cashout_button.text = "💰 CASHOUT: $%s (x%.2f)" % [_format_number(potential_payout), current_mult]
 		mines_status_label.text = "💎 GEM %d/22! Cashout or keep risking?" % current_safe_gems
 		mines_status_label.modulate = Color(0.2, 1.0, 0.6)
+		
+		if current_mult >= 2.0:
+			cashout_button.pivot_offset = cashout_button.size * 0.5
+			var btween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+			btween.tween_property(cashout_button, "scale", Vector2(1.08, 1.08), 0.12)
+			btween.tween_property(cashout_button, "scale", Vector2.ONE, 0.12)
 		
 		if SoundManager: SoundManager.play_coin()
 
