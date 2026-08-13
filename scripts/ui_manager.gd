@@ -549,12 +549,14 @@ func _setup_settings_options() -> void:
 		music_playlist_option_button.add_item("ELECTRO (DEFAULT)", 0)
 		music_playlist_option_button.add_item("HARD", 1)
 		music_playlist_option_button.add_item("EPIC", 2)
-		music_playlist_option_button.add_item("OFF", 3)
+		music_playlist_option_button.add_item("ARGENTA", 3)
+		music_playlist_option_button.add_item("OFF", 4)
 		
 		match MusicManager.current_playlist:
 			"hard": music_playlist_option_button.select(1)
 			"epic": music_playlist_option_button.select(2)
-			"off": music_playlist_option_button.select(3)
+			"argenta": music_playlist_option_button.select(3)
+			"off": music_playlist_option_button.select(4)
 			_: music_playlist_option_button.select(0)
 			
 	if music_volume_slider and MusicManager:
@@ -991,7 +993,8 @@ func _on_music_playlist_selected(index: int) -> void:
 	match index:
 		1: MusicManager.set_playlist("hard")
 		2: MusicManager.set_playlist("epic")
-		3: MusicManager.set_playlist("off")
+		3: MusicManager.set_playlist("argenta")
+		4: MusicManager.set_playlist("off")
 		_: MusicManager.set_playlist("electro")
 
 func _on_music_volume_changed(val: float) -> void:

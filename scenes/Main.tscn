@@ -1850,15 +1850,17 @@ text = "MUSIC PLAYLIST:"
 custom_minimum_size = Vector2(180, 30)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-item_count = 4
+item_count = 5
 popup/item_0/text = "ELECTRO (DEFAULT)"
 popup/item_0/id = 0
 popup/item_1/text = "HARD"
 popup/item_1/id = 1
 popup/item_2/text = "EPIC"
 popup/item_2/id = 2
-popup/item_3/text = "OFF"
+popup/item_3/text = "ARGENTA"
 popup/item_3/id = 3
+popup/item_4/text = "OFF"
+popup/item_4/id = 4
 
 [node name="MusicVolLabel" type="Label" parent="UI/SettingsPanel/SettingsGrid"]
 layout_mode = 2

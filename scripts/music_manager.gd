@@ -16,6 +16,11 @@ var playlists: Dictionary = {
 	"epic": [
 		"res://assets/music/epic1.mp3",
 		"res://assets/music/epic2.mp3"
+	],
+	"argenta": [
+		"res://assets/music/argenta1.mp3",
+		"res://assets/music/argenta2.mp3",
+		"res://assets/music/argenta3.mp3"
 	]
 }
 
