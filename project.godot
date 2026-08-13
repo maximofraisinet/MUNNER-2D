@@ -15,6 +15,7 @@ run/main_scene="res://scenes/Main.tscn"
 
 GameManager="*res://scripts/game_manager.gd"
 CharacterManager="*res://scripts/character_manager.gd"
+MusicManager="*res://scripts/music_manager.gd"
 
 [display]
 

@@ -112,6 +112,9 @@ extends CanvasLayer
 @onready var close_store_button: Button = $StorePanel/CloseStoreButton
 
 @onready var settings_panel: Panel = $SettingsPanel
+@onready var music_playlist_option_button: OptionButton = $SettingsPanel/SettingsGrid/MusicPlaylistOptionButton
+@onready var music_volume_slider: HSlider = $SettingsPanel/SettingsGrid/VolumeHBox/MusicVolumeHSlider
+@onready var music_volume_label: Label = $SettingsPanel/SettingsGrid/VolumeHBox/MusicVolumeValueLabel
 @onready var ui_theme_option_button: OptionButton = $SettingsPanel/SettingsGrid/UiThemeOptionButton
 @onready var pack_option_button: OptionButton = $SettingsPanel/SettingsGrid/PackOptionButton
 @onready var bg_option_button: OptionButton = $SettingsPanel/SettingsGrid/BgOptionButton
@@ -172,6 +175,11 @@ func _ready() -> void:
 		buy_poison_button.pressed.connect(_on_buy_poison_pressed)
 	
 	close_store_button.pressed.connect(_on_close_store_button_pressed)
+	
+	if music_playlist_option_button:
+		music_playlist_option_button.item_selected.connect(_on_music_playlist_selected)
+	if music_volume_slider:
+		music_volume_slider.value_changed.connect(_on_music_volume_changed)
 	
 	ui_theme_option_button.item_selected.connect(_on_ui_theme_selected)
 	pack_option_button.item_selected.connect(_on_pack_option_selected)
@@ -402,6 +410,24 @@ func _on_card_mouse_exited(card: PanelContainer) -> void:
 	tween.tween_property(card, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 func _setup_settings_options() -> void:
+	if music_playlist_option_button and MusicManager:
+		music_playlist_option_button.clear()
+		music_playlist_option_button.add_item("ELECTRO (DEFAULT)", 0)
+		music_playlist_option_button.add_item("HARD", 1)
+		music_playlist_option_button.add_item("EPIC", 2)
+		music_playlist_option_button.add_item("OFF", 3)
+		
+		match MusicManager.current_playlist:
+			"hard": music_playlist_option_button.select(1)
+			"epic": music_playlist_option_button.select(2)
+			"off": music_playlist_option_button.select(3)
+			_: music_playlist_option_button.select(0)
+			
+	if music_volume_slider and MusicManager:
+		music_volume_slider.value = MusicManager.music_volume * 100.0
+		if music_volume_label:
+			music_volume_label.text = "%d%%" % int(MusicManager.music_volume * 100.0)
+
 	if ui_theme_option_button:
 		ui_theme_option_button.clear()
 		ui_theme_option_button.add_item("LIGHT", 0)
@@ -675,6 +701,20 @@ func _on_store_button_pressed() -> void:
 func _on_settings_button_pressed() -> void:
 	_setup_settings_options()
 	settings_panel.visible = true
+
+func _on_music_playlist_selected(index: int) -> void:
+	if not MusicManager: return
+	match index:
+		1: MusicManager.set_playlist("hard")
+		2: MusicManager.set_playlist("epic")
+		3: MusicManager.set_playlist("off")
+		_: MusicManager.set_playlist("electro")
+
+func _on_music_volume_changed(val: float) -> void:
+	if not MusicManager: return
+	MusicManager.set_volume(val / 100.0)
+	if music_volume_label:
+		music_volume_label.text = "%d%%" % int(val)
 
 func _on_ui_theme_selected(index: int) -> void:
 	var theme_name = "light" if index == 0 else "dark"
