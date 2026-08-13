@@ -4,7 +4,7 @@ class_name ObstaclePool
 @export var obstacle_scene: PackedScene = preload("res://scenes/Obstacle.tscn")
 
 const POOL_SIZE: int = 15
-const SPAWN_X: float = 1320.0 # Posición de spawn ajustada al borde derecho de la cámara descentrada
+const SPAWN_X: float = 1320.0
 const GROUND_Y: float = 555.0
 
 var pool: Array[Area2D] = []
@@ -15,6 +15,7 @@ var cluster_remaining: int = 0
 @onready var coin_pool: Node2D = $"../CoinPool"
 
 func _ready() -> void:
+	GameManager.game_restarted_triggered.connect(reset_pool)
 	for i in range(POOL_SIZE):
 		var obs = obstacle_scene.instantiate() as Area2D
 		obs.visible = false
@@ -23,7 +24,17 @@ func _ready() -> void:
 		add_child(obs)
 		pool.append(obs)
 
+func reset_pool() -> void:
+	for obs in pool:
+		_deactivate_obstacle(obs)
+	spawn_timer = 0.0
+	next_spawn_interval = 1.5
+	cluster_remaining = 0
+
 func _physics_process(delta: float) -> void:
+	if GameManager.current_state != GameManager.State.PLAYING:
+		return
+		
 	var current_speed = GameManager.current_speed
 	
 	for obs in pool:
