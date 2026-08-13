@@ -6,10 +6,21 @@ extends CanvasLayer
 @onready var speed_label: Label = $HUD/SpeedLabel
 @onready var notification_label: Label = $HUD/NotificationToastLabel
 
-@onready var lives_status_label: Label = $HUD/PowerUpStatusBox/LivesStatusLabel
-@onready var shield_status_label: Label = $HUD/PowerUpStatusBox/ShieldStatusLabel
-@onready var fly_status_label: Label = $HUD/PowerUpStatusBox/FlyStatusLabel
-@onready var turbo_status_label: Label = $HUD/PowerUpStatusBox/TurboStatusLabel
+@onready var life_row: HBoxContainer = $HUD/PowerUpStatusBox/LifeRow
+@onready var life_icon: TextureRect = $HUD/PowerUpStatusBox/LifeRow/LifeIcon
+@onready var lives_status_label: Label = $HUD/PowerUpStatusBox/LifeRow/LifeLabel
+
+@onready var shield_row: HBoxContainer = $HUD/PowerUpStatusBox/ShieldRow
+@onready var shield_icon: TextureRect = $HUD/PowerUpStatusBox/ShieldRow/ShieldIcon
+@onready var shield_status_label: Label = $HUD/PowerUpStatusBox/ShieldRow/ShieldLabel
+
+@onready var fly_row: HBoxContainer = $HUD/PowerUpStatusBox/FlyRow
+@onready var fly_icon: TextureRect = $HUD/PowerUpStatusBox/FlyRow/FlyIcon
+@onready var fly_status_label: Label = $HUD/PowerUpStatusBox/FlyRow/FlyLabel
+
+@onready var turbo_row: HBoxContainer = $HUD/PowerUpStatusBox/TurboRow
+@onready var turbo_icon: TextureRect = $HUD/PowerUpStatusBox/TurboRow/TurboIcon
+@onready var turbo_status_label: Label = $HUD/PowerUpStatusBox/TurboRow/TurboLabel
 
 @onready var slot1_card: PanelContainer = $HUD/BoostHudHBox/Slot1Card
 @onready var slot1_icon: TextureRect = $HUD/BoostHudHBox/Slot1Card/VBox/IconRect
@@ -149,7 +160,7 @@ func _update_hud_boost_slots() -> void:
 	if not CharacterManager: return
 	var curr_char = CharacterManager.get_current_character()
 	var unlocked_slots = curr_char.boost_slots if curr_char else 0
-	var pack_name = GameManager.selected_icon_pack if GameManager else "argento"
+	var pack_name = GameManager.selected_icon_pack if GameManager else "default"
 	
 	var slot_cards = [slot1_card, slot2_card, slot3_card]
 	var slot_icons = [slot1_icon, slot2_icon, slot3_icon]
@@ -305,29 +316,47 @@ func _update_powerup_status() -> void:
 	if not player:
 		return
 		
-	if lives_status_label:
-		var lives = int(player.get("extra_lives"))
-		lives_status_label.visible = (lives > 0)
-		if lives > 0:
-			lives_status_label.text = "LIVES: %d" % lives
-
-	if shield_status_label:
-		var has_shield = player.get("has_shield") == true
-		shield_status_label.visible = has_shield
-		if has_shield:
-			shield_status_label.text = "SHIELD: %.1fs" % float(player.get("shield_timer"))
+	var pack_name = GameManager.selected_icon_pack if GameManager else "default"
 		
-	if fly_status_label:
+	# 1. VIDA EXTRA (LIFE)
+	if life_row:
+		var lives = int(player.get("extra_lives"))
+		life_row.visible = (lives > 0)
+		if lives > 0:
+			if lives_status_label: lives_status_label.text = "x%d" % lives
+			if life_icon:
+				var tex = load("res://assets/powerups/%s/life.png" % pack_name) as Texture2D
+				if tex: life_icon.texture = tex
+
+	# 2. ESCUDO (SHIELD)
+	if shield_row:
+		var has_shield = player.get("has_shield") == true
+		shield_row.visible = has_shield
+		if has_shield:
+			if shield_status_label: shield_status_label.text = "%.1fs" % float(player.get("shield_timer"))
+			if shield_icon:
+				var tex = load("res://assets/powerups/%s/shield.png" % pack_name) as Texture2D
+				if tex: shield_icon.texture = tex
+		
+	# 3. VUELO (FLY)
+	if fly_row:
 		var is_flying = player.get("is_flying") == true
-		fly_status_label.visible = is_flying
+		fly_row.visible = is_flying
 		if is_flying:
-			fly_status_label.text = "FLYING: %.1fs" % float(player.get("fly_timer"))
+			if fly_status_label: fly_status_label.text = "%.1fs" % float(player.get("fly_timer"))
+			if fly_icon:
+				var tex = load("res://assets/powerups/%s/fly.png" % pack_name) as Texture2D
+				if tex: fly_icon.texture = tex
 			
-	if turbo_status_label:
+	# 4. TURBO DEBUFF (TURBO)
+	if turbo_row:
 		var is_turbo = player.get("is_turbo") == true
-		turbo_status_label.visible = is_turbo
+		turbo_row.visible = is_turbo
 		if is_turbo:
-			turbo_status_label.text = "TURBO DEBUFF: %.1fs" % float(player.get("turbo_timer"))
+			if turbo_status_label: turbo_status_label.text = "%.1fs" % float(player.get("turbo_timer"))
+			if turbo_icon:
+				var tex = load("res://assets/powerups/%s/turbo.png" % pack_name) as Texture2D
+				if tex: turbo_icon.texture = tex
 
 func _update_store_buttons() -> void:
 	if store_coins_label:

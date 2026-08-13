@@ -25,18 +25,6 @@ size = Vector2(2400, 68)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(50, 70)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud_slot_enabled"]
-bg_color = Color(0.12, 0.16, 0.24, 0.9)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0.85, 1, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud_slot_disabled"]
 bg_color = Color(0.15, 0.15, 0.15, 0.4)
 border_width_left = 2
@@ -306,43 +294,92 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -280.0
+offset_left = -230.0
 offset_top = 85.0
-offset_right = -20.0
-offset_bottom = 225.0
+offset_right = -15.0
+offset_bottom = 260.0
 grow_horizontal = 0
+theme_override_constants/separation = 6
+alignment = 0
 
-[node name="LivesStatusLabel" type="Label" parent="UI/HUD/PowerUpStatusBox"]
+[node name="LifeRow" type="HBoxContainer" parent="UI/HUD/PowerUpStatusBox"]
 visible = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="LifeLabel" type="Label" parent="UI/HUD/PowerUpStatusBox/LifeRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(1, 0.2, 0.3, 1)
-text = "LIVES: 0"
+text = "x1"
 horizontal_alignment = 2
 
-[node name="ShieldStatusLabel" type="Label" parent="UI/HUD/PowerUpStatusBox"]
+[node name="LifeIcon" type="TextureRect" parent="UI/HUD/PowerUpStatusBox/LifeRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("16_life_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ShieldRow" type="HBoxContainer" parent="UI/HUD/PowerUpStatusBox"]
 visible = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="ShieldLabel" type="Label" parent="UI/HUD/PowerUpStatusBox/ShieldRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0, 1, 1, 1)
-text = "SHIELD: 5.0s"
+text = "5.0s"
 horizontal_alignment = 2
 
-[node name="FlyStatusLabel" type="Label" parent="UI/HUD/PowerUpStatusBox"]
+[node name="ShieldIcon" type="TextureRect" parent="UI/HUD/PowerUpStatusBox/ShieldRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("15_shield_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FlyRow" type="HBoxContainer" parent="UI/HUD/PowerUpStatusBox"]
 visible = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="FlyLabel" type="Label" parent="UI/HUD/PowerUpStatusBox/FlyRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-text = "FLYING: 4.0s"
+text = "4.0s"
 horizontal_alignment = 2
 
-[node name="TurboStatusLabel" type="Label" parent="UI/HUD/PowerUpStatusBox"]
+[node name="FlyIcon" type="TextureRect" parent="UI/HUD/PowerUpStatusBox/FlyRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("18_fly_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TurboRow" type="HBoxContainer" parent="UI/HUD/PowerUpStatusBox"]
 visible = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="TurboLabel" type="Label" parent="UI/HUD/PowerUpStatusBox/TurboRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(1, 0, 1, 1)
-text = "TURBO DEBUFF: 4.0s"
+text = "4.0s"
 horizontal_alignment = 2
+
+[node name="TurboIcon" type="TextureRect" parent="UI/HUD/PowerUpStatusBox/TurboRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="MainMenu" type="Control" parent="UI"]
 layout_mode = 3
@@ -1100,9 +1137,9 @@ custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 item_count = 2
-popup/item_0/text = "ARGENTO"
+popup/item_0/text = "DEFAULT"
 popup/item_0/id = 0
-popup/item_1/text = "DEFAULT"
+popup/item_1/text = "ARGENTO"
 popup/item_1/id = 1
 
 [node name="BgLabel" type="Label" parent="UI/SettingsPanel/SettingsGrid"]
