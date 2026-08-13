@@ -16,6 +16,8 @@ extends CanvasLayer
 @onready var select_demon_button: Button = $StorePanel/CharactersHBox/DemonBox/SelectDemonButton
 @onready var select_tired_button: Button = $StorePanel/CharactersHBox/TiredBox/SelectTiredButton
 @onready var select_leech_button: Button = $StorePanel/CharactersHBox/LeechBox/SelectLeechButton
+@onready var select_maximo_button: Button = $StorePanel/CharactersHBox/MaximoBox/SelectMaximoButton
+@onready var select_omablo_button: Button = $StorePanel/CharactersHBox/OmabloBox/SelectOmabloButton
 @onready var close_store_button: Button = $StorePanel/CloseStoreButton
 
 @onready var game_over_panel: Panel = $GameOverPanel
@@ -35,6 +37,8 @@ func _ready() -> void:
 	select_demon_button.pressed.connect(_on_select_demon_pressed)
 	select_tired_button.pressed.connect(_on_select_tired_pressed)
 	select_leech_button.pressed.connect(_on_select_leech_pressed)
+	select_maximo_button.pressed.connect(_on_select_maximo_pressed)
+	select_omablo_button.pressed.connect(_on_select_omablo_pressed)
 	close_store_button.pressed.connect(_on_close_store_button_pressed)
 	
 	restart_button.pressed.connect(_on_restart_button_pressed)
@@ -56,17 +60,20 @@ func _process(_delta: float) -> void:
 func _update_store_buttons() -> void:
 	var current_id = CharacterManager.current_character_id if CharacterManager else "demon"
 	
-	# DEMON
 	select_demon_button.text = "EQUIPPED" if current_id == "demon" else "SELECT"
 	select_demon_button.disabled = (current_id == "demon")
 	
-	# TIRED
 	select_tired_button.text = "EQUIPPED" if current_id == "tired" else "SELECT"
 	select_tired_button.disabled = (current_id == "tired")
 	
-	# LEECH
 	select_leech_button.text = "EQUIPPED" if current_id == "leech" else "SELECT"
 	select_leech_button.disabled = (current_id == "leech")
+	
+	select_maximo_button.text = "EQUIPPED" if current_id == "maximo" else "SELECT"
+	select_maximo_button.disabled = (current_id == "maximo")
+	
+	select_omablo_button.text = "EQUIPPED" if current_id == "omablo" else "SELECT"
+	select_omablo_button.disabled = (current_id == "omablo")
 
 func _update_menu_stats() -> void:
 	if best_score_label:
@@ -104,6 +111,16 @@ func _on_select_tired_pressed() -> void:
 func _on_select_leech_pressed() -> void:
 	if CharacterManager:
 		CharacterManager.select_character("leech")
+		_update_store_buttons()
+
+func _on_select_maximo_pressed() -> void:
+	if CharacterManager:
+		CharacterManager.select_character("maximo")
+		_update_store_buttons()
+
+func _on_select_omablo_pressed() -> void:
+	if CharacterManager:
+		CharacterManager.select_character("omablo")
 		_update_store_buttons()
 
 func _on_close_store_button_pressed() -> void:

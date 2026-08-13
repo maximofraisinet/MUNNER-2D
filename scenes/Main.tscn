@@ -176,9 +176,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -360.0
+offset_left = -440.0
 offset_top = -180.0
-offset_right = 360.0
+offset_right = 440.0
 offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -202,64 +202,98 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -320.0
+offset_left = -400.0
 offset_top = -60.0
-offset_right = 320.0
+offset_right = 400.0
 offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 15
 alignment = 1
 
 [node name="DemonBox" type="VBoxContainer" parent="UI/StorePanel/CharactersHBox"]
-custom_minimum_size = Vector2(170, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 theme_override_constants/separation = 15
 
 [node name="NameLabel" type="Label" parent="UI/StorePanel/CharactersHBox/DemonBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 18
 text = "DEMON"
 horizontal_alignment = 1
 
 [node name="SelectDemonButton" type="Button" parent="UI/StorePanel/CharactersHBox/DemonBox"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 15
 text = "EQUIPPED"
 
 [node name="TiredBox" type="VBoxContainer" parent="UI/StorePanel/CharactersHBox"]
-custom_minimum_size = Vector2(170, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 theme_override_constants/separation = 15
 
 [node name="NameLabel" type="Label" parent="UI/StorePanel/CharactersHBox/TiredBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 18
 text = "TIRED"
 horizontal_alignment = 1
 
 [node name="SelectTiredButton" type="Button" parent="UI/StorePanel/CharactersHBox/TiredBox"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 15
 text = "SELECT"
 
 [node name="LeechBox" type="VBoxContainer" parent="UI/StorePanel/CharactersHBox"]
-custom_minimum_size = Vector2(170, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 theme_override_constants/separation = 15
 
 [node name="NameLabel" type="Label" parent="UI/StorePanel/CharactersHBox/LeechBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 18
 text = "LEECH"
 horizontal_alignment = 1
 
 [node name="SelectLeechButton" type="Button" parent="UI/StorePanel/CharactersHBox/LeechBox"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "SELECT"
+
+[node name="MaximoBox" type="VBoxContainer" parent="UI/StorePanel/CharactersHBox"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/CharactersHBox/MaximoBox"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 18
+text = "MAXIMO"
+horizontal_alignment = 1
+
+[node name="SelectMaximoButton" type="Button" parent="UI/StorePanel/CharactersHBox/MaximoBox"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "SELECT"
+
+[node name="OmabloBox" type="VBoxContainer" parent="UI/StorePanel/CharactersHBox"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/CharactersHBox/OmabloBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "OMABLO"
+horizontal_alignment = 1
+
+[node name="SelectOmabloButton" type="Button" parent="UI/StorePanel/CharactersHBox/OmabloBox"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
 text = "SELECT"
 
 [node name="CloseStoreButton" type="Button" parent="UI/StorePanel"]

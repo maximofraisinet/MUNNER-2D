@@ -78,6 +78,52 @@ func _register_characters() -> void:
 		leech.jump_frame = leech.run_frames[2]
 	characters["leech"] = leech
 
+	# Personaje 4: MAXIMO
+	var maximo = CharacterData.new()
+	maximo.id = "maximo"
+	maximo.display_name = "MAXIMO"
+	maximo.sprite_scale = Vector2(0.13, 0.13)
+	maximo.sprite_offset = Vector2(0, -20)
+	
+	var maximo_paths = [
+		"res://assets/characters/maximo/run1.png",
+		"res://assets/characters/maximo/run2.png",
+		"res://assets/characters/maximo/run3.png",
+		"res://assets/characters/maximo/run4.png",
+		"res://assets/characters/maximo/run5.png",
+		"res://assets/characters/maximo/run6.png"
+	]
+	for path in maximo_paths:
+		var tex = load(path) as Texture2D
+		if tex:
+			maximo.run_frames.append(tex)
+	if maximo.run_frames.size() > 2:
+		maximo.jump_frame = maximo.run_frames[2]
+	characters["maximo"] = maximo
+
+	# Personaje 5: OMABLO
+	var omablo = CharacterData.new()
+	omablo.id = "omablo"
+	omablo.display_name = "OMABLO"
+	omablo.sprite_scale = Vector2(0.115, 0.115)
+	omablo.sprite_offset = Vector2(0, -20)
+	
+	var omablo_paths = [
+		"res://assets/characters/omablo/run1.png",
+		"res://assets/characters/omablo/run2.png",
+		"res://assets/characters/omablo/run3.png",
+		"res://assets/characters/omablo/run4.png",
+		"res://assets/characters/omablo/run5.png",
+		"res://assets/characters/omablo/run6.png"
+	]
+	for path in omablo_paths:
+		var tex = load(path) as Texture2D
+		if tex:
+			omablo.run_frames.append(tex)
+	if omablo.run_frames.size() > 2:
+		omablo.jump_frame = omablo.run_frames[2]
+	characters["omablo"] = omablo
+
 func get_current_character() -> CharacterData:
 	if characters.has(current_character_id):
 		return characters[current_character_id]
