@@ -257,8 +257,8 @@ func select_character(id: String) -> void:
 func get_boost_price(boost_id: String) -> int:
 	match boost_id:
 		"shield_boost": return 100
-		"slow_boost": return 150
-		"life_boost": return 200
+		"slow_boost": return 1500
+		"life_boost": return 2000
 		"fly_boost": return 250
 		"coin_mult_boost": return 700
 		"mega_slow_boost": return 5000

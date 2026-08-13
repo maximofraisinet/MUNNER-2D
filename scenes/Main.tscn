@@ -1401,7 +1401,7 @@ alignment = 1
 custom_minimum_size = Vector2(92, 34)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
-text = "BUY (200)"
+text = "BUY (2,000)"
 
 [node name="EquipLifeSlot1Button" type="Button" parent="UI/StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox"]
 custom_minimum_size = Vector2(85, 34)
@@ -1458,7 +1458,7 @@ alignment = 1
 custom_minimum_size = Vector2(92, 34)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
-text = "BUY (150)"
+text = "BUY (1,500)"
 
 [node name="EquipSlowSlot1Button" type="Button" parent="UI/StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox"]
 custom_minimum_size = Vector2(85, 34)

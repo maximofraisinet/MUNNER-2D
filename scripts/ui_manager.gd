@@ -735,19 +735,19 @@ func _update_store_buttons() -> void:
 	
 	if buy_shield_boost_button:
 		var price = CharacterManager.get_boost_price("shield_boost")
-		buy_shield_boost_button.text = "BUY (%d COINS)" % price
+		buy_shield_boost_button.text = "BUY (%s COINS)" % _format_number(price)
 		buy_shield_boost_button.disabled = (GameManager.total_coins < price)
 	if buy_life_boost_button:
 		var price = CharacterManager.get_boost_price("life_boost")
-		buy_life_boost_button.text = "BUY (%d COINS)" % price
+		buy_life_boost_button.text = "BUY (%s COINS)" % _format_number(price)
 		buy_life_boost_button.disabled = (GameManager.total_coins < price)
 	if buy_slow_boost_button:
 		var price = CharacterManager.get_boost_price("slow_boost")
-		buy_slow_boost_button.text = "BUY (%d COINS)" % price
+		buy_slow_boost_button.text = "BUY (%s COINS)" % _format_number(price)
 		buy_slow_boost_button.disabled = (GameManager.total_coins < price)
 	if buy_fly_boost_button:
 		var price = CharacterManager.get_boost_price("fly_boost")
-		buy_fly_boost_button.text = "BUY (%d COINS)" % price
+		buy_fly_boost_button.text = "BUY (%s COINS)" % _format_number(price)
 		buy_fly_boost_button.disabled = (GameManager.total_coins < price)
 	if buy_coin_mult_boost_button:
 		var price = CharacterManager.get_boost_price("coin_mult_boost")
