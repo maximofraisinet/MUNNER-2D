@@ -23,6 +23,7 @@ var extra_lives: int = 0
 
 var has_shield: bool = false
 var shield_timer: float = 0.0
+var shield_regen_timer: float = 0.0
 
 var is_invulnerable: bool = false
 var invulnerability_timer: float = 0.0
@@ -54,6 +55,7 @@ func _reset_player_state() -> void:
 	extra_lives = 0
 	has_shield = false
 	shield_timer = 0.0
+	shield_regen_timer = 0.0
 	is_invulnerable = false
 	invulnerability_timer = 0.0
 	is_flying = false
@@ -61,6 +63,12 @@ func _reset_player_state() -> void:
 	is_turbo = false
 	turbo_timer = 0.0
 	GameManager.speed_multiplier = 1.0
+	
+	if current_character and current_character.id == "demon_messi":
+		extra_lives = 5 # Empieza con 5 vidas extra
+		has_shield = true
+		shield_timer = 999999.0 # Escudo permanente inicial
+		
 	if sprite:
 		sprite.modulate = Color.WHITE
 
@@ -82,19 +90,23 @@ func apply_powerup(type: PowerUp.Type) -> void:
 		PowerUp.Type.SHIELD:
 			has_shield = true
 			var shield_dur = 6.0 if (current_character and current_character.id == "leech") else 5.0
-			shield_timer = shield_dur
+			shield_timer = 999999.0 if (current_character and current_character.id == "demon_messi") else shield_dur
 		PowerUp.Type.EXTRA_LIFE:
 			extra_lives += 1
 		PowerUp.Type.FLY:
 			is_flying = true
 			fly_timer = 4.0
 		PowerUp.Type.TURBO_DEBUFF:
+			if current_character and (current_character.id == "messi" or current_character.id == "demon_messi"):
+				return # Inmune a debuffs
 			is_turbo = true
 			turbo_timer = 4.0
 			GameManager.speed_multiplier = 1.35
 		PowerUp.Type.SLOW_PERMANENT:
 			GameManager.apply_permanent_speed_reduction()
 		PowerUp.Type.SPEED_PERMANENT:
+			if current_character and (current_character.id == "messi" or current_character.id == "demon_messi"):
+				return # Inmune a aceleración negativa
 			GameManager.apply_permanent_speed_increase()
 
 func use_boost_slot(slot_idx: int) -> void:
@@ -110,7 +122,7 @@ func use_boost_slot(slot_idx: int) -> void:
 		
 		if boost_id == "shield_boost":
 			has_shield = true
-			shield_timer = 5.0
+			shield_timer = 999999.0 if (curr_char.id == "demon_messi") else 5.0
 			GameManager.speed_notification_emitted.emit("ACTIVATED SHIELD BOOST!", Color(0.0, 1.0, 1.0))
 		elif boost_id == "life_boost":
 			extra_lives += 1
@@ -132,6 +144,8 @@ func on_obstacle_hit(obs: Area2D) -> bool:
 		shield_timer = 0.0
 		is_invulnerable = true
 		invulnerability_timer = 0.5
+		if current_character and current_character.id == "demon_messi":
+			shield_regen_timer = 2.0 # Se auto-regenera en 2 segundos
 		if obs:
 			obs.visible = false
 			obs.set_deferred("process_mode", PROCESS_MODE_DISABLED)
@@ -170,8 +184,15 @@ func _physics_process(delta: float) -> void:
 		if invulnerability_timer <= 0.0:
 			is_invulnerable = false
 
+	# Regenerar escudo de DEMON MESSI
+	if shield_regen_timer > 0.0:
+		shield_regen_timer -= delta
+		if shield_regen_timer <= 0.0:
+			has_shield = true
+			shield_timer = 999999.0
+
 	# Procesar temporizador de Escudo Finito
-	if has_shield:
+	if has_shield and current_character and current_character.id != "demon_messi":
 		shield_timer -= delta
 		if shield_timer <= 0.0:
 			has_shield = false
@@ -182,6 +203,10 @@ func _physics_process(delta: float) -> void:
 		if turbo_timer <= 0.0:
 			is_turbo = false
 			GameManager.speed_multiplier = 1.0
+
+	# Imán de Monedas para DEMON MESSI
+	if current_character and current_character.id == "demon_messi":
+		_process_coin_magnet(delta)
 
 	# Procesar temporizador de Vuelo
 	if is_flying:
@@ -212,6 +237,14 @@ func _physics_process(delta: float) -> void:
 
 	_update_visual_modulation()
 	move_and_slide()
+
+func _process_coin_magnet(delta: float) -> void:
+	if not coin_pool: return
+	for coin in coin_pool.get_children():
+		if coin is Area2D and coin.visible:
+			var dist = global_position.distance_to(coin.global_position)
+			if dist < 600.0:
+				coin.global_position = coin.global_position.move_toward(global_position, 800.0 * delta)
 
 func _update_visual_modulation() -> void:
 	if not sprite:

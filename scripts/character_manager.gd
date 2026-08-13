@@ -171,7 +171,7 @@ func _register_characters() -> void:
 	dark_angel.tier_rank = 7
 	dark_angel.price = 1
 	dark_angel.boost_slots = 3 # 3 MAX Boost Slots activos!
-	dark_angel.pros_description = "PRO: +300% Fly drop rate & 3 Boost Slots"
+	dark_angel.pros_description = "PRO: +300% Fly drop rate & 3 Slots"
 	dark_angel.cons_description = "CON: +50% Turbo Debuff drop rate"
 	dark_angel.fly_spawn_multiplier = 4.0 # +300% fly drop!
 	dark_angel.life_spawn_multiplier = 1.5
@@ -188,6 +188,31 @@ func _register_characters() -> void:
 		if tex: dark_angel.run_frames.append(tex)
 	if dark_angel.run_frames.size() > 2: dark_angel.jump_frame = dark_angel.run_frames[2]
 	characters["dark_angel"] = dark_angel
+
+	# 8. DEMON MESSI (Tier 8 - GOD OF ALL CHARACTERS)
+	var demon_messi = CharacterData.new()
+	demon_messi.id = "demon_messi"
+	demon_messi.display_name = "DEMON MESSI 👑🔥"
+	demon_messi.tier_rank = 8
+	demon_messi.price = 1
+	demon_messi.boost_slots = 3 # 3 MAX Boost Slots
+	demon_messi.pros_description = "PRO: PERMA-SHIELD, +5 LIVES, MAGNET, 0% DEBUFFS"
+	demon_messi.cons_description = "CON: NONE (UNSTOPPABLE GOD TIER)"
+	demon_messi.negative_spawn_multiplier = 0.0 # 0% debuffs!
+	demon_messi.life_spawn_multiplier = 5.0    # +400% Extra Lives!
+	demon_messi.fly_spawn_multiplier = 5.0     # +400% Fly items!
+	demon_messi.sprite_scale = Vector2(0.14, 0.14)
+	demon_messi.sprite_offset = Vector2(0, -20)
+	var demon_messi_paths = [
+		"res://assets/characters/demon_messi/run1.png", "res://assets/characters/demon_messi/run2.png",
+		"res://assets/characters/demon_messi/run3.png", "res://assets/characters/demon_messi/run4.png",
+		"res://assets/characters/demon_messi/run5.png", "res://assets/characters/demon_messi/run6.png"
+	]
+	for path in demon_messi_paths:
+		var tex = load(path) as Texture2D
+		if tex: demon_messi.run_frames.append(tex)
+	if demon_messi.run_frames.size() > 2: demon_messi.jump_frame = demon_messi.run_frames[2]
+	characters["demon_messi"] = demon_messi
 
 func get_current_character() -> CharacterData:
 	if characters.has(current_character_id):

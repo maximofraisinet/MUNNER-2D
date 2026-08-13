@@ -56,6 +56,7 @@ extends CanvasLayer
 @onready var demon_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/DemonCard
 @onready var messi_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/MessiCard
 @onready var dark_angel_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/DarkAngelCard
+@onready var demon_messi_card: PanelContainer = $StorePanel/ScrollContainer/CardsHBox/DemonMessiCard
 
 @onready var action_tired_button: Button = $StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox/ActionTiredButton
 @onready var action_leech_button: Button = $StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox/ActionLeechButton
@@ -64,6 +65,7 @@ extends CanvasLayer
 @onready var action_demon_button: Button = $StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox/ActionDemonButton
 @onready var action_messi_button: Button = $StorePanel/ScrollContainer/CardsHBox/MessiCard/VBox/ActionMessiButton
 @onready var action_dark_angel_button: Button = $StorePanel/ScrollContainer/CardsHBox/DarkAngelCard/VBox/ActionDarkAngelButton
+@onready var action_demon_messi_button: Button = $StorePanel/ScrollContainer/CardsHBox/DemonMessiCard/VBox/ActionDemonMessiButton
 
 @onready var loadout_title_label: Label = $StorePanel/LoadoutBarContainer/LoadoutTitleLabel
 @onready var store_slot1_card: PanelContainer = $StorePanel/LoadoutBarContainer/LoadoutSlotsHBox/Slot1Card
@@ -136,6 +138,7 @@ func _ready() -> void:
 	action_demon_button.pressed.connect(_on_action_demon_pressed)
 	action_messi_button.pressed.connect(_on_action_messi_pressed)
 	action_dark_angel_button.pressed.connect(_on_action_dark_angel_pressed)
+	action_demon_messi_button.pressed.connect(_on_action_demon_messi_pressed)
 	
 	buy_shield_boost_button.pressed.connect(_on_buy_shield_boost_pressed)
 	equip_shield_slot1_button.pressed.connect(_on_equip_shield_slot1_pressed)
@@ -319,7 +322,7 @@ func _update_scroll_buttons_visibility() -> void:
 		scroll_right_button.visible = (curr < max_val - 5)
 
 func _setup_card_hover_effects() -> void:
-	var cards = [tired_card, leech_card, maximo_card, omablo_card, demon_card, messi_card, dark_angel_card, shield_boost_card, life_boost_card, slow_boost_card, fly_boost_card]
+	var cards = [tired_card, leech_card, maximo_card, omablo_card, demon_card, messi_card, dark_angel_card, demon_messi_card, shield_boost_card, life_boost_card, slow_boost_card, fly_boost_card]
 	for card in cards:
 		if card:
 			card.mouse_entered.connect(_on_card_mouse_entered.bind(card))
@@ -411,7 +414,11 @@ func _update_powerup_status() -> void:
 		var has_shield = player.get("has_shield") == true
 		shield_row.visible = has_shield
 		if has_shield:
-			if shield_status_label: shield_status_label.text = "%.1fs" % float(player.get("shield_timer"))
+			var s_timer = float(player.get("shield_timer"))
+			if s_timer > 999.0:
+				if shield_status_label: shield_status_label.text = "PERMA"
+			else:
+				if shield_status_label: shield_status_label.text = "%.1fs" % s_timer
 			if shield_icon:
 				var tex = load("res://assets/powerups/%s/shield.png" % pack_name) as Texture2D
 				if tex: shield_icon.texture = tex
@@ -449,7 +456,8 @@ func _update_store_buttons() -> void:
 		"omablo": action_omablo_button,
 		"demon": action_demon_button,
 		"messi": action_messi_button,
-		"dark_angel": action_dark_angel_button
+		"dark_angel": action_dark_angel_button,
+		"demon_messi": action_demon_messi_button
 	}
 	
 	for char_id in char_buttons.keys():
@@ -573,6 +581,9 @@ func _on_action_messi_pressed() -> void:
 
 func _on_action_dark_angel_pressed() -> void:
 	_handle_character_action("dark_angel")
+
+func _on_action_demon_messi_pressed() -> void:
+	_handle_character_action("demon_messi")
 
 func _handle_character_action(char_id: String) -> void:
 	if not CharacterManager: return
