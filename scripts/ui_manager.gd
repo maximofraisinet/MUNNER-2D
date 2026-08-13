@@ -110,6 +110,11 @@ extends CanvasLayer
 @onready var bg_preview_rect: TextureRect = $SettingsPanel/SettingsGrid/BgPreviewRect
 @onready var close_settings_button: Button = $SettingsPanel/CloseSettingsButton
 
+@onready var cheat_panel: Panel = $CheatPanel
+@onready var cheat_amount_input: LineEdit = $CheatPanel/AmountLineEdit
+@onready var cheat_claim_button: Button = $CheatPanel/ButtonsHBox/ClaimButton
+@onready var cheat_cancel_button: Button = $CheatPanel/ButtonsHBox/CancelButton
+
 @onready var game_over_panel: Panel = $GameOverPanel
 @onready var summary_label: Label = $GameOverPanel/SummaryLabel
 @onready var restart_button: Button = $GameOverPanel/ButtonsContainer/RestartButton
@@ -118,6 +123,7 @@ extends CanvasLayer
 @onready var player: Node2D = $"../Player"
 
 var notification_timer: float = 0.0
+var cheat_buffer: String = ""
 
 func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
@@ -161,6 +167,10 @@ func _ready() -> void:
 	bg_option_button.item_selected.connect(_on_bg_option_selected)
 	close_settings_button.pressed.connect(_on_close_settings_button_pressed)
 	
+	cheat_claim_button.pressed.connect(_on_cheat_claim_pressed)
+	cheat_cancel_button.pressed.connect(_on_cheat_cancel_pressed)
+	cheat_amount_input.text_submitted.connect(_on_cheat_amount_submitted)
+	
 	restart_button.pressed.connect(_on_restart_button_pressed)
 	menu_button.pressed.connect(_on_menu_button_pressed)
 	
@@ -176,6 +186,41 @@ func _ready() -> void:
 		CharacterManager.unlocked_characters_changed.connect(_update_all_ui)
 		CharacterManager.boost_inventory_changed.connect(_update_all_ui)
 		CharacterManager.character_changed.connect(_on_character_changed_ui)
+
+func _unhandled_input(event: InputEvent) -> void:
+	# Detector de código de trampa "hesoyam" en el menú principal
+	if GameManager.current_state == GameManager.State.START and not cheat_panel.visible:
+		if event is InputEventKey and event.pressed and not event.echo:
+			var key_str = OS.get_keycode_string(event.keycode).to_lower()
+			if key_str.length() == 1 and key_str >= "a" and key_str <= "z":
+				cheat_buffer += key_str
+				if cheat_buffer.length() > 12:
+					cheat_buffer = cheat_buffer.right(12)
+				if cheat_buffer.ends_with("hesoyam"):
+					cheat_buffer = ""
+					_open_cheat_panel()
+
+func _open_cheat_panel() -> void:
+	cheat_panel.visible = true
+	cheat_amount_input.text = ""
+	cheat_amount_input.grab_focus()
+
+func _on_cheat_claim_pressed() -> void:
+	_apply_cheat_coins()
+
+func _on_cheat_amount_submitted(_new_text: String) -> void:
+	_apply_cheat_coins()
+
+func _apply_cheat_coins() -> void:
+	var amount = cheat_amount_input.text.to_int()
+	if amount > 0:
+		GameManager.total_coins += amount
+		GameManager.save_data()
+		_update_all_ui()
+	cheat_panel.visible = false
+
+func _on_cheat_cancel_pressed() -> void:
+	cheat_panel.visible = false
 
 func _setup_store_slot_click_handlers() -> void:
 	var slots = [store_slot1_card, store_slot2_card, store_slot3_card]
@@ -198,6 +243,7 @@ func _on_character_changed_ui(_char: CharacterData) -> void:
 	_update_all_ui()
 
 func _update_all_ui() -> void:
+	_update_menu_stats()
 	_update_store_buttons()
 	_update_store_loadout_bar()
 	_update_hud_boost_slots()
@@ -552,6 +598,7 @@ func _show_main_menu() -> void:
 	game_over_panel.visible = false
 	store_panel.visible = false
 	settings_panel.visible = false
+	if cheat_panel: cheat_panel.visible = false
 
 func _on_play_button_pressed() -> void:
 	main_menu.visible = false
@@ -701,6 +748,7 @@ func _on_game_started() -> void:
 	game_over_panel.visible = false
 	store_panel.visible = false
 	settings_panel.visible = false
+	if cheat_panel: cheat_panel.visible = false
 	hud.visible = true
 	if notification_label:
 		notification_label.visible = false
@@ -711,6 +759,7 @@ func _on_game_restarted() -> void:
 	game_over_panel.visible = false
 	store_panel.visible = false
 	settings_panel.visible = false
+	if cheat_panel: cheat_panel.visible = false
 	hud.visible = true
 	if notification_label:
 		notification_label.visible = false
