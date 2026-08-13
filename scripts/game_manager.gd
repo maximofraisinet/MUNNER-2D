@@ -8,6 +8,7 @@ signal speed_notification_emitted(message: String, text_color: Color)
 signal icon_pack_changed(pack_name: String)
 signal background_changed(bg_name: String)
 signal ui_theme_changed(theme_name: String)
+signal jump_binding_changed(type_name: String, code: int, display_name: String)
 
 enum State { START, PLAYING, GAMEOVER }
 var current_state: State = State.START
@@ -30,6 +31,11 @@ var selected_icon_pack: String = "default"
 var selected_bg: String = "bg-game1"
 var selected_ui_theme: String = "light"
 
+## Configuración de Controles (Jump Binding)
+var jump_binding_type: String = "key" # "key" or "mouse"
+var jump_binding_code: int = KEY_SPACE
+var jump_binding_name: String = "SPACE"
+
 ## Estadísticas persistentes
 var high_score: float = 0.0
 var total_coins: int = 0
@@ -42,7 +48,30 @@ const SAVE_PATH = "user://savegame.cfg"
 
 func _ready() -> void:
 	load_data()
+	setup_jump_input_action()
 	get_tree().paused = true
+
+func setup_jump_input_action() -> void:
+	if not InputMap.has_action("jump"):
+		InputMap.add_action("jump")
+	InputMap.action_erase_events("jump")
+	
+	if jump_binding_type == "mouse":
+		var ev = InputEventMouseButton.new()
+		ev.button_index = jump_binding_code
+		InputMap.action_add_event("jump", ev)
+	else:
+		var ev = InputEventKey.new()
+		ev.physical_keycode = jump_binding_code
+		InputMap.action_add_event("jump", ev)
+
+func set_jump_binding(type_name: String, code: int, display_name: String) -> void:
+	jump_binding_type = type_name
+	jump_binding_code = code
+	jump_binding_name = display_name
+	setup_jump_input_action()
+	save_data()
+	jump_binding_changed.emit(jump_binding_type, jump_binding_code, jump_binding_name)
 
 func _process(delta: float) -> void:
 	if current_state == State.PLAYING:
@@ -128,11 +157,15 @@ func wipe_all_data() -> void:
 
 func save_data() -> void:
 	var config = ConfigFile.new()
+	config.load(SAVE_PATH)
 	config.set_value("stats", "high_score", high_score)
 	config.set_value("stats", "total_coins", total_coins)
 	config.set_value("settings", "icon_pack", selected_icon_pack)
 	config.set_value("settings", "selected_bg", selected_bg)
 	config.set_value("settings", "selected_ui_theme", selected_ui_theme)
+	config.set_value("controls", "jump_type", jump_binding_type)
+	config.set_value("controls", "jump_code", jump_binding_code)
+	config.set_value("controls", "jump_name", jump_binding_name)
 	config.save(SAVE_PATH)
 
 func load_data() -> void:
@@ -143,3 +176,7 @@ func load_data() -> void:
 		selected_icon_pack = config.get_value("settings", "icon_pack", "default")
 		selected_bg = config.get_value("settings", "selected_bg", "bg-game1")
 		selected_ui_theme = config.get_value("settings", "selected_ui_theme", "light")
+		jump_binding_type = config.get_value("controls", "jump_type", "key")
+		jump_binding_code = config.get_value("controls", "jump_code", KEY_SPACE)
+		jump_binding_name = config.get_value("controls", "jump_name", "SPACE")
+		setup_jump_input_action()

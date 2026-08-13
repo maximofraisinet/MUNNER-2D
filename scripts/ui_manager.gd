@@ -40,8 +40,13 @@ extends CanvasLayer
 @onready var total_coins_label: Label = $MainMenu/StatsContainer/TotalCoinsLabel
 @onready var play_button: Button = $MainMenu/ButtonsContainer/PlayButton
 @onready var store_button: Button = $MainMenu/ButtonsContainer/StoreButton
+@onready var achievements_button: Button = $MainMenu/ButtonsContainer/AchievementsButton
 @onready var settings_button: Button = $MainMenu/ButtonsContainer/SettingsButton
 @onready var exit_button: Button = $MainMenu/ButtonsContainer/ExitButton
+
+@onready var achievements_panel: Panel = $AchievementsPanel
+@onready var achievements_vbox: VBoxContainer = $AchievementsPanel/ScrollContainer/AchievementsVBox
+@onready var close_achievements_button: Button = $AchievementsPanel/CloseAchievementsButton
 
 @onready var store_panel: Panel = $StorePanel
 @onready var store_coins_label: Label = $StorePanel/StoreCoinsLabel
@@ -134,6 +139,7 @@ extends CanvasLayer
 @onready var close_store_button: Button = $StorePanel/CloseStoreButton
 
 @onready var settings_panel: Panel = $SettingsPanel
+@onready var rebind_jump_button: Button = $SettingsPanel/SettingsGrid/RebindJumpButton
 @onready var music_playlist_option_button: OptionButton = $SettingsPanel/SettingsGrid/MusicPlaylistOptionButton
 @onready var music_volume_slider: HSlider = $SettingsPanel/SettingsGrid/VolumeHBox/MusicVolumeHSlider
 @onready var music_volume_label: Label = $SettingsPanel/SettingsGrid/VolumeHBox/MusicVolumeValueLabel
@@ -157,6 +163,7 @@ extends CanvasLayer
 
 var notification_timer: float = 0.0
 var cheat_buffer: String = ""
+var is_rebind_listening: bool = false
 
 func _ready() -> void:
 	process_mode = PROCESS_MODE_ALWAYS
@@ -169,8 +176,15 @@ func _ready() -> void:
 	
 	play_button.pressed.connect(_on_play_button_pressed)
 	store_button.pressed.connect(_on_store_button_pressed)
+	achievements_button.pressed.connect(_on_achievements_button_pressed)
+	close_achievements_button.pressed.connect(_on_close_achievements_button_pressed)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	exit_button.pressed.connect(_on_exit_button_pressed)
+	
+	rebind_jump_button.pressed.connect(_on_rebind_jump_pressed)
+	
+	if AchievementManager:
+		AchievementManager.achievement_claimed.connect(_on_achievement_claimed)
 	
 	action_tired_button.pressed.connect(_on_action_tired_pressed)
 	action_leech_button.pressed.connect(_on_action_leech_pressed)
@@ -241,6 +255,31 @@ func _ready() -> void:
 
 func _on_icon_pack_changed_ui(_pack_name: String) -> void:
 	_update_all_ui()
+
+func _input(event: InputEvent) -> void:
+	if is_rebind_listening:
+		if event is InputEventKey and event.pressed and not event.echo:
+			var key_code = event.physical_keycode if event.physical_keycode != 0 else event.keycode
+			var key_name = OS.get_keycode_string(key_code).to_upper()
+			if key_name == "":
+				key_name = "KEY %d" % key_code
+			GameManager.set_jump_binding("key", key_code, key_name)
+			is_rebind_listening = false
+			_update_rebind_button_text()
+			get_viewport().set_input_as_handled()
+			return
+		elif event is InputEventMouseButton and event.pressed:
+			var btn_idx = event.button_index
+			var btn_name = "MOUSE %d" % btn_idx
+			match btn_idx:
+				MOUSE_BUTTON_LEFT: btn_name = "LEFT CLICK"
+				MOUSE_BUTTON_RIGHT: btn_name = "RIGHT CLICK"
+				MOUSE_BUTTON_MIDDLE: btn_name = "MIDDLE CLICK"
+			GameManager.set_jump_binding("mouse", btn_idx, btn_name)
+			is_rebind_listening = false
+			_update_rebind_button_text()
+			get_viewport().set_input_as_handled()
+			return
 
 func _unhandled_input(event: InputEvent) -> void:
 	if GameManager.current_state == GameManager.State.START and not cheat_panel.visible:
@@ -561,6 +600,18 @@ func _setup_settings_options() -> void:
 		_: bg_option_button.select(0)
 		
 	_update_bg_preview(current_bg)
+	_update_rebind_button_text()
+
+func _update_rebind_button_text() -> void:
+	if rebind_jump_button and GameManager:
+		rebind_jump_button.text = "%s (CLICK TO CHANGE)" % GameManager.jump_binding_name
+		rebind_jump_button.modulate = Color.WHITE
+
+func _on_rebind_jump_pressed() -> void:
+	is_rebind_listening = true
+	if rebind_jump_button:
+		rebind_jump_button.text = "PRESS ANY KEY OR CLICK..."
+		rebind_jump_button.modulate = Color(1.0, 0.9, 0.2, 1.0)
 
 func _update_ui_theme_bg(theme_name: String) -> void:
 	if menu_bg_rect:
@@ -793,14 +844,19 @@ func _update_menu_stats() -> void:
 		best_score_label.text = "BEST SCORE: %d" % int(GameManager.high_score)
 	if total_coins_label:
 		total_coins_label.text = "TOTAL COINS: %s" % _format_number(GameManager.total_coins)
+	if achievements_button and AchievementManager:
+		var unclaimed = AchievementManager.get_unclaimed_count()
+		if unclaimed > 0:
+			achievements_button.text = "ACHIEVEMENTS (%d)" % unclaimed
+		else:
+			achievements_button.text = "ACHIEVEMENTS"
 
 func _show_main_menu() -> void:
-	_update_menu_stats()
-	_update_all_ui()
 	main_menu.visible = true
 	hud.visible = false
 	game_over_panel.visible = false
 	store_panel.visible = false
+	if achievements_panel: achievements_panel.visible = false
 	settings_panel.visible = false
 	if cheat_panel: cheat_panel.visible = false
 
@@ -813,6 +869,118 @@ func _on_store_button_pressed() -> void:
 	_switch_store_tab(true)
 	_update_all_ui()
 	store_panel.visible = true
+
+func _on_achievements_button_pressed() -> void:
+	_populate_achievements()
+	if achievements_panel: achievements_panel.visible = true
+
+func _on_close_achievements_button_pressed() -> void:
+	if achievements_panel: achievements_panel.visible = false
+	_update_menu_stats()
+
+func _populate_achievements() -> void:
+	if not achievements_vbox or not AchievementManager: return
+	
+	for child in achievements_vbox.get_children():
+		child.queue_free()
+		
+	var curr_high_score = int(GameManager.high_score)
+	
+	for ach in AchievementManager.ACHIEVEMENTS:
+		var id = ach["id"]
+		var title = ach["title"]
+		var desc = ach["desc"]
+		var target = ach["target_score"]
+		var reward = ach["reward"]
+		var is_unlocked = curr_high_score >= target
+		var is_claimed = AchievementManager.is_claimed(id)
+		
+		var card = PanelContainer.new()
+		card.custom_minimum_size = Vector2(0, 56)
+		var style = StyleBoxFlat.new()
+		style.bg_color = Color(0.12, 0.12, 0.18, 0.95) if is_unlocked else Color(0.08, 0.08, 0.10, 0.8)
+		style.set_border_width_all(2)
+		style.border_color = Color(1.0, 0.84, 0.0, 0.8) if (is_unlocked and not is_claimed) else (Color(0.2, 0.8, 0.4, 0.8) if is_claimed else Color(0.25, 0.25, 0.35, 0.5))
+		style.set_corner_radius_all(6)
+		card.add_theme_stylebox_override("panel", style)
+		
+		var hbox = HBoxContainer.new()
+		hbox.add_theme_constant_override("separation", 14)
+		hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+		
+		var icon_lbl = Label.new()
+		icon_lbl.text = " 🏆 " if is_unlocked else " 🔒 "
+		icon_lbl.add_theme_font_size_override("font_size", 20)
+		hbox.add_child(icon_lbl)
+		
+		var details_vbox = VBoxContainer.new()
+		details_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		details_vbox.add_theme_constant_override("separation", 2)
+		
+		var title_lbl = Label.new()
+		title_lbl.text = title
+		title_lbl.add_theme_font_size_override("font_size", 14)
+		title_lbl.add_theme_color_override("font_color", Color(1.0, 0.84, 0.0) if is_unlocked else Color(0.7, 0.7, 0.7))
+		details_vbox.add_child(title_lbl)
+		
+		var desc_lbl = Label.new()
+		desc_lbl.text = "%s (Best: %d / %d)" % [desc, min(curr_high_score, target), target]
+		desc_lbl.add_theme_font_size_override("font_size", 11)
+		desc_lbl.add_theme_color_override("font_color", Color(0.8, 0.85, 0.95))
+		details_vbox.add_child(desc_lbl)
+		
+		var progress = ProgressBar.new()
+		progress.custom_minimum_size = Vector2(0, 8)
+		progress.max_value = target
+		progress.value = min(curr_high_score, target)
+		progress.show_percentage = false
+		details_vbox.add_child(progress)
+		
+		hbox.add_child(details_vbox)
+		
+		var reward_lbl = Label.new()
+		reward_lbl.text = "+%s COINS" % _format_number(reward)
+		reward_lbl.add_theme_font_size_override("font_size", 13)
+		reward_lbl.add_theme_color_override("font_color", Color(1.0, 0.84, 0.0))
+		hbox.add_child(reward_lbl)
+		
+		if is_claimed:
+			var claimed_lbl = Label.new()
+			claimed_lbl.custom_minimum_size = Vector2(110, 32)
+			claimed_lbl.text = "CLAIMED ✓"
+			claimed_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			claimed_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			claimed_lbl.add_theme_font_size_override("font_size", 12)
+			claimed_lbl.add_theme_color_override("font_color", Color(0.3, 0.9, 0.4))
+			hbox.add_child(claimed_lbl)
+		elif is_unlocked:
+			var claim_btn = Button.new()
+			claim_btn.custom_minimum_size = Vector2(110, 32)
+			claim_btn.text = "CLAIM!"
+			claim_btn.add_theme_font_size_override("font_size", 13)
+			claim_btn.pressed.connect(_on_claim_single_achievement.bind(id))
+			hbox.add_child(claim_btn)
+		else:
+			var locked_lbl = Label.new()
+			locked_lbl.custom_minimum_size = Vector2(110, 32)
+			locked_lbl.text = "LOCKED 🔒"
+			locked_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			locked_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			locked_lbl.add_theme_font_size_override("font_size", 12)
+			locked_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.6))
+			hbox.add_child(locked_lbl)
+			
+		card.add_child(hbox)
+		achievements_vbox.add_child(card)
+
+func _on_claim_single_achievement(id: String) -> void:
+	if AchievementManager:
+		AchievementManager.claim_achievement(id)
+		_populate_achievements()
+		_update_all_ui()
+
+func _on_achievement_claimed(_id: String, reward: int) -> void:
+	_on_speed_notification_emitted("🏆 ACHIEVEMENT CLAIMED! +%s COINS! 💰" % _format_number(reward), Color(1.0, 0.84, 0.0))
 
 func _on_settings_button_pressed() -> void:
 	_setup_settings_options()
@@ -971,6 +1139,8 @@ func _on_buy_poison_pressed() -> void:
 func _drink_poison_and_wipe_everything() -> void:
 	GameManager.wipe_all_data()
 	CharacterManager.wipe_all_data()
+	if AchievementManager:
+		AchievementManager.wipe_all_data()
 	_update_all_ui()
 	store_panel.visible = false
 	_show_main_menu()

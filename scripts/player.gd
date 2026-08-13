@@ -259,7 +259,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			_animate_run(delta)
 
-		if is_on_floor() and (Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_up")):
+		if is_on_floor() and (Input.is_action_just_pressed("jump") or Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_up")):
 			velocity.y = jump_velocity
 
 	_update_visual_modulation()
