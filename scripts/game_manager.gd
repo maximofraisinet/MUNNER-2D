@@ -25,7 +25,7 @@ var effective_speed: float:
 var player_air_hang_time: float = 0.6818
 
 ## Configuración de Paquete de Iconos y Fondo
-var selected_icon_pack: String = "argento"
+var selected_icon_pack: String = "default"
 var selected_bg: String = "bg-game1"
 
 ## Estadísticas persistentes
@@ -120,5 +120,5 @@ func load_data() -> void:
 	if config.load(SAVE_PATH) == OK:
 		high_score = config.get_value("stats", "high_score", 0.0)
 		total_coins = config.get_value("stats", "total_coins", 0)
-		selected_icon_pack = config.get_value("settings", "icon_pack", "argento")
+		selected_icon_pack = config.get_value("settings", "icon_pack", "default")
 		selected_bg = config.get_value("settings", "selected_bg", "bg-game1")

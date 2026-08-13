@@ -8,7 +8,7 @@ const SPAWN_X: float = 1320.0
 
 var pool: Array[Area2D] = []
 var spawn_timer: float = 0.0
-var next_spawn_interval: float = 8.0
+var next_spawn_interval: float = 14.0
 
 const HEIGHT_POSITIONS: Array[float] = [540.0, 460.0]
 
@@ -26,7 +26,7 @@ func reset_pool() -> void:
 	for pup in pool:
 		_deactivate_powerup(pup)
 	spawn_timer = 0.0
-	next_spawn_interval = randf_range(6.0, 11.0)
+	next_spawn_interval = randf_range(12.0, 20.0)
 
 func _physics_process(delta: float) -> void:
 	if GameManager.current_state != GameManager.State.PLAYING:
@@ -44,12 +44,12 @@ func _physics_process(delta: float) -> void:
 	if spawn_timer >= next_spawn_interval:
 		spawn_timer = 0.0
 		_spawn_powerup()
-		next_spawn_interval = randf_range(6.0, 11.0)
+		next_spawn_interval = randf_range(12.0, 20.0)
 
 func _spawn_powerup() -> void:
 	for pup in pool:
 		if not pup.visible:
-			var rand_type = randi() % 6 as PowerUp.Type
+			var rand_type = _select_weighted_powerup_type()
 			if pup.has_method("setup"):
 				pup.setup(rand_type)
 				
@@ -59,6 +59,36 @@ func _spawn_powerup() -> void:
 			pup.set_deferred("process_mode", PROCESS_MODE_INHERIT)
 			pup.set_deferred("monitoring", true)
 			return
+
+func _select_weighted_powerup_type() -> PowerUp.Type:
+	var curr_char = CharacterManager.get_current_character() if CharacterManager else null
+	var life_mult = curr_char.life_spawn_multiplier if curr_char else 1.0
+	var fly_mult = curr_char.fly_spawn_multiplier if curr_char else 1.0
+	var neg_mult = curr_char.negative_spawn_multiplier if curr_char else 1.0
+	
+	# Ponderación basada en rareza
+	var weights = {
+		PowerUp.Type.SHIELD: 40.0,
+		PowerUp.Type.TURBO_DEBUFF: 30.0 * neg_mult,
+		PowerUp.Type.FLY: 12.0 * fly_mult,
+		PowerUp.Type.SLOW_PERMANENT: 8.0,
+		PowerUp.Type.EXTRA_LIFE: 6.0 * life_mult,
+		PowerUp.Type.SPEED_PERMANENT: 4.0 * neg_mult
+	}
+	
+	var total_weight: float = 0.0
+	for w in weights.values():
+		total_weight += w
+		
+	var roll = randf() * total_weight
+	var accumulated: float = 0.0
+	
+	for p_type in weights.keys():
+		accumulated += weights[p_type]
+		if roll <= accumulated:
+			return p_type
+			
+	return PowerUp.Type.SHIELD
 
 func _deactivate_powerup(pup: Area2D) -> void:
 	pup.visible = false

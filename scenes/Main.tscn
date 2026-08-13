@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c_main_001"]
+[gd_scene load_steps=24 format=3 uid="uid://c_main_001"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/obstacle_pool.gd" id="2_pool"]
@@ -9,12 +9,81 @@
 [ext_resource type="Script" path="res://scripts/powerup_pool.gd" id="7_powerup_pool"]
 [ext_resource type="Script" path="res://scripts/scrolling_background.gd" id="8_bg_game"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/bg-game1.png" id="9_bg_tex"]
+[ext_resource type="Texture2D" path="res://assets/characters/tired/run1.png" id="10_tired_preview"]
+[ext_resource type="Texture2D" path="res://assets/characters/leech/run1.png" id="11_leech_preview"]
+[ext_resource type="Texture2D" path="res://assets/characters/maximo/run1.png" id="12_maximo_preview"]
+[ext_resource type="Texture2D" path="res://assets/characters/omablo/run1.png" id="13_omablo_preview"]
+[ext_resource type="Texture2D" path="res://assets/characters/demon/run1.png" id="14_demon_preview"]
+[ext_resource type="Texture2D" path="res://assets/powerups/argento/shield.png" id="15_shield_tex"]
+[ext_resource type="Texture2D" path="res://assets/powerups/argento/life.png" id="16_life_tex"]
+[ext_resource type="Texture2D" path="res://assets/powerups/argento/slow.png" id="17_slow_tex"]
+[ext_resource type="Texture2D" path="res://assets/powerups/argento/fly.png" id="18_fly_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
 size = Vector2(2400, 68)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(50, 70)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud_slot_enabled"]
+bg_color = Color(0.12, 0.16, 0.24, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.85, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud_slot_disabled"]
+bg_color = Color(0.15, 0.15, 0.15, 0.4)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.4, 0.4, 0.4)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opaque_panel"]
+bg_color = Color(0.08, 0.08, 0.12, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.84, 0, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card_normal"]
+bg_color = Color(0.12, 0.12, 0.18, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.35, 0.45, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card_demon"]
+bg_color = Color(0.15, 0.12, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.84, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="Main" type="Node2D"]
 
@@ -129,15 +198,118 @@ theme_override_font_sizes/font_size = 28
 text = "SPEED DOWN (-20%)"
 horizontal_alignment = 1
 
+[node name="BoostHudHBox" type="HBoxContainer" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -230.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = 75.0
+grow_horizontal = 0
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="Slot1Card" type="PanelContainer" parent="UI/HUD/BoostHudHBox"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_slot_disabled")
+
+[node name="VBox" type="VBoxContainer" parent="UI/HUD/BoostHudHBox/Slot1Card"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="KeyLabel" type="Label" parent="UI/HUD/BoostHudHBox/Slot1Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "[1]"
+horizontal_alignment = 1
+
+[node name="IconRect" type="TextureRect" parent="UI/HUD/BoostHudHBox/Slot1Card/VBox"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/HUD/BoostHudHBox/Slot1Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "x0"
+horizontal_alignment = 1
+
+[node name="Slot2Card" type="PanelContainer" parent="UI/HUD/BoostHudHBox"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_slot_disabled")
+
+[node name="VBox" type="VBoxContainer" parent="UI/HUD/BoostHudHBox/Slot2Card"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="KeyLabel" type="Label" parent="UI/HUD/BoostHudHBox/Slot2Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "[2]"
+horizontal_alignment = 1
+
+[node name="IconRect" type="TextureRect" parent="UI/HUD/BoostHudHBox/Slot2Card/VBox"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/HUD/BoostHudHBox/Slot2Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "x0"
+horizontal_alignment = 1
+
+[node name="Slot3Card" type="PanelContainer" parent="UI/HUD/BoostHudHBox"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_slot_disabled")
+
+[node name="VBox" type="VBoxContainer" parent="UI/HUD/BoostHudHBox/Slot3Card"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="KeyLabel" type="Label" parent="UI/HUD/BoostHudHBox/Slot3Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "[3]"
+horizontal_alignment = 1
+
+[node name="IconRect" type="TextureRect" parent="UI/HUD/BoostHudHBox/Slot3Card/VBox"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/HUD/BoostHudHBox/Slot3Card/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "x0"
+horizontal_alignment = 1
+
 [node name="PowerUpStatusBox" type="VBoxContainer" parent="UI/HUD"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -280.0
-offset_top = 20.0
+offset_top = 85.0
 offset_right = -20.0
-offset_bottom = 160.0
+offset_bottom = 225.0
 grow_horizontal = 0
 
 [node name="LivesStatusLabel" type="Label" parent="UI/HUD/PowerUpStatusBox"]
@@ -262,125 +434,601 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -440.0
-offset_top = -180.0
-offset_right = 440.0
-offset_bottom = 180.0
+offset_left = -520.0
+offset_top = -270.0
+offset_right = 520.0
+offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_opaque_panel")
 
 [node name="TitleLabel" type="Label" parent="UI/StorePanel"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 20.0
-offset_bottom = 60.0
+offset_top = 10.0
+offset_bottom = 40.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
 text = "CHARACTER STORE"
 horizontal_alignment = 1
 
-[node name="CharactersHBox" type="HBoxContainer" parent="UI/StorePanel"]
+[node name="StoreCoinsLabel" type="Label" parent="UI/StorePanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 10.0
+offset_right = -20.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "COINS: 0"
+horizontal_alignment = 2
+
+[node name="ScrollLeftButton" type="Button" parent="UI/StorePanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -145.0
+offset_right = 45.0
+offset_bottom = -25.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 22
+text = "◀"
+
+[node name="ScrollRightButton" type="Button" parent="UI/StorePanel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -145.0
+offset_right = -10.0
+offset_bottom = -25.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 22
+text = "▶"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/StorePanel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -60.0
-offset_right = 400.0
-offset_bottom = 60.0
+offset_left = -460.0
+offset_top = -225.0
+offset_right = 460.0
+offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 15
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="CardsHBox" type="HBoxContainer" parent="UI/StorePanel/ScrollContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="TiredCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
+custom_minimum_size = Vector2(170, 250)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard"]
+layout_mode = 2
+theme_override_constants/separation = 3
 alignment = 1
 
-[node name="DemonBox" type="VBoxContainer" parent="UI/StorePanel/CharactersHBox"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-theme_override_constants/separation = 15
-
-[node name="NameLabel" type="Label" parent="UI/StorePanel/CharactersHBox/DemonBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "DEMON"
-horizontal_alignment = 1
-
-[node name="SelectDemonButton" type="Button" parent="UI/StorePanel/CharactersHBox/DemonBox"]
-custom_minimum_size = Vector2(0, 45)
+[node name="NameLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+text = "1. TIRED"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("10_tired_preview")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox"]
+custom_minimum_size = Vector2(155, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+text = "PRO: +10% Score per second"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox"]
+custom_minimum_size = Vector2(155, 35)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+text = "CON: +10% Jump fall speed"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="SlotsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Slots: 0"
+horizontal_alignment = 1
+
+[node name="ActionTiredButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/TiredCard/VBox"]
+custom_minimum_size = Vector2(145, 34)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 12
 text = "EQUIPPED"
 
-[node name="TiredBox" type="VBoxContainer" parent="UI/StorePanel/CharactersHBox"]
-custom_minimum_size = Vector2(140, 0)
+[node name="LeechCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
+custom_minimum_size = Vector2(170, 250)
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
 
-[node name="NameLabel" type="Label" parent="UI/StorePanel/CharactersHBox/TiredBox"]
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "TIRED"
-horizontal_alignment = 1
+theme_override_constants/separation = 3
+alignment = 1
 
-[node name="SelectTiredButton" type="Button" parent="UI/StorePanel/CharactersHBox/TiredBox"]
-custom_minimum_size = Vector2(0, 45)
+[node name="NameLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-text = "SELECT"
-
-[node name="LeechBox" type="VBoxContainer" parent="UI/StorePanel/CharactersHBox"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-theme_override_constants/separation = 15
-
-[node name="NameLabel" type="Label" parent="UI/StorePanel/CharactersHBox/LeechBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "LEECH"
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+text = "2. LEECH"
 horizontal_alignment = 1
 
-[node name="SelectLeechButton" type="Button" parent="UI/StorePanel/CharactersHBox/LeechBox"]
-custom_minimum_size = Vector2(0, 45)
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox"]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
-theme_override_font_sizes/font_size = 15
-text = "SELECT"
+size_flags_horizontal = 4
+texture = ExtResource("11_leech_preview")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="MaximoBox" type="VBoxContainer" parent="UI/StorePanel/CharactersHBox"]
-custom_minimum_size = Vector2(140, 0)
+[node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox"]
+custom_minimum_size = Vector2(155, 38)
 layout_mode = 2
-theme_override_constants/separation = 15
-
-[node name="NameLabel" type="Label" parent="UI/StorePanel/CharactersHBox/MaximoBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "MAXIMO"
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+text = "PRO: +20% Shield Duration (6.0s)"
+autowrap_mode = 2
 horizontal_alignment = 1
 
-[node name="SelectMaximoButton" type="Button" parent="UI/StorePanel/CharactersHBox/MaximoBox"]
-custom_minimum_size = Vector2(0, 45)
+[node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox"]
+custom_minimum_size = Vector2(155, 35)
 layout_mode = 2
-theme_override_font_sizes/font_size = 15
-text = "SELECT"
-
-[node name="OmabloBox" type="VBoxContainer" parent="UI/StorePanel/CharactersHBox"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-theme_override_constants/separation = 15
-
-[node name="NameLabel" type="Label" parent="UI/StorePanel/CharactersHBox/OmabloBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "OMABLO"
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+text = "CON: -15% Coin spawn chance"
+autowrap_mode = 2
 horizontal_alignment = 1
 
-[node name="SelectOmabloButton" type="Button" parent="UI/StorePanel/CharactersHBox/OmabloBox"]
-custom_minimum_size = Vector2(0, 45)
+[node name="SlotsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Slots: 0"
+horizontal_alignment = 1
+
+[node name="ActionLeechButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/LeechCard/VBox"]
+custom_minimum_size = Vector2(145, 34)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 12
+text = "BUY (1 COIN)"
+
+[node name="MaximoCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
+custom_minimum_size = Vector2(170, 250)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard"]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-text = "SELECT"
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+text = "3. MAXIMO"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("12_maximo_preview")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox"]
+custom_minimum_size = Vector2(155, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+text = "PRO: -50% Negative items drop rate"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox"]
+custom_minimum_size = Vector2(155, 35)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+text = "CON: -10% Score multiplier"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="SlotsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Slots: 0"
+horizontal_alignment = 1
+
+[node name="ActionMaximoButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/MaximoCard/VBox"]
+custom_minimum_size = Vector2(145, 34)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 12
+text = "BUY (1 COIN)"
+
+[node name="OmabloCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
+custom_minimum_size = Vector2(170, 250)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard"]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+text = "4. OMABLO"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("13_omablo_preview")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox"]
+custom_minimum_size = Vector2(155, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+text = "PRO: +150% EXTRA LIFE drop rate"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox"]
+custom_minimum_size = Vector2(155, 35)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+text = "CON: +30% Turbo Debuff drop rate"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="SlotsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Slots: 0"
+horizontal_alignment = 1
+
+[node name="ActionOmabloButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/OmabloCard/VBox"]
+custom_minimum_size = Vector2(145, 34)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 12
+text = "BUY (1 COIN)"
+
+[node name="DemonCard" type="PanelContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox"]
+custom_minimum_size = Vector2(170, 250)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_demon")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard"]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "5. DEMON ★"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("14_demon_preview")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
+custom_minimum_size = Vector2(155, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+text = "PRO: +150% Life, +100% Fly & -50% Debuffs"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="ConsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
+custom_minimum_size = Vector2(155, 35)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.2, 1, 0.5, 1)
+text = "CON: None (Premium Tier)"
+autowrap_mode = 2
+horizontal_alignment = 1
+
+[node name="SlotsLabel" type="Label" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "Slots: 1 BOOST SLOT"
+horizontal_alignment = 1
+
+[node name="ActionDemonButton" type="Button" parent="UI/StorePanel/ScrollContainer/CardsHBox/DemonCard/VBox"]
+custom_minimum_size = Vector2(145, 34)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 12
+text = "BUY (1 COIN)"
+
+[node name="BoostStoreTitle" type="Label" parent="UI/StorePanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -225.0
+offset_right = 300.0
+offset_bottom = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "BOOST STORE & SLOTS (PRESS KEYS 1, 2, 3 IN GAME)"
+horizontal_alignment = 1
+
+[node name="BoostCardsHBox" type="HBoxContainer" parent="UI/StorePanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -480.0
+offset_top = -195.0
+offset_right = 480.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="ShieldBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
+custom_minimum_size = Vector2(210, 145)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+text = "SHIELD BOOST"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("15_shield_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Owned: 0"
+horizontal_alignment = 1
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="BuyShieldBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox"]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "BUY (1 COIN)"
+
+[node name="EquipShieldSlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/ShieldBoostCard/VBox/ButtonsHBox"]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "SLOT 1"
+
+[node name="LifeBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
+custom_minimum_size = Vector2(210, 145)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1, 0.2, 0.3, 1)
+text = "LIFE BOOST"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("16_life_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Owned: 0"
+horizontal_alignment = 1
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="BuyLifeBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox"]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "BUY (1 COIN)"
+
+[node name="EquipLifeSlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/LifeBoostCard/VBox/ButtonsHBox"]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "SLOT 1"
+
+[node name="SlowBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
+custom_minimum_size = Vector2(210, 145)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0, 1, 0.5, 1)
+text = "SLOW BOOST"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("17_slow_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Owned: 0"
+horizontal_alignment = 1
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="BuySlowBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox"]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "BUY (1 COIN)"
+
+[node name="EquipSlowSlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/SlowBoostCard/VBox/ButtonsHBox"]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "SLOT 1"
+
+[node name="FlyBoostCard" type="PanelContainer" parent="UI/StorePanel/BoostCardsHBox"]
+custom_minimum_size = Vector2(210, 145)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card_normal")
+
+[node name="VBox" type="VBoxContainer" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "FLY BOOST"
+horizontal_alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("18_fly_tex")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QtyLabel" type="Label" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Owned: 0"
+horizontal_alignment = 1
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="BuyFlyBoostButton" type="Button" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox"]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "BUY (1 COIN)"
+
+[node name="EquipFlySlot1Button" type="Button" parent="UI/StorePanel/BoostCardsHBox/FlyBoostCard/VBox/ButtonsHBox"]
+custom_minimum_size = Vector2(90, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "SLOT 1"
 
 [node name="CloseStoreButton" type="Button" parent="UI/StorePanel"]
 layout_mode = 1
@@ -390,12 +1038,12 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -80.0
-offset_top = -60.0
+offset_top = -38.0
 offset_right = 80.0
-offset_bottom = -20.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "BACK"
 
 [node name="SettingsPanel" type="Panel" parent="UI"]
@@ -411,6 +1059,7 @@ offset_right = 300.0
 offset_bottom = 210.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_opaque_panel")
 
 [node name="TitleLabel" type="Label" parent="UI/SettingsPanel"]
 layout_mode = 1

@@ -37,11 +37,18 @@ var turbo_timer: float = 0.0
 func _ready() -> void:
 	initial_pos = global_position
 	GameManager.game_restarted_triggered.connect(_on_game_restarted)
+	GameManager.game_started_triggered.connect(_on_game_started)
 	if CharacterManager:
 		CharacterManager.character_changed.connect(_on_character_changed)
 	load_character()
 
+func _on_game_started() -> void:
+	_reset_player_state()
+
 func _on_game_restarted() -> void:
+	_reset_player_state()
+
+func _reset_player_state() -> void:
 	global_position = initial_pos
 	velocity = Vector2.ZERO
 	extra_lives = 0
@@ -74,7 +81,8 @@ func apply_powerup(type: PowerUp.Type) -> void:
 	match type:
 		PowerUp.Type.SHIELD:
 			has_shield = true
-			shield_timer = 5.0
+			var shield_dur = 6.0 if (current_character and current_character.id == "leech") else 5.0
+			shield_timer = shield_dur
 		PowerUp.Type.EXTRA_LIFE:
 			extra_lives += 1
 		PowerUp.Type.FLY:
@@ -89,11 +97,36 @@ func apply_powerup(type: PowerUp.Type) -> void:
 		PowerUp.Type.SPEED_PERMANENT:
 			GameManager.apply_permanent_speed_increase()
 
+func use_boost_slot(slot_idx: int) -> void:
+	if not CharacterManager: return
+	var curr_char = CharacterManager.get_current_character()
+	if not curr_char or slot_idx >= curr_char.boost_slots:
+		return
+	var boost_id = CharacterManager.equipped_boost_slots[slot_idx]
+	if boost_id != "" and CharacterManager.get_boost_qty(boost_id) > 0:
+		CharacterManager.boost_inventory[boost_id] -= 1
+		CharacterManager.save_data()
+		CharacterManager.boost_inventory_changed.emit()
+		
+		if boost_id == "shield_boost":
+			has_shield = true
+			shield_timer = 5.0
+			GameManager.speed_notification_emitted.emit("ACTIVATED SHIELD BOOST!", Color(0.0, 1.0, 1.0))
+		elif boost_id == "life_boost":
+			extra_lives += 1
+			GameManager.speed_notification_emitted.emit("ACTIVATED LIFE BOOST!", Color(1.0, 0.2, 0.3))
+		elif boost_id == "slow_boost":
+			GameManager.apply_permanent_speed_reduction()
+		elif boost_id == "fly_boost":
+			is_flying = true
+			fly_timer = 4.0
+			GameManager.speed_notification_emitted.emit("ACTIVATED FLY BOOST!", Color(1.0, 0.84, 0.0))
+
 func on_obstacle_hit(obs: Area2D) -> bool:
 	if is_invulnerable:
 		return true
 		
-	# 1. Absorber con Escudo Finito
+	# 1. Absorber con Escudo
 	if has_shield:
 		has_shield = false
 		shield_timer = 0.0
@@ -116,7 +149,16 @@ func on_obstacle_hit(obs: Area2D) -> bool:
 			obstacle_pool.clear_landing_runway()
 		return true
 		
-	return false # Sin escudo ni vida extra: Game Over
+	return false
+
+func _unhandled_input(event: InputEvent) -> void:
+	if GameManager.current_state == GameManager.State.PLAYING and event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_1:
+			use_boost_slot(0)
+		elif event.keycode == KEY_2:
+			use_boost_slot(1)
+		elif event.keycode == KEY_3:
+			use_boost_slot(2)
 
 func _physics_process(delta: float) -> void:
 	if GameManager.current_state != GameManager.State.PLAYING:
