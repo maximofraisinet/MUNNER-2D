@@ -4,4 +4,7 @@
 docs/*
 tasks/*
 *.AppImage
+*.exe
+*.pck
+*.zip
 build/
