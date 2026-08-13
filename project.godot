@@ -8,7 +8,7 @@ config_version=5
 
 config/name="MUNNER 2D"
 config/features=PackedStringArray("4.3", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
 run/main_scene="res://scenes/Main.tscn"
 
 [autoload]
