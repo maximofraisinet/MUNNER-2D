@@ -24,12 +24,12 @@ func _ready() -> void:
 	load_data()
 
 func _register_characters() -> void:
-	# 1. TIRED (Tier 1)
+	# 1. TIRED (Tier 1 - Starter)
 	var tired = CharacterData.new()
 	tired.id = "tired"
 	tired.display_name = "TIRED"
 	tired.tier_rank = 1
-	tired.price = 1
+	tired.price = 0 # Starter gratuito
 	tired.boost_slots = 0
 	tired.pros_description = "+10% Score bonus per second"
 	tired.cons_description = "+10% Faster base jump fall"
@@ -46,12 +46,12 @@ func _register_characters() -> void:
 	if tired.run_frames.size() > 2: tired.jump_frame = tired.run_frames[2]
 	characters["tired"] = tired
 
-	# 2. LEECH (Tier 2)
+	# 2. LEECH (Tier 2 - 1st Buyable)
 	var leech = CharacterData.new()
 	leech.id = "leech"
 	leech.display_name = "LEECH"
 	leech.tier_rank = 2
-	leech.price = 1
+	leech.price = 500
 	leech.boost_slots = 0
 	leech.pros_description = "+20% Shield Duration (6.0s duration)"
 	leech.cons_description = "-15% Coin spawn chance"
@@ -68,12 +68,12 @@ func _register_characters() -> void:
 	if leech.run_frames.size() > 2: leech.jump_frame = leech.run_frames[2]
 	characters["leech"] = leech
 
-	# 3. MAXIMO (Tier 3)
+	# 3. MAXIMO (Tier 3 - 2nd Buyable)
 	var maximo = CharacterData.new()
 	maximo.id = "maximo"
 	maximo.display_name = "MAXIMO"
 	maximo.tier_rank = 3
-	maximo.price = 1
+	maximo.price = 1500
 	maximo.boost_slots = 0
 	maximo.pros_description = "-50% Negative items drop rate"
 	maximo.cons_description = "-10% Run score multiplier"
@@ -96,7 +96,7 @@ func _register_characters() -> void:
 	omablo.id = "omablo"
 	omablo.display_name = "OMABLO"
 	omablo.tier_rank = 4
-	omablo.price = 1
+	omablo.price = 3500
 	omablo.boost_slots = 0
 	omablo.pros_description = "+150% EXTRA LIFE drop rate"
 	omablo.cons_description = "+30% Turbo Debuff drop rate"
@@ -117,9 +117,9 @@ func _register_characters() -> void:
 	# 5. DEMON (Tier 5 - Premium)
 	var demon = CharacterData.new()
 	demon.id = "demon"
-	demon.display_name = "DEMON"
+	demon.display_name = "DEMON ★"
 	demon.tier_rank = 5
-	demon.price = 1
+	demon.price = 7500
 	demon.boost_slots = 1 # 1 Boost Slot activo
 	demon.pros_description = "+150% Extra Life, +100% Fly & -50% Debuffs"
 	demon.cons_description = "None (Premium Perk Tier)"
@@ -144,7 +144,7 @@ func _register_characters() -> void:
 	messi.id = "messi"
 	messi.display_name = "MESSI 👑"
 	messi.tier_rank = 6
-	messi.price = 1
+	messi.price = 15000
 	messi.boost_slots = 2 # 2 Boost Slots activos!
 	messi.pros_description = "PRO: 0% Negative items drop (No Debuffs!)"
 	messi.cons_description = "CON: Standard positive item drop rates"
@@ -169,7 +169,7 @@ func _register_characters() -> void:
 	dark_angel.id = "dark_angel"
 	dark_angel.display_name = "DARK ANGEL ⚡"
 	dark_angel.tier_rank = 7
-	dark_angel.price = 1
+	dark_angel.price = 30000
 	dark_angel.boost_slots = 3 # 3 MAX Boost Slots activos!
 	dark_angel.pros_description = "PRO: +300% Fly drop rate & 3 Slots"
 	dark_angel.cons_description = "CON: +50% Turbo Debuff drop rate"
@@ -194,7 +194,7 @@ func _register_characters() -> void:
 	demon_messi.id = "demon_messi"
 	demon_messi.display_name = "DEMON MESSI 👑🔥"
 	demon_messi.tier_rank = 8
-	demon_messi.price = 1
+	demon_messi.price = 50000 # Ultimate Endgame GOD Tier
 	demon_messi.boost_slots = 3 # 3 MAX Boost Slots
 	demon_messi.pros_description = "PRO: PERMA-SHIELD, +5 LIVES, MAGNET, 0% DEBUFFS"
 	demon_messi.cons_description = "CON: NONE (UNSTOPPABLE GOD TIER)"
@@ -244,9 +244,18 @@ func select_character(id: String) -> void:
 		save_data()
 		character_changed.emit(get_current_character())
 
+func get_boost_price(boost_id: String) -> int:
+	match boost_id:
+		"shield_boost": return 100
+		"slow_boost": return 150
+		"life_boost": return 200
+		"fly_boost": return 250
+		_: return 100
+
 func buy_boost(boost_id: String) -> bool:
-	if GameManager.total_coins >= 1:
-		GameManager.total_coins -= 1
+	var price = get_boost_price(boost_id)
+	if GameManager.total_coins >= price:
+		GameManager.total_coins -= price
 		boost_inventory[boost_id] = boost_inventory.get(boost_id, 0) + 1
 		GameManager.save_data()
 		save_data()

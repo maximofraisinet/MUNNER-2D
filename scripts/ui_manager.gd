@@ -188,7 +188,6 @@ func _ready() -> void:
 		CharacterManager.character_changed.connect(_on_character_changed_ui)
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Detector de código de trampa "hesoyam" en el menú principal
 	if GameManager.current_state == GameManager.State.START and not cheat_panel.visible:
 		if event is InputEventKey and event.pressed and not event.echo:
 			var key_str = OS.get_keycode_string(event.keycode).to_lower()
@@ -234,7 +233,6 @@ func _on_store_slot_gui_input(event: InputEvent, slot_idx: int) -> void:
 		if CharacterManager:
 			var curr = CharacterManager.get_current_character()
 			if curr and slot_idx < curr.boost_slots:
-				# Hacer clic en un slot lo desequipa
 				CharacterManager.equipped_boost_slots[slot_idx] = ""
 				CharacterManager.save_data()
 				CharacterManager.boost_inventory_changed.emit()
@@ -511,9 +509,20 @@ func _update_powerup_status() -> void:
 				var tex = load("res://assets/powerups/%s/turbo.png" % pack_name) as Texture2D
 				if tex: turbo_icon.texture = tex
 
+func _format_number(n: int) -> String:
+	var s = str(n)
+	var result = ""
+	var count = 0
+	for i in range(s.length() - 1, -1, -1):
+		if count > 0 and count % 3 == 0:
+			result = "," + result
+		result = s[i] + result
+		count += 1
+	return result
+
 func _update_store_buttons() -> void:
 	if store_coins_label:
-		store_coins_label.text = "COINS: %d" % GameManager.total_coins
+		store_coins_label.text = "COINS: %s" % _format_number(GameManager.total_coins)
 		
 	if not CharacterManager:
 		return
@@ -543,7 +552,7 @@ func _update_store_buttons() -> void:
 				btn.disabled = false
 		else:
 			var price = CharacterManager.characters[char_id].price
-			btn.text = "BUY (%d COIN)" % price
+			btn.text = "BUY (%s COINS)" % _format_number(price)
 			btn.disabled = (GameManager.total_coins < price)
 			
 	var shield_qty = CharacterManager.get_boost_qty("shield_boost")
@@ -556,10 +565,22 @@ func _update_store_buttons() -> void:
 	if slow_qty_label: slow_qty_label.text = "Owned: %d" % slow_qty
 	if fly_qty_label: fly_qty_label.text = "Owned: %d" % fly_qty
 	
-	if buy_shield_boost_button: buy_shield_boost_button.disabled = (GameManager.total_coins < 1)
-	if buy_life_boost_button: buy_life_boost_button.disabled = (GameManager.total_coins < 1)
-	if buy_slow_boost_button: buy_slow_boost_button.disabled = (GameManager.total_coins < 1)
-	if buy_fly_boost_button: buy_fly_boost_button.disabled = (GameManager.total_coins < 1)
+	if buy_shield_boost_button:
+		var price = CharacterManager.get_boost_price("shield_boost")
+		buy_shield_boost_button.text = "BUY (%d COINS)" % price
+		buy_shield_boost_button.disabled = (GameManager.total_coins < price)
+	if buy_life_boost_button:
+		var price = CharacterManager.get_boost_price("life_boost")
+		buy_life_boost_button.text = "BUY (%d COINS)" % price
+		buy_life_boost_button.disabled = (GameManager.total_coins < price)
+	if buy_slow_boost_button:
+		var price = CharacterManager.get_boost_price("slow_boost")
+		buy_slow_boost_button.text = "BUY (%d COINS)" % price
+		buy_slow_boost_button.disabled = (GameManager.total_coins < price)
+	if buy_fly_boost_button:
+		var price = CharacterManager.get_boost_price("fly_boost")
+		buy_fly_boost_button.text = "BUY (%d COINS)" % price
+		buy_fly_boost_button.disabled = (GameManager.total_coins < price)
 		
 	var curr_char = CharacterManager.get_current_character()
 	var has_slots = curr_char and curr_char.boost_slots > 0
@@ -588,7 +609,7 @@ func _update_menu_stats() -> void:
 	if best_score_label:
 		best_score_label.text = "BEST SCORE: %d" % int(GameManager.high_score)
 	if total_coins_label:
-		total_coins_label.text = "TOTAL COINS: %d" % GameManager.total_coins
+		total_coins_label.text = "TOTAL COINS: %s" % _format_number(GameManager.total_coins)
 
 func _show_main_menu() -> void:
 	_update_menu_stats()
