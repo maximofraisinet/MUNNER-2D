@@ -40,7 +40,7 @@ Collected coins can be spent in the in-game store to unlock characters, purchase
 
 ## 3. Characters and Abilities
 
-The game includes eight playable characters, each featuring distinctive attributes, coin multipliers, jump profiles, and perk slot capacities:
+The game includes nine playable characters, each featuring distinctive attributes, coin multipliers, jump profiles, and perk slot capacities:
 
 | Character | Perk Slots | Coin Multiplier | Jump Gravity | Description |
 |---|---|---|---|---|
@@ -48,9 +48,10 @@ The game includes eight playable characters, each featuring distinctive attribut
 | Leech | 0 | 1.2x | Standard | Slightly higher coin earnings. |
 | Maximo | 0 | 1.5x | Agile | Enhanced agility and boosted coin earnings. |
 | Omablo | 0 | 2.0x | Heavy | High coin collection rate with heavier jump physics. |
-| Demon | 1 | 2.5x | Floaty | Unlocks active perk inventory slot 1. |
-| Messi | 2 | 3.0x | High Agility | World-champion runner with 2 perk loadout slots. |
-| Dark Angel | 2 | 3.5x | Low Gravity | Extended hangtime and superior multiplier. |
+| Ignacho | 1 | 2.0x | Agile | Unlocks perk slot 1 with +80% Fly rate but +150% speed debuffs. |
+| Demon | 1 | 3.0x | Floaty | Unlocks active perk inventory slot 1. |
+| Messi | 2 | 4.0x | High Agility | World-champion runner with 2 perk loadout slots. |
+| Dark Angel | 3 | 4.0x | Low Gravity | Extended hangtime and 3 boost slots. |
 | Demon Messi | 3 | 4.0x | Ultimate | The apex runner equipped with all 3 perk slots. |
 
 ---

@@ -120,12 +120,38 @@ func _register_characters() -> void:
 	if omablo.run_frames.size() > 2: omablo.jump_frame = omablo.run_frames[2]
 	characters["omablo"] = omablo
 
-	# 5. DEMON (Tier 5 - Premium)
+	# 5. IGNACHO (Tier 5)
+	var ignacho = CharacterData.new()
+	ignacho.id = "ignacho"
+	ignacho.display_name = "IGNACHO ⚡"
+	ignacho.tier_rank = 5
+	ignacho.price = 7500
+	ignacho.boost_slots = 1 # 1 Boost Slot activo
+	ignacho.coin_multiplier = 2
+	ignacho.pros_description = "INFINITO x2 MONEDAS, 1 Perk Slot & +80% Fly drop"
+	ignacho.cons_description = "+150% Speed / Turbo Debuffs drop rate"
+	ignacho.negative_spawn_multiplier = 2.5 # +150% Turbo / Speed debuffs!
+	ignacho.fly_spawn_multiplier = 1.8
+	ignacho.life_spawn_multiplier = 1.2
+	ignacho.sprite_scale = Vector2(0.13, 0.13)
+	ignacho.sprite_offset = Vector2(0, -20)
+	var ignacho_paths = [
+		"res://assets/characters/ignacho/run1.png", "res://assets/characters/ignacho/run2.png",
+		"res://assets/characters/ignacho/run3.png", "res://assets/characters/ignacho/run4.png",
+		"res://assets/characters/ignacho/run5.png", "res://assets/characters/ignacho/run6.png"
+	]
+	for path in ignacho_paths:
+		var tex = load(path) as Texture2D
+		if tex: ignacho.run_frames.append(tex)
+	if ignacho.run_frames.size() > 2: ignacho.jump_frame = ignacho.run_frames[2]
+	characters["ignacho"] = ignacho
+
+	# 6. DEMON (Tier 6 - Premium)
 	var demon = CharacterData.new()
 	demon.id = "demon"
 	demon.display_name = "DEMON ★"
-	demon.tier_rank = 5
-	demon.price = 7500
+	demon.tier_rank = 6
+	demon.price = 12500
 	demon.boost_slots = 1 # 1 Boost Slot activo
 	demon.coin_multiplier = 3
 	demon.pros_description = "INFINITO x3 MONEDAS, +150% Life, +100% Fly & 1 Slot"
@@ -146,12 +172,12 @@ func _register_characters() -> void:
 	if demon.run_frames.size() > 2: demon.jump_frame = demon.run_frames[2]
 	characters["demon"] = demon
 
-	# 6. MESSI (Tier 6 - GOAT Tier)
+	# 7. MESSI (Tier 7 - GOAT Tier)
 	var messi = CharacterData.new()
 	messi.id = "messi"
 	messi.display_name = "MESSI 👑"
-	messi.tier_rank = 6
-	messi.price = 15000
+	messi.tier_rank = 7
+	messi.price = 25000
 	messi.boost_slots = 2 # 2 Boost Slots activos!
 	messi.coin_multiplier = 4
 	messi.pros_description = "INFINITO x4 MONEDAS, 2 Slots & 0% Debuffs"
@@ -172,12 +198,12 @@ func _register_characters() -> void:
 	if messi.run_frames.size() > 2: messi.jump_frame = messi.run_frames[2]
 	characters["messi"] = messi
 
-	# 7. DARK ANGEL (Tier 7 - Celestial Ultimate)
+	# 8. DARK ANGEL (Tier 8 - Celestial Ultimate)
 	var dark_angel = CharacterData.new()
 	dark_angel.id = "dark_angel"
 	dark_angel.display_name = "DARK ANGEL ⚡"
-	dark_angel.tier_rank = 7
-	dark_angel.price = 30000
+	dark_angel.tier_rank = 8
+	dark_angel.price = 45000
 	dark_angel.boost_slots = 3 # 3 MAX Boost Slots activos!
 	dark_angel.coin_multiplier = 4
 	dark_angel.pros_description = "INFINITO x4 MONEDAS, 3 Slots & +300% Fly"
@@ -198,12 +224,12 @@ func _register_characters() -> void:
 	if dark_angel.run_frames.size() > 2: dark_angel.jump_frame = dark_angel.run_frames[2]
 	characters["dark_angel"] = dark_angel
 
-	# 8. DEMON MESSI (Tier 8 - GOD OF ALL CHARACTERS)
+	# 9. DEMON MESSI (Tier 9 - GOD OF ALL CHARACTERS)
 	var demon_messi = CharacterData.new()
 	demon_messi.id = "demon_messi"
 	demon_messi.display_name = "DEMON MESSI 👑🔥"
-	demon_messi.tier_rank = 8
-	demon_messi.price = 50000 # Ultimate Endgame GOD Tier
+	demon_messi.tier_rank = 9
+	demon_messi.price = 75000 # Ultimate Endgame GOD Tier
 	demon_messi.boost_slots = 3 # 3 MAX Boost Slots
 	demon_messi.coin_multiplier = 4
 	demon_messi.pros_description = "INFINITO x4 MONEDAS, PERMA-SHIELD, +5 LIVES, MAGNET"

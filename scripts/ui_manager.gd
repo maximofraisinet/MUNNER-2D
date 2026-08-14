@@ -68,6 +68,7 @@ extends CanvasLayer
 @onready var leech_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/LeechCard
 @onready var maximo_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/MaximoCard
 @onready var omablo_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/OmabloCard
+@onready var ignacho_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/IgnachoCard
 @onready var demon_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/DemonCard
 @onready var messi_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/MessiCard
 @onready var dark_angel_card: PanelContainer = $StorePanel/CharactersView/ScrollContainer/CardsHBox/DarkAngelCard
@@ -77,6 +78,7 @@ extends CanvasLayer
 @onready var action_leech_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/LeechCard/VBox/ActionLeechButton
 @onready var action_maximo_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/MaximoCard/VBox/ActionMaximoButton
 @onready var action_omablo_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/OmabloCard/VBox/ActionOmabloButton
+@onready var action_ignacho_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/IgnachoCard/VBox/ActionIgnachoButton
 @onready var action_demon_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/DemonCard/VBox/ActionDemonButton
 @onready var action_messi_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/MessiCard/VBox/ActionMessiButton
 @onready var action_dark_angel_button: Button = $StorePanel/CharactersView/ScrollContainer/CardsHBox/DarkAngelCard/VBox/ActionDarkAngelButton
@@ -196,6 +198,8 @@ func _ready() -> void:
 	action_leech_button.pressed.connect(_on_action_leech_pressed)
 	action_maximo_button.pressed.connect(_on_action_maximo_pressed)
 	action_omablo_button.pressed.connect(_on_action_omablo_pressed)
+	if action_ignacho_button:
+		action_ignacho_button.pressed.connect(_on_action_ignacho_pressed)
 	action_demon_button.pressed.connect(_on_action_demon_pressed)
 	action_messi_button.pressed.connect(_on_action_messi_pressed)
 	action_dark_angel_button.pressed.connect(_on_action_dark_angel_pressed)
@@ -824,6 +828,7 @@ func _update_store_buttons() -> void:
 		"leech": action_leech_button,
 		"maximo": action_maximo_button,
 		"omablo": action_omablo_button,
+		"ignacho": action_ignacho_button,
 		"demon": action_demon_button,
 		"messi": action_messi_button,
 		"dark_angel": action_dark_angel_button,
@@ -1156,6 +1161,9 @@ func _on_action_maximo_pressed() -> void:
 
 func _on_action_omablo_pressed() -> void:
 	_handle_character_action("omablo")
+
+func _on_action_ignacho_pressed() -> void:
+	_handle_character_action("ignacho")
 
 func _on_action_demon_pressed() -> void:
 	_handle_character_action("demon")
