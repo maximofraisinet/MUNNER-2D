@@ -71,7 +71,8 @@ The game includes nine playable characters, each featuring distinctive attribute
 ## 4. Power-Up and Inventory System
 
 ### In-Run Power-Ups
-- **Shield**: Grants temporary invulnerability against obstacle collisions (persists until hit or timer expiry).
+- **Shield**: Grants temporary invulnerability against obstacle collisions (lasts 20 seconds or until hit).
+- **2X Coin Multiplier**: Doubles the value of all collected coins for 20 seconds with an on-screen HUD countdown.
 - **Extra Life**: Stores a reserve life that prevents death upon obstacle impact.
 - **Slow Down**: Temporarily reduces running speed by 50% to navigate dense obstacle fields.
 - **Flight**: Propels the character above ground level while spawning a trail of high-value coins.

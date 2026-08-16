@@ -57,7 +57,7 @@ func _register_characters() -> void:
 	leech.price = 500
 	leech.boost_slots = 0
 	leech.coin_multiplier = 1
-	leech.pros_description = "+20% Shield Duration (6.0s duration)"
+	leech.pros_description = "+20% Shield Duration (24.0s duration)"
 	leech.cons_description = "-15% Coin spawn chance"
 	leech.sprite_scale = Vector2(0.13, 0.13)
 	leech.sprite_offset = Vector2(0, -20)

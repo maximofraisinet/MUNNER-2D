@@ -95,7 +95,7 @@ func apply_powerup(type: PowerUp.Type) -> void:
 	match type:
 		PowerUp.Type.SHIELD:
 			has_shield = true
-			var shield_dur = 6.0 if (current_character and current_character.id == "leech") else 5.0
+			var shield_dur = 24.0 if (current_character and current_character.id == "leech") else 20.0
 			shield_timer = 999999.0 if (current_character and current_character.id == "demon_messi") else shield_dur
 		PowerUp.Type.EXTRA_LIFE:
 			extra_lives += 1
@@ -116,8 +116,8 @@ func apply_powerup(type: PowerUp.Type) -> void:
 			GameManager.apply_permanent_speed_increase()
 		PowerUp.Type.COIN_MULT_2X:
 			is_coin_multiplier_active = true
-			coin_mult_timer = 5.0
-			GameManager.speed_notification_emitted.emit("2X COINS MULTIPLIER (5s)!", Color(1.0, 0.84, 0.0))
+			coin_mult_timer = 20.0
+			GameManager.speed_notification_emitted.emit("2X COINS MULTIPLIER (20s)!", Color(1.0, 0.84, 0.0))
 
 func get_current_coin_multiplier() -> int:
 	var base_mult: int = current_character.coin_multiplier if current_character else 1
@@ -138,8 +138,9 @@ func use_boost_slot(slot_idx: int) -> void:
 		
 		if boost_id == "shield_boost":
 			has_shield = true
-			shield_timer = 999999.0 if (curr_char.id == "demon_messi") else 5.0
-			GameManager.speed_notification_emitted.emit("ACTIVATED SHIELD BOOST!", Color(0.0, 1.0, 1.0))
+			var s_dur = 24.0 if (curr_char and curr_char.id == "leech") else 20.0
+			shield_timer = 999999.0 if (curr_char.id == "demon_messi") else s_dur
+			GameManager.speed_notification_emitted.emit("ACTIVATED SHIELD BOOST (20s)!", Color(0.0, 1.0, 1.0))
 			if SoundManager: SoundManager.play_powerup_positive()
 		elif boost_id == "life_boost":
 			extra_lives += 1
@@ -158,8 +159,8 @@ func use_boost_slot(slot_idx: int) -> void:
 			if SoundManager: SoundManager.play_fly()
 		elif boost_id == "coin_mult_boost":
 			is_coin_multiplier_active = true
-			coin_mult_timer = 5.0
-			GameManager.speed_notification_emitted.emit("ACTIVATED 2X COINS (5s)!", Color(1.0, 0.84, 0.0))
+			coin_mult_timer = 20.0
+			GameManager.speed_notification_emitted.emit("ACTIVATED 2X COINS (20s)!", Color(1.0, 0.84, 0.0))
 			if SoundManager: SoundManager.play_powerup_positive()
 
 func on_obstacle_hit(obs: Area2D) -> bool:

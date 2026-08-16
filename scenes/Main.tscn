@@ -312,7 +312,7 @@ anchor_right = 1.0
 offset_left = -230.0
 offset_top = 85.0
 offset_right = -15.0
-offset_bottom = 260.0
+offset_bottom = 330.0
 grow_horizontal = 0
 theme_override_constants/separation = 6
 alignment = 0
@@ -347,7 +347,7 @@ alignment = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0, 1, 1, 1)
-text = "5.0s"
+text = "20.0s"
 horizontal_alignment = 2
 
 [node name="ShieldIcon" type="TextureRect" parent="UI/HUD/PowerUpStatusBox/ShieldRow"]
@@ -391,6 +391,25 @@ text = "4.0s"
 horizontal_alignment = 2
 
 [node name="TurboIcon" type="TextureRect" parent="UI/HUD/PowerUpStatusBox/TurboRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CoinMultRow" type="HBoxContainer" parent="UI/HUD/PowerUpStatusBox"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="CoinMultLabel" type="Label" parent="UI/HUD/PowerUpStatusBox/CoinMultRow"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+text = "20.0s"
+horizontal_alignment = 2
+
+[node name="CoinMultIcon" type="TextureRect" parent="UI/HUD/PowerUpStatusBox/CoinMultRow"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 expand_mode = 1
@@ -1413,7 +1432,7 @@ custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0.8, 0.9, 0.95, 1)
-text = "Protects you from 1 obstacle collision (5s duration)"
+text = "Protects you from 1 obstacle collision (20s duration)"
 autowrap_mode = 2
 horizontal_alignment = 1
 
@@ -1625,7 +1644,7 @@ alignment = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
 theme_override_colors/font_color = Color(1.0, 0.84, 0.0, 1)
-text = "2X COINS (5s)"
+text = "2X COINS (20s)"
 horizontal_alignment = 1
 
 [node name="PreviewRect" type="TextureRect" parent="UI/StorePanel/PerksView/PerksScrollContainer/BoostCardsHBox/CoinMultBoostCard/VBox"]
@@ -1640,7 +1659,7 @@ custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0.8, 0.9, 0.95, 1)
-text = "Doubles all collected coin value for 5 seconds"
+text = "Doubles all collected coin value for 20 seconds"
 autowrap_mode = 2
 horizontal_alignment = 1
 

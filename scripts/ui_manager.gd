@@ -22,6 +22,10 @@ extends CanvasLayer
 @onready var turbo_icon: TextureRect = $HUD/PowerUpStatusBox/TurboRow/TurboIcon
 @onready var turbo_status_label: Label = $HUD/PowerUpStatusBox/TurboRow/TurboLabel
 
+@onready var coin_mult_row: HBoxContainer = $HUD/PowerUpStatusBox/CoinMultRow
+@onready var coin_mult_icon: TextureRect = $HUD/PowerUpStatusBox/CoinMultRow/CoinMultIcon
+@onready var coin_mult_status_label: Label = $HUD/PowerUpStatusBox/CoinMultRow/CoinMultLabel
+
 @onready var slot1_card: PanelContainer = $HUD/BoostHudHBox/Slot1Card
 @onready var slot1_icon: TextureRect = $HUD/BoostHudHBox/Slot1Card/VBox/IconRect
 @onready var slot1_qty: Label = $HUD/BoostHudHBox/Slot1Card/VBox/QtyLabel
@@ -778,6 +782,22 @@ func _update_powerup_status() -> void:
 			if turbo_icon:
 				var tex = load("res://assets/powerups/%s/turbo.png" % pack_name) as Texture2D
 				if tex: turbo_icon.texture = tex
+				
+	if coin_mult_row:
+		var is_mult = player.get("is_coin_multiplier_active") == true
+		coin_mult_row.visible = is_mult
+		if is_mult:
+			var m_timer = float(player.get("coin_mult_timer"))
+			if coin_mult_status_label: coin_mult_status_label.text = "%.1fs" % m_timer
+			if m_timer <= 2.5:
+				# Flashing warning pulse when ending
+				var pulse = 0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.015)
+				coin_mult_row.modulate = Color(1.0, 0.8 + 0.2 * pulse, 0.2 + 0.8 * pulse, 1.0)
+			else:
+				coin_mult_row.modulate = Color.WHITE
+			if coin_mult_icon:
+				var tex = load("res://assets/powerups/%s/coin_mult.png" % pack_name) as Texture2D
+				if tex: coin_mult_icon.texture = tex
 
 func _format_number(n: int) -> String:
 	var s = str(n)
