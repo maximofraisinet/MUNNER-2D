@@ -65,13 +65,25 @@ func _spawn_obstacle() -> void:
 			obs.visible = true
 			obs.process_mode = PROCESS_MODE_INHERIT
 			
-			if coin_pool and coin_pool.has_method("spawn_coin_over_obstacle") and randf() < 0.35:
+			var coin_mult = _get_coin_spawn_rate_multiplier()
+			var overhead_chance = min(0.90, 0.35 * coin_mult)
+			if coin_pool and coin_pool.has_method("spawn_coin_over_obstacle") and randf() < overhead_chance:
 				coin_pool.spawn_coin_over_obstacle(SPAWN_X)
 			return
 
 func _deactivate_obstacle(obs: Area2D) -> void:
 	obs.visible = false
 	obs.process_mode = PROCESS_MODE_DISABLED
+
+func _get_coin_spawn_rate_multiplier() -> float:
+	var mult: float = 1.0
+	if GameManager:
+		var score = GameManager.run_score
+		if score >= 4000.0:
+			mult = 2.0 # +50% en 2000 y otro +50% en 4000 (total +100% / x2.0)
+		elif score >= 2000.0:
+			mult = 1.5 # +50% a partir de 2000 de score
+	return mult
 
 func _calculate_next_spawn_interval() -> void:
 	var v_game = GameManager.effective_speed
@@ -91,6 +103,16 @@ func _calculate_next_spawn_interval() -> void:
 	
 	next_spawn_interval = t_min + randf_range(0.1, 0.4)
 	
-	if coin_pool and coin_pool.has_method("spawn_safe_ground_coin") and next_spawn_interval > 1.2 and randf() < 0.4:
+	var coin_mult = _get_coin_spawn_rate_multiplier()
+	var ground_chance = min(0.95, 0.40 * coin_mult)
+	if coin_pool and coin_pool.has_method("spawn_safe_ground_coin") and next_spawn_interval > 0.8 and randf() < ground_chance:
 		var safe_offset = SPAWN_X + (v_game * next_spawn_interval * 0.5)
-		coin_pool.spawn_safe_ground_coin(safe_offset)
+		if coin_mult >= 2.0:
+			coin_pool.spawn_safe_ground_coin(safe_offset - 55.0)
+			coin_pool.spawn_safe_ground_coin(safe_offset)
+			coin_pool.spawn_safe_ground_coin(safe_offset + 55.0)
+		elif coin_mult >= 1.5:
+			coin_pool.spawn_safe_ground_coin(safe_offset - 30.0)
+			coin_pool.spawn_safe_ground_coin(safe_offset + 30.0)
+		else:
+			coin_pool.spawn_safe_ground_coin(safe_offset)

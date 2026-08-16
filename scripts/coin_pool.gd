@@ -3,7 +3,7 @@ class_name CoinPool
 
 @export var coin_scene: PackedScene = preload("res://scenes/Coin.tscn")
 
-const POOL_SIZE: int = 25
+const POOL_SIZE: int = 50
 var pool: Array[Area2D] = []
 
 func _ready() -> void:

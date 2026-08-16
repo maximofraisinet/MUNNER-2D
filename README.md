@@ -47,6 +47,7 @@ Collected coins can be spent in the in-game store to unlock characters, purchase
 - **Dynamic Decaying Acceleration Curve**: Unlike linear runners where difficulty spikes uncontrollably, MUNNER 2D utilizes a non-linear acceleration decay model. The game starts at 400 px/s, scales smoothly through mid-game (reaching approximately 1,500 px/s at 2,000 score), and approaches a top speed cap of 1,800 px/s.
 - **Fair Reaction Window ($T_{min}$)**: Obstacle spawner intervals dynamically recalculate minimum reaction distance based on real-time runner velocity.
 - **High-Performance Object Pooling**: Obstacles, coins, and power-ups are recycled from pre-allocated memory pools, eliminating garbage collection stutter during high-speed runs.
+- **Progressive Coin Density**: Coin spawn probabilities and cluster density scale dynamically as the run progresses (+50% spawn frequency and twin coin trails after 2,000 score, and +100% frequency with triple coin trails after 4,000 score).
 
 ---
 
