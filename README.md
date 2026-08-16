@@ -3,6 +3,18 @@
 MUNNER 2D is a fast-paced, feature-packed 2D endless runner developed with Godot Engine 4. It combines classic arcade obstacle-dodging mechanics with an RPG-style perk inventory, multiple unlockable characters with unique stats, an in-game store, an achievement ladder, and casino betting minigames.
 
 ---
+## Captures
+
+<img width="1152" height="646" alt="Screenshot_20260815_225859" src="https://github.com/user-attachments/assets/ae28989b-9ac6-4ac0-b9ab-a98799190968" />
+
+
+<img width="16383" height="960" alt="carrusel-like" src="https://github.com/user-attachments/assets/1f430b31-1120-4a2c-bde9-1b6bc3f8e90c" />
+
+## Gameplay
+
+https://github.com/user-attachments/assets/e5d7cf85-a330-41e4-b573-43c6630a234e
+
+---
 
 ## Table of Contents
 
