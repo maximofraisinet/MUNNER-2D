@@ -193,4 +193,4 @@ This installs the official Windows export templates, compiles a self-contained e
 
 ## 12. License
 
-All source code and game scripts are released under the MIT License. Game audio tracks and sprite assets remain property of their respective creators.
+All source code and game scripts are released under the MIT License.
