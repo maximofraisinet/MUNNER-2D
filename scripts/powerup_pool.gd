@@ -14,6 +14,8 @@ const HEIGHT_POSITIONS: Array[float] = [540.0, 460.0]
 
 func _ready() -> void:
 	GameManager.game_restarted_triggered.connect(reset_pool)
+	GameManager.game_started_triggered.connect(reset_pool)
+	GameManager.menu_opened_triggered.connect(reset_pool)
 	for i in range(POOL_SIZE):
 		var pup = powerup_scene.instantiate() as Area2D
 		pup.visible = false

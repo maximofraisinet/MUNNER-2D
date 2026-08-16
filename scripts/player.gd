@@ -43,6 +43,7 @@ func _ready() -> void:
 	initial_pos = global_position
 	GameManager.game_restarted_triggered.connect(_on_game_restarted)
 	GameManager.game_started_triggered.connect(_on_game_started)
+	GameManager.menu_opened_triggered.connect(_on_menu_opened)
 	if CharacterManager:
 		CharacterManager.character_changed.connect(_on_character_changed)
 	load_character()
@@ -51,6 +52,9 @@ func _on_game_started() -> void:
 	_reset_player_state()
 
 func _on_game_restarted() -> void:
+	_reset_player_state()
+
+func _on_menu_opened() -> void:
 	_reset_player_state()
 
 func _reset_player_state() -> void:
@@ -68,12 +72,18 @@ func _reset_player_state() -> void:
 	turbo_timer = 0.0
 	is_coin_multiplier_active = false
 	coin_mult_timer = 0.0
+	footstep_timer = 0.0
+	anim_timer = 0.0
+	current_frame_idx = 0
 	GameManager.speed_multiplier = 1.0
 	
-	if current_character and current_character.id == "demon_messi":
-		extra_lives = 5 # Empieza con 5 vidas extra
-		has_shield = true
-		shield_timer = 999999.0 # Escudo permanente inicial
+	if current_character:
+		if current_character.run_frames.size() > 0 and sprite:
+			sprite.texture = current_character.run_frames[0]
+		if current_character.id == "demon_messi":
+			extra_lives = 5 # Empieza con 5 vidas extra
+			has_shield = true
+			shield_timer = 999999.0 # Escudo permanente inicial
 		
 	if sprite:
 		sprite.modulate = Color.WHITE

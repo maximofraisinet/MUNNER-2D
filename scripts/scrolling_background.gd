@@ -10,6 +10,9 @@ func _ready() -> void:
 	z_index = -10
 	if GameManager:
 		GameManager.background_changed.connect(_on_background_changed)
+		GameManager.game_started_triggered.connect(_setup_background)
+		GameManager.game_restarted_triggered.connect(_setup_background)
+		GameManager.menu_opened_triggered.connect(_setup_background)
 	_setup_background()
 
 func _on_background_changed(_bg_name: String) -> void:

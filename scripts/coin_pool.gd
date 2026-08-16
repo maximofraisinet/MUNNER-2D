@@ -8,6 +8,8 @@ var pool: Array[Area2D] = []
 
 func _ready() -> void:
 	GameManager.game_restarted_triggered.connect(reset_pool)
+	GameManager.game_started_triggered.connect(reset_pool)
+	GameManager.menu_opened_triggered.connect(reset_pool)
 	for i in range(POOL_SIZE):
 		var coin = coin_scene.instantiate() as Area2D
 		coin.visible = false

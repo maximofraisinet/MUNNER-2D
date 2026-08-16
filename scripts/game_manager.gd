@@ -138,6 +138,10 @@ func restart_game() -> void:
 
 func open_main_menu() -> void:
 	current_state = State.START
+	current_speed = initial_speed
+	speed_multiplier = 1.0
+	run_score = 0.0
+	run_coins = 0
 	get_tree().paused = true
 	menu_opened_triggered.emit()
 

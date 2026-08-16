@@ -16,6 +16,8 @@ var cluster_remaining: int = 0
 
 func _ready() -> void:
 	GameManager.game_restarted_triggered.connect(reset_pool)
+	GameManager.game_started_triggered.connect(reset_pool)
+	GameManager.menu_opened_triggered.connect(reset_pool)
 	for i in range(POOL_SIZE):
 		var obs = obstacle_scene.instantiate() as Area2D
 		obs.visible = false
