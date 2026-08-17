@@ -78,11 +78,12 @@ func claim_achievement(id: String) -> bool:
 	for ach in ACHIEVEMENTS:
 		if ach["id"] == id:
 			if can_claim(id):
-				claimed_achievements.append(id)
+				if id not in claimed_achievements:
+					claimed_achievements.append(id)
 				var reward = ach["reward"]
 				GameManager.total_coins += reward
-				GameManager.save_data()
 				save_data()
+				GameManager.save_data()
 				achievement_claimed.emit(id, reward)
 				return true
 	return false

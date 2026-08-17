@@ -336,6 +336,7 @@ func wipe_all_data() -> void:
 
 func save_data() -> void:
 	var config = ConfigFile.new()
+	config.load(SAVE_PATH)
 	config.set_value("character", "current", current_character_id)
 	config.set_value("character", "unlocked", unlocked_characters)
 	config.set_value("character", "boost_inventory", boost_inventory)
