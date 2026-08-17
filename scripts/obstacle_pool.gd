@@ -32,7 +32,7 @@ func reset_pool() -> void:
 	next_spawn_interval = 1.5
 	cluster_remaining = 0
 
-## Desactivar todos los obstáculos en pista de aterrizaje (X entre 0 y 750)
+## Clear all obstacles on landing runway (X between 0 and 750)
 func clear_landing_runway() -> void:
 	for obs in pool:
 		if obs.visible and obs.global_position.x >= -50.0 and obs.global_position.x <= 750.0:
@@ -80,9 +80,9 @@ func _get_coin_spawn_rate_multiplier() -> float:
 	if GameManager:
 		var score = GameManager.run_score
 		if score >= 4000.0:
-			mult = 2.0 # +50% en 2000 y otro +50% en 4000 (total +100% / x2.0)
+			mult = 2.0 # +50% at 2000 and another +50% at 4000 (total +100% / x2.0)
 		elif score >= 2000.0:
-			mult = 1.5 # +50% a partir de 2000 de score
+			mult = 1.5 # +50% from 2000 score onward
 	return mult
 
 func _calculate_next_spawn_interval() -> void:

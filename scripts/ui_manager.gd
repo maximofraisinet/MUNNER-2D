@@ -829,7 +829,7 @@ func _update_store_buttons() -> void:
 		
 	var pack_name = GameManager.selected_icon_pack if GameManager else "default"
 	
-	# Actualizar dinámicamente las previsualizaciones de iconos en la tienda según el paquete seleccionado
+	# Dynamically update icon previews in the shop according to selected icon pack
 	if shield_preview_rect:
 		var tex = load("res://assets/powerups/%s/shield.png" % pack_name) as Texture2D
 		if tex: shield_preview_rect.texture = tex

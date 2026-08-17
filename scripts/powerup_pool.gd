@@ -68,7 +68,7 @@ func _select_weighted_powerup_type() -> PowerUp.Type:
 	var fly_mult = curr_char.fly_spawn_multiplier if curr_char else 1.0
 	var neg_mult = curr_char.negative_spawn_multiplier if curr_char else 1.0
 	
-	# Ponderación basada en rareza
+	# Rarity-based weighting
 	var weights = {
 		PowerUp.Type.SHIELD: 40.0,
 		PowerUp.Type.TURBO_DEBUFF: 30.0 * neg_mult,

@@ -13,7 +13,7 @@ signal jump_binding_changed(type_name: String, code: int, display_name: String)
 enum State { START, PLAYING, GAMEOVER }
 var current_state: State = State.START
 
-## Parámetros de velocidad iniciales y aceleración dinámica
+## Initial speed and dynamic acceleration parameters
 var initial_speed: float = 400.0
 var max_speed: float = 1800.0
 var base_acceleration: float = 10.0
@@ -25,24 +25,24 @@ var effective_speed: float:
 	get:
 		return current_speed * speed_multiplier
 
-## Tiempo de vuelo del jugador
+## Player air hang time
 var player_air_hang_time: float = 0.6818
 
-## Configuración de Paquete de Iconos, Fondo y Tema de UI
+## Icon pack, background, and UI theme configuration
 var selected_icon_pack: String = "default"
 var selected_bg: String = "bg-game1"
 var selected_ui_theme: String = "light"
 
-## Configuración de Controles (Jump Binding)
+## Controls configuration (Jump Binding)
 var jump_binding_type: String = "key" # "key" or "mouse"
 var jump_binding_code: int = KEY_SPACE
 var jump_binding_name: String = "SPACE"
 
-## Estadísticas persistentes
+## Persistent stats
 var high_score: float = 0.0
 var total_coins: int = 0
 
-## Estadísticas de la partida actual
+## Current run stats
 var run_score: float = 0.0
 var run_coins: int = 0
 

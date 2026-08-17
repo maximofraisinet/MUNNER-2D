@@ -22,7 +22,7 @@ func randomize_appearance() -> void:
 	if sprite and obstacle_textures.size() > 0:
 		var tex = obstacle_textures.pick_random()
 		sprite.texture = tex
-		# Ajustar escala dinámica para alineación visual con el piso y hitbox (34x52)
+		# Adjust dynamic scale for visual alignment with floor and hitbox (34x52)
 		if tex:
 			var target_height = 52.0
 			var scale_factor = target_height / float(tex.get_height())
@@ -32,5 +32,5 @@ func _on_body_entered(body: Node2D) -> void:
 	if visible and body is Player:
 		if body.has_method("on_obstacle_hit"):
 			if body.on_obstacle_hit(self):
-				return # El escudo o vida absorbió el golpe y desactivó este obstáculo
+				return # Shield or extra life absorbed the hit and deactivated this obstacle
 		GameManager.game_over()

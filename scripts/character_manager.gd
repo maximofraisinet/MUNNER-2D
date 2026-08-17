@@ -8,7 +8,7 @@ var current_character_id: String = "tired"
 var characters: Dictionary = {}
 var unlocked_characters: Array = ["tired"]
 
-## Inventario de Boosts y Slots Equipados (Hasta 3 Slots)
+## Boost Inventory and Equipped Slots (Up to 3 Slots)
 var boost_inventory: Dictionary = {
 	"shield_boost": 0,
 	"life_boost": 0,
@@ -31,7 +31,7 @@ func _register_characters() -> void:
 	tired.id = "tired"
 	tired.display_name = "TIRED"
 	tired.tier_rank = 1
-	tired.price = 0 # Starter gratuito
+	tired.price = 0 # Free starter
 	tired.boost_slots = 0
 	tired.coin_multiplier = 1
 	tired.pros_description = "+10% Score bonus per second"
@@ -104,7 +104,7 @@ func _register_characters() -> void:
 	omablo.price = 3500
 	omablo.boost_slots = 0
 	omablo.coin_multiplier = 2
-	omablo.pros_description = "INFINITO x2 MONEDAS & +150% EXTRA LIFE drop rate"
+	omablo.pros_description = "PERMANENT 2X COINS & +150% EXTRA LIFE drop rate"
 	omablo.cons_description = "+30% Turbo Debuff drop rate"
 	omablo.life_spawn_multiplier = 2.5
 	omablo.sprite_scale = Vector2(0.115, 0.115)
@@ -126,9 +126,9 @@ func _register_characters() -> void:
 	ignacho.display_name = "IGNACHO ⚡"
 	ignacho.tier_rank = 5
 	ignacho.price = 7500
-	ignacho.boost_slots = 1 # 1 Boost Slot activo
+	ignacho.boost_slots = 1 # 1 Active Boost Slot
 	ignacho.coin_multiplier = 2
-	ignacho.pros_description = "INFINITO x2 MONEDAS, 1 Perk Slot & +80% Fly drop"
+	ignacho.pros_description = "PERMANENT 2X COINS, 1 Perk Slot & +80% Fly drop"
 	ignacho.cons_description = "+150% Speed / Turbo Debuffs drop rate"
 	ignacho.negative_spawn_multiplier = 2.5 # +150% Turbo / Speed debuffs!
 	ignacho.fly_spawn_multiplier = 1.8
@@ -152,9 +152,9 @@ func _register_characters() -> void:
 	demon.display_name = "DEMON ★"
 	demon.tier_rank = 6
 	demon.price = 12500
-	demon.boost_slots = 1 # 1 Boost Slot activo
+	demon.boost_slots = 1 # 1 Active Boost Slot
 	demon.coin_multiplier = 3
-	demon.pros_description = "INFINITO x3 MONEDAS, +150% Life, +100% Fly & 1 Slot"
+	demon.pros_description = "PERMANENT 3X COINS, +150% Life, +100% Fly & 1 Slot"
 	demon.cons_description = "None (Premium Perk Tier)"
 	demon.life_spawn_multiplier = 2.5
 	demon.fly_spawn_multiplier = 2.0
@@ -178,9 +178,9 @@ func _register_characters() -> void:
 	messi.display_name = "MESSI 👑"
 	messi.tier_rank = 7
 	messi.price = 25000
-	messi.boost_slots = 2 # 2 Boost Slots activos!
+	messi.boost_slots = 2 # 2 Active Boost Slots
 	messi.coin_multiplier = 4
-	messi.pros_description = "INFINITO x4 MONEDAS, 2 Slots & 0% Debuffs"
+	messi.pros_description = "PERMANENT 4X COINS, 2 Slots & 0% Debuffs"
 	messi.cons_description = "CON: Standard positive item drop rates"
 	messi.negative_spawn_multiplier = 0.0 # 0% debuffs!
 	messi.life_spawn_multiplier = 1.0
@@ -204,9 +204,9 @@ func _register_characters() -> void:
 	dark_angel.display_name = "DARK ANGEL ⚡"
 	dark_angel.tier_rank = 8
 	dark_angel.price = 45000
-	dark_angel.boost_slots = 3 # 3 MAX Boost Slots activos!
+	dark_angel.boost_slots = 3 # 3 MAX Active Boost Slots
 	dark_angel.coin_multiplier = 4
-	dark_angel.pros_description = "INFINITO x4 MONEDAS, 3 Slots & +300% Fly"
+	dark_angel.pros_description = "PERMANENT 4X COINS, 3 Slots & +300% Fly"
 	dark_angel.cons_description = "CON: +50% Turbo Debuff drop rate"
 	dark_angel.fly_spawn_multiplier = 4.0 # +300% fly drop!
 	dark_angel.life_spawn_multiplier = 1.5
@@ -232,7 +232,7 @@ func _register_characters() -> void:
 	demon_messi.price = 75000 # Ultimate Endgame GOD Tier
 	demon_messi.boost_slots = 3 # 3 MAX Boost Slots
 	demon_messi.coin_multiplier = 4
-	demon_messi.pros_description = "INFINITO x4 MONEDAS, PERMA-SHIELD, +5 LIVES, MAGNET"
+	demon_messi.pros_description = "PERMANENT 4X COINS, PERMA-SHIELD, +5 LIVES, MAGNET"
 	demon_messi.cons_description = "CON: NONE (UNSTOPPABLE GOD TIER)"
 	demon_messi.negative_spawn_multiplier = 0.0 # 0% debuffs!
 	demon_messi.life_spawn_multiplier = 5.0    # +400% Extra Lives!
@@ -306,7 +306,7 @@ func equip_boost_to_slot(slot_idx: int, boost_id: String) -> bool:
 	var curr = get_current_character()
 	if curr and slot_idx < curr.boost_slots:
 		if equipped_boost_slots[slot_idx] == boost_id:
-			equipped_boost_slots[slot_idx] = "" # Desequipar
+			equipped_boost_slots[slot_idx] = "" # Unequip
 		else:
 			equipped_boost_slots[slot_idx] = boost_id
 		save_data()

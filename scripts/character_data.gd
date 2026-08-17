@@ -16,7 +16,7 @@ class_name CharacterData
 @export var pros_description: String = ""
 @export var cons_description: String = ""
 
-## Multiplicadores de probabilidad para apariciones
+## Spawn chance multipliers
 @export var life_spawn_multiplier: float = 1.0
 @export var fly_spawn_multiplier: float = 1.0
 @export var negative_spawn_multiplier: float = 1.0

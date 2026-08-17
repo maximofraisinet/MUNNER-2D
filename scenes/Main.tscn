@@ -874,7 +874,7 @@ stretch_mode = 5
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-text = "Tier 4 (INFINITO x2 MONEDAS)"
+text = "Tier 4 (PERMANENT 2X COINS)"
 horizontal_alignment = 1
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/CharactersView/ScrollContainer/CardsHBox/OmabloCard/VBox"]
@@ -938,7 +938,7 @@ stretch_mode = 5
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-text = "Tier 5 (INFINITO x2 MONEDAS)"
+text = "Tier 5 (PERMANENT 2X COINS)"
 horizontal_alignment = 1
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/CharactersView/ScrollContainer/CardsHBox/IgnachoCard/VBox"]
@@ -1002,7 +1002,7 @@ stretch_mode = 5
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-text = "Tier 6 (INFINITO x3 MONEDAS)"
+text = "Tier 6 (PERMANENT 3X COINS)"
 horizontal_alignment = 1
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/CharactersView/ScrollContainer/CardsHBox/DemonCard/VBox"]
@@ -1066,7 +1066,7 @@ stretch_mode = 5
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-text = "Tier 7 (INFINITO x4 MONEDAS)"
+text = "Tier 7 (PERMANENT 4X COINS)"
 horizontal_alignment = 1
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/CharactersView/ScrollContainer/CardsHBox/MessiCard/VBox"]
@@ -1130,7 +1130,7 @@ stretch_mode = 5
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-text = "Tier 8 (INFINITO x4 MONEDAS)"
+text = "Tier 8 (PERMANENT 4X COINS)"
 horizontal_alignment = 1
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/CharactersView/ScrollContainer/CardsHBox/DarkAngelCard/VBox"]
@@ -1194,7 +1194,7 @@ stretch_mode = 5
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-text = "Tier 9 (INFINITO x4 MONEDAS)"
+text = "Tier 9 (PERMANENT 4X COINS)"
 horizontal_alignment = 1
 
 [node name="ProsLabel" type="Label" parent="UI/StorePanel/CharactersView/ScrollContainer/CardsHBox/DemonMessiCard/VBox"]

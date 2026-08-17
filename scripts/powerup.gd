@@ -59,13 +59,13 @@ func _update_visuals() -> void:
 		icon_sprite.texture = tex
 		icon_sprite.visible = true
 		
-		# Ajustar escala para encajar dentro del área del potenciador (~36x36 px)
+		# Adjust scale to fit within the powerup area (~36x36 px)
 		var max_side = max(tex.get_width(), tex.get_height())
 		if max_side > 0:
 			var s = 36.0 / max_side
 			icon_sprite.scale = Vector2(s, s)
 			
-		visual.visible = false # Ocultar rect de fallback cuando hay textura
+		visual.visible = false # Hide fallback rect when texture is present
 	else:
 		if icon_sprite:
 			icon_sprite.visible = false
