@@ -271,10 +271,16 @@ func _ready() -> void:
 		
 	if casino_panel:
 		if casino_panel.has_signal("casino_closed"):
-			casino_panel.casino_closed.connect(_update_modal_dimmer)
+			casino_panel.casino_closed.connect(_on_casino_closed_ui)
 		casino_panel.visibility_changed.connect(_update_modal_dimmer)
 	if modal_dimmer:
 		modal_dimmer.gui_input.connect(_on_modal_dimmer_gui_input)
+	
+	_update_all_ui()
+
+func _on_casino_closed_ui() -> void:
+	_update_modal_dimmer()
+	_update_menu_stats()
 
 func _on_modal_dimmer_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -326,25 +332,29 @@ func _unhandled_input(event: InputEvent) -> void:
 					_open_cheat_panel()
 
 func _close_any_open_modal() -> bool:
+	var closed = false
 	if cheat_panel and cheat_panel.visible:
 		cheat_panel.visible = false
-		_update_modal_dimmer()
-		return true
-	if casino_panel and casino_panel.visible:
+		closed = true
+	elif casino_panel and casino_panel.visible:
 		if casino_panel.has_method("_on_close_pressed"):
 			casino_panel._on_close_pressed()
 		else:
 			casino_panel.visible = false
-		_update_modal_dimmer()
-		return true
-	if achievements_panel and achievements_panel.visible:
+		closed = true
+	elif achievements_panel and achievements_panel.visible:
 		_on_close_achievements_button_pressed()
-		return true
-	if settings_panel and settings_panel.visible:
+		closed = true
+	elif settings_panel and settings_panel.visible:
 		_on_close_settings_button_pressed()
-		return true
-	if store_panel and store_panel.visible:
+		closed = true
+	elif store_panel and store_panel.visible:
 		_on_close_store_button_pressed()
+		closed = true
+	
+	if closed:
+		_update_modal_dimmer()
+		_update_menu_stats()
 		return true
 	return false
 
@@ -962,6 +972,7 @@ func _show_main_menu() -> void:
 	settings_panel.visible = false
 	if cheat_panel: cheat_panel.visible = false
 	if modal_dimmer: modal_dimmer.visible = false
+	_update_menu_stats()
 
 func _animate_open_panel(panel: Control) -> void:
 	if not panel: return
@@ -1125,6 +1136,7 @@ func _on_settings_button_pressed() -> void:
 func _on_close_settings_button_pressed() -> void:
 	settings_panel.visible = false
 	_update_modal_dimmer()
+	_update_menu_stats()
 
 func _on_music_playlist_selected(index: int) -> void:
 	if not MusicManager: return
@@ -1296,6 +1308,7 @@ func _drink_poison_and_wipe_everything() -> void:
 func _on_close_store_button_pressed() -> void:
 	store_panel.visible = false
 	_update_modal_dimmer()
+	_update_menu_stats()
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()
@@ -1333,6 +1346,7 @@ func _on_game_restarted() -> void:
 
 func _on_menu_opened() -> void:
 	_show_main_menu()
+	_update_all_ui()
 
 func _on_game_over() -> void:
 	if summary_label:
